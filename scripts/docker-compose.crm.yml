@@ -1,0 +1,19 @@
+# Isolated MariaDB for Frappe CRM (avoids port conflicts with existing MySQL on 3306)
+services:
+  crm-mariadb:
+    image: mariadb:10.8
+    container_name: crm-mariadb
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    environment:
+      MYSQL_ROOT_PASSWORD: crm123456
+    ports:
+      - "3307:3306"
+    volumes:
+      - crm-mariadb-data:/var/lib/mysql
+
+volumes:
+  crm-mariadb-data:

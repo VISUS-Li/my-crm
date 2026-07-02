@@ -17,6 +17,7 @@ playwright-report
 package-lock.json
 
 .vscode
+.idea
 .github/instructions
 .github/skills
 .github/copilot-instructions.md
@@ -25,3 +26,7 @@ CLAUDE.md
 AGENTS.md
 .claude
 .pi
+
+# Local deploy credentials (copy from deploy.config.example.json)
+scripts/deploy.config.json
+scripts/__pycache__/

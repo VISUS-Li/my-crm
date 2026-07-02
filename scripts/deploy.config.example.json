@@ -1,0 +1,28 @@
+{
+  "host": "10.0.161.126",
+  "user": "visus",
+  "password": "",
+  "port": 22,
+  "remote_crm_src": "/home/visus/crm-src",
+  "remote_bench": "/home/visus/frappe-bench",
+  "site_name": "crm.localhost",
+  "web_port": 8010,
+  "socketio_port": 9010,
+  "db_root_password": "crm123456",
+  "admin_password": "admin",
+  "exclude": [
+    ".git",
+    "node_modules",
+    "frontend/node_modules",
+    "frappe-ui/node_modules",
+    "crm/public/frontend",
+    "frontend/coverage",
+    "dev-dist",
+    "build",
+    "test-results",
+    "playwright-report",
+    "__pycache__",
+    ".vscode",
+    ".pi"
+  ]
+}

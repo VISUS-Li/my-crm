@@ -159,6 +159,16 @@ The script will set up a production-ready instance of Frappe CRM with all the ne
 
 **Note:** You'll find all the code related to Frappe CRM's frontend inside `frappe-bench/apps/crm/frontend`
 
+### Windows dev + Ubuntu server deploy
+
+This fork syncs code from Windows to a remote Ubuntu Frappe bench. See **[scripts/README.md](./scripts/README.md)** for setup and daily use.
+
+After changing code, deploy to the server:
+
+```bash
+python scripts/sync_to_server.py --deploy
+```
+
 ### Docker
 
 You need Docker, docker-compose and git setup on your machine. Refer [Docker documentation](https://docs.docker.com/). After that, follow below steps:

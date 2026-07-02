@@ -17,6 +17,23 @@ they run as evaluated strings in the browser.
 | Why code is the way it is (decisions, bugs fixed, history) | [ARCHIVE.md](./.pi/ARCHIVE.md) |
 | Form scripting user guide | [feats/form-scripting/guide.md](./.pi/feats/form-scripting/guide.md) |
 | formDialog() API reference | [feats/form-scripting/form-dialog.md](./.pi/feats/form-scripting/form-dialog.md) |
+| **Sync code to Ubuntu server & restart** | [scripts/README.md](./scripts/README.md) |
+
+---
+
+## Deploy to Ubuntu (Windows dev → remote server)
+
+Development happens on **Windows**; Frappe bench runs on **Ubuntu** (`10.0.161.126`).
+
+**After completing a feature or when the user wants to see changes on the server**, run from repo root:
+
+```bash
+python scripts/sync_to_server.py --deploy
+```
+
+This syncs changed files to `~/crm-src` on the server, runs `yarn build`, and restarts bench. Full details, config, and troubleshooting: **[scripts/README.md](./scripts/README.md)**.
+
+Do **not** commit `scripts/deploy.config.json` (local credentials; gitignored).
 
 ---
 
