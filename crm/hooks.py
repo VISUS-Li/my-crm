@@ -135,12 +135,16 @@ permission_query_conditions = {
 	"CRM Lead": "crm.permissions.org_hierarchy.get_lead_permission_query_conditions",
 	"CRM Deal": "crm.permissions.org_hierarchy.get_deal_permission_query_conditions",
 	"CRM Notification": "crm.fcrm.doctype.crm_notification.crm_notification.get_permission_query_conditions",
+	"CRM POI Sync Job": "crm.amap.permissions.get_poi_sync_job_permission_query_conditions",
+	"CRM POI Record": "crm.amap.permissions.get_poi_record_permission_query_conditions",
 }
 
 has_permission = {
 	"CRM Lead": "crm.permissions.org_hierarchy.has_lead_permission",
 	"CRM Deal": "crm.permissions.org_hierarchy.has_deal_permission",
 	"CRM Notification": "crm.fcrm.doctype.crm_notification.crm_notification.has_permission",
+	"CRM POI Sync Job": "crm.amap.permissions.has_poi_sync_job_permission",
+	"CRM POI Record": "crm.amap.permissions.has_poi_record_permission",
 }
 
 # DocType Class

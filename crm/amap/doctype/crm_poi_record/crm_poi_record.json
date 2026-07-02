@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "autoname": "field:amap_poi_id",
+ "creation": "2026-07-02 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amap_poi_id",
+  "name1",
+  "tel",
+  "tel_normalized",
+  "has_valid_phone",
+  "column_break_contact",
+  "address",
+  "location",
+  "section_break_meta",
+  "poi_type",
+  "poi_typecode",
+  "province",
+  "city",
+  "district",
+  "column_break_links",
+  "lead",
+  "sync_job",
+  "job_owner",
+  "section_break_raw",
+  "raw_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "amap_poi_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Amap POI ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tel",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Phone"
+  },
+  {
+   "fieldname": "tel_normalized",
+   "fieldtype": "Data",
+   "label": "Normalized Phone"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_valid_phone",
+   "fieldtype": "Check",
+   "in_standard_filter": 1,
+   "label": "Has Valid Phone"
+  },
+  {
+   "fieldname": "column_break_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location"
+  },
+  {
+   "fieldname": "section_break_meta",
+   "fieldtype": "Section Break",
+   "label": "POI Details"
+  },
+  {
+   "fieldname": "poi_type",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "POI Type"
+  },
+  {
+   "fieldname": "poi_typecode",
+   "fieldtype": "Data",
+   "label": "POI Type Code"
+  },
+  {
+   "fieldname": "province",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Province"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "City"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "District"
+  },
+  {
+   "fieldname": "column_break_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "label": "Lead",
+   "options": "CRM Lead"
+  },
+  {
+   "fieldname": "sync_job",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Sync Job",
+   "options": "CRM POI Sync Job"
+  },
+  {
+   "fieldname": "job_owner",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Job Owner",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_raw",
+   "fieldtype": "Section Break",
+   "label": "Raw Data"
+  },
+  {
+   "fieldname": "raw_json",
+   "fieldtype": "Long Text",
+   "label": "Raw JSON"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-02 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Amap",
+ "name": "CRM POI Record",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -30,3 +30,17 @@ AGENTS.md
 # Local deploy credentials (copy from deploy.config.example.json)
 scripts/deploy.config.json
 scripts/__pycache__/
+
+# Local Amap verification / E2E scripts (depend on deploy.config.json)
+scripts/test_amap_flow.py
+scripts/verify_amap_http.py
+scripts/verify_amap_server.py
+
+# Local Amap unit tests (run locally, not committed)
+crm/amap/**/test_*.py
+
+# Local feature planning notes (project docs live in .pi/)
+docs/amap-poi-sales-dev-plan.md
+
+# pytest
+.pytest_cache/

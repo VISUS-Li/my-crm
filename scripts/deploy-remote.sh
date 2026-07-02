@@ -20,6 +20,10 @@ echo "==> Linking CRM static assets..."
 cd "$BENCH_DIR"
 ln -sfn "$(pwd)/apps/crm/crm/public" sites/assets/crm
 
+echo "==> Running migrations..."
+cd "$BENCH_DIR"
+bench --site "$SITE_NAME" migrate
+
 echo "==> Clearing cache..."
 cd "$BENCH_DIR"
 bench --site "$SITE_NAME" clear-cache

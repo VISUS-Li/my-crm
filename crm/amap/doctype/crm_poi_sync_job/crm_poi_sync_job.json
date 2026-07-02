@@ -1,0 +1,266 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-02 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "status",
+  "job_owner",
+  "section_break_search",
+  "keywords",
+  "types",
+  "column_break_region",
+  "province",
+  "city",
+  "district",
+  "adcode",
+  "bbox",
+  "section_break_import",
+  "lead_source",
+  "assign_to",
+  "import_only_with_phone",
+  "section_break_stats",
+  "total_fetched",
+  "with_phone_count",
+  "leads_created",
+  "leads_skipped",
+  "column_break_time",
+  "started_at",
+  "completed_at",
+  "section_break_log",
+  "progress_message",
+  "error_log"
+ ],
+ "fields": [
+  {
+   "default": "POI-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "POI-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nQueued\nRunning\nCompleted\nFailed\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "job_owner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Job Owner",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_search",
+   "fieldtype": "Section Break",
+   "label": "Search Criteria"
+  },
+  {
+   "fieldname": "keywords",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Keywords",
+   "reqd": 1
+  },
+  {
+   "description": "POI type codes, separated by |",
+   "fieldname": "types",
+   "fieldtype": "Data",
+   "label": "Types"
+  },
+  {
+   "fieldname": "column_break_region",
+   "fieldtype": "Column Break",
+   "label": "Region"
+  },
+  {
+   "fieldname": "province",
+   "fieldtype": "Data",
+   "label": "Province"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "District"
+  },
+  {
+   "fieldname": "adcode",
+   "fieldtype": "Data",
+   "label": "Adcode"
+  },
+  {
+   "description": "Optional manual bbox: min_lng,min_lat,max_lng,max_lat",
+   "fieldname": "bbox",
+   "fieldtype": "Data",
+   "label": "Bounding Box"
+  },
+  {
+   "fieldname": "section_break_import",
+   "fieldtype": "Section Break",
+   "label": "Import Settings"
+  },
+  {
+   "fieldname": "lead_source",
+   "fieldtype": "Link",
+   "label": "Lead Source",
+   "options": "CRM Lead Source"
+  },
+  {
+   "description": "Override default lead owner for imported leads",
+   "fieldname": "assign_to",
+   "fieldtype": "Link",
+   "label": "Assign To",
+   "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "import_only_with_phone",
+   "fieldtype": "Check",
+   "label": "Import Only With Phone"
+  },
+  {
+   "fieldname": "section_break_stats",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_fetched",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total Fetched",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "with_phone_count",
+   "fieldtype": "Int",
+   "label": "With Phone Count",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "leads_created",
+   "fieldtype": "Int",
+   "label": "Leads Created",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "leads_skipped",
+   "fieldtype": "Int",
+   "label": "Leads Skipped",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_time",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "started_at",
+   "fieldtype": "Datetime",
+   "label": "Started At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_at",
+   "fieldtype": "Datetime",
+   "label": "Completed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_log",
+   "fieldtype": "Section Break",
+   "label": "Logs"
+  },
+  {
+   "fieldname": "progress_message",
+   "fieldtype": "Small Text",
+   "label": "Progress Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Long Text",
+   "label": "Error Log",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "CRM POI Record",
+   "link_fieldname": "sync_job"
+  }
+ ],
+ "modified": "2026-07-02 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Amap",
+ "name": "CRM POI Sync Job",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

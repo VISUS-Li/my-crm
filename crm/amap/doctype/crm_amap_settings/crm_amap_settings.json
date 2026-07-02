@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "creation": "2026-07-02 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "use_mock_api",
+  "section_break_keys",
+  "api_keys",
+  "section_break_sync",
+  "request_interval",
+  "poi_threshold",
+  "max_recursion_depth",
+  "import_only_with_phone",
+  "column_break_defaults",
+  "default_lead_owner",
+  "default_product"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enable Amap POI Sync"
+  },
+  {
+   "default": "0",
+   "description": "Use simulated POI data instead of calling Amap API (for testing)",
+   "fieldname": "use_mock_api",
+   "fieldtype": "Check",
+   "label": "Use Mock API"
+  },
+  {
+   "fieldname": "section_break_keys",
+   "fieldtype": "Section Break",
+   "label": "API Keys"
+  },
+  {
+   "fieldname": "api_keys",
+   "fieldtype": "Table",
+   "label": "API Keys",
+   "options": "CRM Amap API Key"
+  },
+  {
+   "fieldname": "section_break_sync",
+   "fieldtype": "Section Break",
+   "label": "Sync Settings"
+  },
+  {
+   "default": "0.35",
+   "fieldname": "request_interval",
+   "fieldtype": "Float",
+   "label": "Request Interval (seconds)"
+  },
+  {
+   "default": "180",
+   "fieldname": "poi_threshold",
+   "fieldtype": "Int",
+   "label": "POI Threshold (quadtree split)"
+  },
+  {
+   "default": "20",
+   "fieldname": "max_recursion_depth",
+   "fieldtype": "Int",
+   "label": "Max Recursion Depth"
+  },
+  {
+   "default": "1",
+   "fieldname": "import_only_with_phone",
+   "fieldtype": "Check",
+   "label": "Import Only POIs With Valid Phone"
+  },
+  {
+   "fieldname": "column_break_defaults",
+   "fieldtype": "Column Break",
+   "label": "Defaults"
+  },
+  {
+   "fieldname": "default_lead_owner",
+   "fieldtype": "Link",
+   "label": "Default Lead Owner",
+   "options": "User"
+  },
+  {
+   "fieldname": "default_product",
+   "fieldtype": "Link",
+   "label": "Default Product",
+   "options": "CRM Product"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-02 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Amap",
+ "name": "CRM Amap Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
