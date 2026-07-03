@@ -79,7 +79,7 @@
               <Button class="cursor-grab">
                 <template #default>
                   <Tooltip :text="filter.fieldname">
-                    <span>{{ filter.label }}</span>
+                    <span>{{ translateLabel(filter.label) }}</span>
                   </Tooltip>
                 </template>
                 <template #suffix>
@@ -326,6 +326,7 @@ import { viewsStore } from '@/stores/views'
 import { usersStore } from '@/stores/users'
 import { getMeta } from '@/stores/meta'
 import { isEmoji } from '@/utils'
+import { translateLabel, translateSelectOptions } from '@/utils/translateField'
 import {
   Tooltip,
   createResource,
@@ -767,7 +768,7 @@ const quickFilterOptions = computed(() => {
     .filter((f) => f.label)
     .filter((f) => !existingQuickFilters.includes(f.fieldname))
     .map((field) => ({
-      label: field.label,
+      label: __(field.label),
       value: field.fieldname,
       fieldtype: field.fieldtype,
     }))
@@ -786,8 +787,14 @@ const quickFilterOptions = computed(() => {
 const quickFilterList = computed(() => {
   let filters = quickFilters.data || []
 
-  filters.forEach((filter) => {
-    filter['value'] = filter.fieldtype == 'Check' ? false : ''
+  return filters.map((filter) => {
+    const nextFilter = {
+      ...filter,
+      label: translateLabel(filter.label),
+      options: translateSelectOptions(filter.options),
+      value: filter.fieldtype == 'Check' ? false : '',
+    }
+
     if (list.value.params?.filters[filter.fieldname]) {
       let value = list.value.params.filters[filter.fieldname]
       if (Array.isArray(value)) {
@@ -797,18 +804,19 @@ const quickFilterList = computed(() => {
           ) &&
             value[0]?.toLowerCase() == 'like') ||
           value[0]?.toLowerCase() != 'like'
-        )
-          return
-        filter['value'] = value[1]?.replace(/%/g, '')
+        ) {
+          return nextFilter
+        }
+        nextFilter.value = value[1]?.replace(/%/g, '')
       } else if (typeof value == 'boolean') {
-        filter['value'] = value
+        nextFilter.value = value
       } else {
-        filter['value'] = value?.replace(/%/g, '')
+        nextFilter.value = value?.replace(/%/g, '')
       }
     }
-  })
 
-  return filters
+    return nextFilter
+  })
 })
 
 const quickFilters = createResource({
@@ -824,7 +832,7 @@ if (!quickFilters.data) quickFilters.fetch()
 
 function setupNewQuickFilters(filters) {
   newQuickFilters.value = filters.map((f) => ({
-    label: f.label,
+    label: translateLabel(f.label),
     fieldname: f.fieldname,
     fieldtype: f.fieldtype,
   }))

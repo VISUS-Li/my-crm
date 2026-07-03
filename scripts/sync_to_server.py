@@ -172,7 +172,14 @@ def sync_files(cfg: dict) -> int:
 
 def run_remote_deploy(cfg: dict) -> None:
     remote_root = cfg["remote_crm_src"]
-    cmd = f"bash {remote_root}/scripts/deploy-remote.sh"
+    bench_dir = cfg.get("remote_bench", "$HOME/frappe-bench")
+    site_name = cfg.get("site_name", "crm.localhost")
+    env = (
+        f"CRM_SRC={remote_root} "
+        f"BENCH_DIR={bench_dir} "
+        f"SITE_NAME={site_name} "
+    )
+    cmd = f"{env} bash {remote_root}/scripts/deploy-remote.sh"
     client = connect(cfg)
     print("==> Running deploy on server...")
     _, stdout, stderr = client.exec_command(cmd, get_pty=True)
@@ -197,7 +204,11 @@ def ensure_remote_dir(cfg: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Sync CRM code to Ubuntu server")
-    parser.add_argument("--deploy", action="store_true", help="Build frontend and restart bench after sync")
+    parser.add_argument(
+        "--deploy",
+        action="store_true",
+        help="Sync then: yarn build, bench migrate, bench build --app crm, clear-cache, restart",
+    )
     parser.add_argument("--setup-key", action="store_true", help="Install local SSH public key on server")
     args = parser.parse_args()
 

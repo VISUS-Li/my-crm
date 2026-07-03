@@ -587,10 +587,10 @@ def get_crm_form_script():
 					if (quotation_url) {
 						window.open(quotation_url, '_blank');
 					} else {
-						toast.error("Error while creating quotation in ERPNext");
+						toast.error(__("Error while creating quotation in ERPNext"));
 					}
 				}).catch((e) => {
-					toast.error(e.messages[0] || "Error while creating quotation in ERPNext. Check error log in ERPNext for more details");
+					toast.error(e.messages[0] || __("Error while creating quotation in ERPNext. Check error log in ERPNext for more details"));
 				});
 			}
 		})

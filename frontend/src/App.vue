@@ -18,6 +18,7 @@ import { Dialogs } from '@/utils/dialogs'
 import { sessionStore } from '@/stores/session'
 import { FrappeUIProvider, setConfig, useTheme } from 'frappe-ui'
 import { computed, defineAsyncComponent, provide } from 'vue'
+import { useFontScale } from '@/composables/useFontScale'
 
 const session = sessionStore()
 provide('session', session)
@@ -26,6 +27,8 @@ const { setTheme } = useTheme()
 if (!localStorage.getItem('theme')) {
   setTheme('light')
 }
+
+useFontScale()
 
 const MobileLayout = defineAsyncComponent(
   () => import('./components/Layouts/MobileLayout.vue'),

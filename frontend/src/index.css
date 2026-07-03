@@ -1,6 +1,42 @@
 @import 'frappe-ui/style.css';
 
+@layer base {
+  :root {
+    --font-scale: 1;
+    --prose-font-size: calc(15px * var(--font-scale, 1));
+  }
+}
+
 @layer components {
+  .prose-sm:not(.prose-v3) {
+    font-size: calc(14px * var(--font-scale, 1));
+  }
+  .prose-base:not(.prose-v3) {
+    font-size: calc(16px * var(--font-scale, 1));
+  }
+  .prose-lg:not(.prose-v3) {
+    font-size: calc(18px * var(--font-scale, 1));
+  }
+
+  /* frappe-ui NumberChart and CRM arbitrary px text sizes */
+  .text-\[24px\] {
+    font-size: calc(24px * var(--font-scale, 1));
+  }
+  .text-\[30px\] {
+    font-size: calc(30px * var(--font-scale, 1));
+  }
+  .text-\[8px\] {
+    font-size: calc(8px * var(--font-scale, 1));
+  }
+
+  /* Leaflet map controls */
+  .leaflet-container {
+    font-size: calc(12px * var(--font-scale, 1));
+  }
+  .leaflet-control {
+    font-size: calc(11px * var(--font-scale, 1));
+  }
+
   .prose-f {
     @apply break-all
 			max-w-none

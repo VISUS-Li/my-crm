@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import frappe
+from frappe import _
 from frappe.utils import now_datetime
 
 from crm.amap.poi.client import build_client_from_settings
@@ -25,7 +26,13 @@ def run_poi_sync(job_name: str) -> None:
 		)
 		return
 
-	job.db_set({"status": "Running", "started_at": now_datetime(), "progress_message": "Starting sync"})
+	job.db_set(
+		{
+			"status": "Running",
+			"started_at": now_datetime(),
+			"progress_message": "Starting sync",
+		}
+	)
 	frappe.db.commit()
 
 	try:
@@ -41,7 +48,7 @@ def run_poi_sync(job_name: str) -> None:
 
 			bounds = _resolve_bounds(job, client)
 			if not bounds:
-				raise ValueError("Unable to resolve search bounds from bbox or adcode.")
+				raise ValueError(_("Unable to resolve search bounds from bbox or adcode."))
 
 			def on_log(message: str):
 				if job.is_cancelled():
@@ -68,7 +75,7 @@ def run_poi_sync(job_name: str) -> None:
 			job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
 			return
 
-		job.update_progress(f"Importing {len(pois)} POI records...")
+		job.update_progress("Importing {0} POI records...".format(len(pois)))
 		importer.process_pois(pois)
 
 		job.db_set(

@@ -4,7 +4,7 @@
       v-if="column.label && !column.hideLabel"
       class="text-ink-gray-9 max-w-fit text-base"
     >
-      {{ column.label }}
+      {{ translateLabel(column.label) }}
     </div>
     <template v-for="field in column.fields" :key="field.fieldname">
       <Field :field="field" :data-name="field.fieldname" />
@@ -13,6 +13,7 @@
 </template>
 <script setup>
 import Field from '@/components/FieldLayout/Field.vue'
+import { translateLabel } from '@/utils/translateField'
 
 defineProps({
   column: { type: Object, required: true },

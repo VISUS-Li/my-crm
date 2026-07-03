@@ -24,6 +24,10 @@ echo "==> Running migrations..."
 cd "$BENCH_DIR"
 bench --site "$SITE_NAME" migrate
 
+echo "==> Compiling CRM translations (zh.po -> .mo) and app assets..."
+cd "$BENCH_DIR"
+bench build --app crm
+
 echo "==> Clearing cache..."
 cd "$BENCH_DIR"
 bench --site "$SITE_NAME" clear-cache

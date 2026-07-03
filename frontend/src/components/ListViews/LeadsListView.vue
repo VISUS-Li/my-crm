@@ -140,7 +140,7 @@
               :variant="'subtle'"
               :theme="item.color"
               size="md"
-              :label="item.value"
+              :label="getListCellLabel(item.value, column)"
               @click="
                 (event) =>
                   emit('applyFilter', {
@@ -228,7 +228,8 @@ import RatingInput from '@/components/Controls/RatingInput.vue'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import ListBulkActions from '@/components/ListBulkActions.vue'
 import ListRows from '@/components/ListViews/ListRows.vue'
-import { isTranslatable, formatDuration } from '@/utils'
+import { formatDuration } from '@/utils'
+import { getListCellLabel } from '@/utils/translateField'
 import {
   Avatar,
   ListView,
@@ -274,9 +275,7 @@ const pageLengthCount = defineModel({ type: Number })
 const list = defineModel('list', { type: Object })
 
 function getLabel(label, column) {
-  if (column.type === 'Duration') return formatDuration(label)
-  if (column.options && isTranslatable(column.options)) return __(label)
-  return label
+  return getListCellLabel(label, column, { formatDuration })
 }
 
 const isLikeFilterApplied = computed(() => {

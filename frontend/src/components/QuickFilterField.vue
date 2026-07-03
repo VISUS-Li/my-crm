@@ -2,7 +2,7 @@
   <FormControl
     v-if="filter.fieldtype == 'Check'"
     v-model="filter.value"
-    :label="filter.label"
+    :label="displayLabel"
     type="checkbox"
     @change.stop="updateFilter(filter, $event.target.checked)"
   />
@@ -11,15 +11,15 @@
     v-model="filter.value"
     class="form-control cursor-pointer [&_select]:cursor-pointer"
     type="select"
-    :options="filter.options"
-    :placeholder="filter.label"
+    :options="displayOptions"
+    :placeholder="displayLabel"
     @update:modelValue="updateFilter(filter, $event)"
   />
   <Link
     v-else-if="filter.fieldtype === 'Link'"
     :value="filter.value"
     :doctype="filter.options"
-    :placeholder="filter.label"
+    :placeholder="displayLabel"
     @change="(data) => updateFilter(filter, data)"
   />
   <component
@@ -27,14 +27,14 @@
     v-else-if="['Date', 'Datetime'].includes(filter.fieldtype)"
     class="border-none"
     :value="filter.value"
-    :placeholder="filter.label"
+    :placeholder="displayLabel"
     @change="(v) => updateFilter(filter, v)"
   />
   <FormControl
     v-else
     v-model="filter.value"
     type="text"
-    :placeholder="filter.label"
+    :placeholder="displayLabel"
     @input.stop="debouncedFn(filter, $event.target.value)"
   />
 </template>
@@ -42,13 +42,17 @@
 import Link from '@/components/Controls/Link.vue'
 import { FormControl, DatePicker, DateTimePicker } from 'frappe-ui'
 import { useDebounceFn } from '@vueuse/core'
-import { reactive, watch } from 'vue'
+import { reactive, watch, computed } from 'vue'
+import { translateLabel, translateSelectOptions } from '@/utils/translateField'
 
 const props = defineProps({
   filter: { type: Object, required: true },
 })
 
 const filter = reactive(props.filter)
+
+const displayLabel = computed(() => translateLabel(filter.label))
+const displayOptions = computed(() => translateSelectOptions(filter.options))
 
 const emit = defineEmits(['applyQuickFilter'])
 

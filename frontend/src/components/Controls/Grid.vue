@@ -39,7 +39,7 @@
                 ? 'text-right'
                 : ''
             "
-            :title="field.label"
+            :title="translateLabel(field.label)"
           >
             {{ __(field.label) }}
             <span
@@ -135,7 +135,7 @@
                         "
                         v-model="row[field.fieldname]"
                         type="text"
-                        :placeholder="field.placeholder"
+                        :placeholder="translateLabel(field.placeholder || field.label)"
                         :disabled="true"
                       />
                       <Link
@@ -161,7 +161,7 @@
                         :value="getUser(row[field.fieldname]).full_name"
                         :doctype="field.options"
                         :filters="field.filters"
-                        :placeholder="field.placeholder"
+                        :placeholder="translateLabel(field.placeholder || field.label)"
                         :hideMe="true"
                         @change="(v) => fieldChange(v, field, row)"
                       >
@@ -324,7 +324,7 @@
                       >
                         <ButtonControl
                           class="button-control"
-                          :label="field.label"
+                          :label="translateLabel(field.label)"
                           :icon="field.icon"
                           :theme="getButtonTheme(field.button_color)"
                           :variant="getButtonVariant(field.button_color)"
@@ -381,7 +381,7 @@
                           :bubble-menu="true"
                           editorClass="w-full !min-h-[38px] !h-[38px]"
                           :value="row[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="translateLabel(field.placeholder || field.label)"
                           :disabled="Boolean(field.read_only)"
                           @change="(v) => fieldChange(v, field, row)"
                         />
@@ -392,7 +392,7 @@
                         class="combobox"
                         variant="outline"
                         :options="getOptions(field.options)"
-                        :placeholder="field.placeholder"
+                        :placeholder="translateLabel(field.placeholder || field.label)"
                         :disabled="Boolean(field.read_only)"
                         @update:modelValue="(v) => fieldChange(v, field, row)"
                       />
@@ -494,7 +494,7 @@ import {
 import { flt } from '@/utils/numberFormat.js'
 import { usersStore } from '@/stores/users'
 import { getMeta } from '@/stores/meta'
-import { parseLinkFilters } from '@/utils/fieldTransforms'
+import { translateLabel, translateSelectOptions } from '@/utils/translateField'
 import { createDocument } from '@/composables/document'
 import {
   FormControl,
@@ -641,7 +641,7 @@ function getFieldObj(field) {
   const fieldObjWithFilters = {
     ...field,
     filters: parseLinkFilters(field.link_filters),
-    placeholder: field.placeholder || field.label,
+    placeholder: translateLabel(field.placeholder || field.label),
   }
 
   return {
@@ -775,11 +775,9 @@ function getDefaultValue(defaultValue, fieldtype) {
 
 const getOptions = (options) => {
   if (Array.isArray(options)) {
-    return options
+    return translateSelectOptions(options)
   } else if (typeof options === 'string') {
-    return options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
+    return translateSelectOptions(options)
   } else {
     return []
   }

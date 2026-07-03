@@ -41,7 +41,7 @@
       type="text"
       :placeholder="getPlaceholder(field)"
       :disabled="true"
-      :description="field.description"
+      :description="getFieldDescription(field)"
     />
     <Grid
       v-else-if="field.fieldtype === 'Table'"
@@ -59,7 +59,7 @@
       :class="field.prefix ? 'prefix' : ''"
       :options="field.options"
       :placeholder="getPlaceholder(field)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @update:modelValue="(e) => fieldChange(e, field)"
     >
       <template v-if="field.prefix" #prefix>
@@ -72,7 +72,7 @@
         class="form-control"
         type="checkbox"
         :disabled="Boolean(field.read_only)"
-        :description="field.description"
+        :description="getFieldDescription(field)"
         @change="(e) => fieldChange(e.target.checked, field)"
       />
       <label
@@ -188,14 +188,14 @@
       type="textarea"
       :value="data[field.fieldname]"
       :placeholder="getPlaceholder(field)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
     <Password
       v-else-if="field.fieldtype === 'Password'"
       :value="data[field.fieldname]"
       :placeholder="getPlaceholder(field)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
     <FormattedInput
@@ -204,7 +204,7 @@
       :placeholder="getPlaceholder(field)"
       :value="data[field.fieldname] || '0'"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
     <FormattedInput
@@ -213,7 +213,7 @@
       :value="getFormattedPercent(field.fieldname, data)"
       :placeholder="getPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
     />
     <FormattedInput
@@ -222,7 +222,7 @@
       :value="getFormattedFloat(field.fieldname, data)"
       :placeholder="getPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
     />
     <FormattedInput
@@ -231,7 +231,7 @@
       :value="getFormattedCurrency(field.fieldname, data, parentDoc)"
       :placeholder="getPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
     />
     <DurationInput
@@ -239,7 +239,7 @@
       :value="data[field.fieldname]"
       :placeholder="getPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="(v) => fieldChange(v, field)"
     />
     <RatingInput
@@ -251,7 +251,7 @@
     />
     <ButtonControl
       v-else-if="field.fieldtype === 'Button'"
-      :label="field.label"
+      :label="translateLabel(field.label)"
       :icon="field.icon"
       :theme="getButtonTheme(field.button_color)"
       :variant="getButtonVariant(field.button_color)"
@@ -288,7 +288,7 @@
       :placeholder="getPlaceholder(field)"
       :value="data[field.fieldname]"
       :disabled="Boolean(field.read_only)"
-      :description="field.description"
+      :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
   </div>
@@ -319,6 +319,7 @@ import {
   isNull,
   interpolateTemplate,
 } from '@/utils'
+import { translateLabel, translateSelectOptions } from '@/utils/translateField'
 import { flt, formatNumber, formatCurrency } from '@/utils/numberFormat.js'
 import { getMeta } from '@/stores/meta'
 import { parseLinkFilters } from '@/utils/fieldTransforms'
@@ -461,11 +462,9 @@ const field = computed(() => {
   }
 
   if (field.fieldtype == 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
+    field.options = translateSelectOptions(field.options)
 
-    if (field.options[0].value !== '' && !field.reqd) {
+    if (field.options[0]?.value !== '' && !field.reqd) {
       field.options.unshift({ label: '', value: '' })
     }
   }
@@ -555,6 +554,10 @@ const resolvedHtml = computed(() => {
   return interpolateTemplate(field.value.options || '', data.value)
 })
 
+const getFieldDescription = (f) => {
+  return f.description ? translateLabel(f.description) : f.description
+}
+
 const getPlaceholder = (field) => {
   if (field.placeholder) {
     return __(field.placeholder)
@@ -568,11 +571,9 @@ const getPlaceholder = (field) => {
 
 const getOptions = (options) => {
   if (Array.isArray(options)) {
-    return options
+    return translateSelectOptions(options)
   } else if (typeof options === 'string') {
-    return options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
+    return translateSelectOptions(options)
   } else {
     return []
   }

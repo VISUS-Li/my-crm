@@ -52,7 +52,7 @@
               class="mr-2 h-4 w-4 flex-shrink-0 text-ink-gray-7"
             />
             <span class="whitespace-nowrap">
-              {{ item.label }}
+              {{ __(item.label) }}
             </span>
           </div>
           <div

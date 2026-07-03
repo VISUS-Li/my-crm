@@ -62,7 +62,11 @@
     <EmptyState
       v-else-if="!filteredJobs.length"
       name="POI Sync Jobs"
-      description="Create a sync job to fetch POI data from Amap by city, district, and industry keywords."
+      :description="
+        __(
+          'Create a sync job to fetch POI data from Amap by city, district, and industry keywords.',
+        )
+      "
       icon="map-pin"
     />
 
@@ -90,11 +94,11 @@
           </div>
           <div class="w-1/12">
             <Badge :theme="STATUS_COLORS[job.status] || 'gray'" size="sm">
-              {{ job.status }}
+              {{ __(job.status) }}
             </Badge>
           </div>
           <div class="w-2/12 text-sm text-ink-gray-6">
-            {{ job.total_fetched || 0 }} POI / {{ job.leads_created || 0 }} leads
+            {{ __('{0} POI / {1} leads', [job.total_fetched || 0, job.leads_created || 0]) }}
           </div>
           <div class="w-2/12 truncate text-sm">{{ job.job_owner }}</div>
         </li>

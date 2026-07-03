@@ -16,7 +16,7 @@ def test_connection(api_key: str = ""):
 	settings = frappe.get_single("CRM Amap Settings")
 
 	if settings.use_mock_api and not (api_key and api_key.strip()):
-		return {"success": True, "message": "Mock API mode enabled"}
+		return {"success": True, "message": _("Mock API mode enabled")}
 
 	if api_key and api_key.strip():
 		client = AmapClient(

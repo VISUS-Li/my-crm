@@ -1,0 +1,110 @@
+/** Translate field labels and select options via the global __() dictionary. */
+
+export function translateLabel(label) {
+  if (label == null || label === '') return label
+  if (typeof label !== 'string') return label
+  if (typeof window !== 'undefined' && typeof window.__ === 'function') {
+    return window.__(label)
+  }
+  return label
+}
+
+export function isTranslatableDoctype(options) {
+  if (!options || typeof options !== 'string') return false
+  if (typeof window === 'undefined') return false
+  return (window.translated_doctypes || []).includes(options)
+}
+
+export function getListCellLabel(label, column = {}, { formatDuration } = {}) {
+  if (label == null || label === '') return label
+
+  const colType = column.type || column.fieldtype
+  const fieldKey = column.key || column.fieldname
+
+  if (colType === 'Duration' && formatDuration) {
+    return formatDuration(label)
+  }
+
+  if (colType === 'Select' || fieldKey === 'sla_status') {
+    return translateLabel(String(label))
+  }
+
+  if (isTranslatableDoctype(column.options)) {
+    return translateLabel(String(label))
+  }
+
+  return label
+}
+
+export function translateListColumns(columns = []) {
+  return columns.map((col) => ({
+    ...col,
+    label: translateLabel(col.label),
+  }))
+}
+
+/** Translate label on API field/option objects ({ label, fieldname, ... }). */
+export function translateFieldOptions(options = []) {
+  if (!Array.isArray(options)) return options
+  return options.map((option) => ({
+    ...option,
+    label: translateLabel(option.label),
+  }))
+}
+
+/** Translate a stored field value for display (Select options, translated_doctype links). */
+export function translateFieldValue(field, value) {
+  if (value == null || value === '') return value
+
+  const fieldtype = field?.fieldtype
+  const options = field?.options
+
+  if (fieldtype === 'Select') {
+    return translateLabel(String(value))
+  }
+
+  if (fieldtype === 'Link' && isTranslatableDoctype(options)) {
+    return translateLabel(String(value))
+  }
+
+  if (field?.fieldname === 'sla_status') {
+    return translateLabel(String(value))
+  }
+
+  return value
+}
+
+export function translateSelectOptions(options, { includeEmptyOption = false } = {}) {
+  if (options == null) return options
+
+  if (typeof options === 'string') {
+    if (options === '') {
+      return [{ label: '', value: '' }]
+    }
+    const mapped = options.split('\n').map((option) => ({
+      label: translateLabel(option),
+      value: option,
+    }))
+    if (includeEmptyOption && mapped[0]?.value !== '') {
+      mapped.unshift({ label: '', value: '' })
+    }
+    return mapped
+  }
+
+  if (Array.isArray(options)) {
+    return options.map((option) => {
+      if (typeof option === 'string') {
+        return { label: translateLabel(option), value: option }
+      }
+      if (option && typeof option === 'object') {
+        return {
+          ...option,
+          label: translateLabel(option.label ?? option.value),
+        }
+      }
+      return option
+    })
+  }
+
+  return options
+}

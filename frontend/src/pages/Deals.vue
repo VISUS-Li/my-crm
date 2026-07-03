@@ -93,14 +93,14 @@
             :variant="'subtle'"
             :theme="getRow(itemName, titleField).color"
             size="md"
-            :label="getRow(itemName, titleField).value"
+            :label="getKanbanCellLabel(itemName, titleField)"
           />
         </div>
         <div
           v-else-if="getRow(itemName, titleField).label"
           class="truncate text-base"
         >
-          {{ getRow(itemName, titleField).label }}
+          {{ getKanbanCellLabel(itemName, titleField) }}
         </div>
         <div v-else class="text-ink-gray-4">{{ __('No Title') }}</div>
       </div>
@@ -154,7 +154,7 @@
             :variant="'subtle'"
             :theme="getRow(itemName, fieldName).color"
             size="md"
-            :label="getRow(itemName, fieldName).value"
+            :label="getKanbanCellLabel(itemName, fieldName)"
           />
         </div>
         <div
@@ -167,7 +167,7 @@
           />
         </div>
         <div v-else class="truncate text-base">
-          {{ getRow(itemName, fieldName).label }}
+          {{ getKanbanCellLabel(itemName, fieldName) }}
         </div>
       </div>
     </template>
@@ -266,6 +266,7 @@ import { organizationsStore } from '@/stores/organizations'
 import { statusesStore } from '@/stores/statuses'
 import { callEnabled } from '@/composables/telephony'
 import { formatDate, timeAgo, website, formatTime } from '@/utils'
+import { translateLabel, translateListColumns, getListCellLabel } from '@/utils/translateField'
 import { timestampCell } from '@/composables/useTimelinePreferences'
 import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
 import { Tooltip, Avatar, Dropdown } from 'frappe-ui'
@@ -306,6 +307,27 @@ function getRow(name, field) {
   return getValue(rows.value?.find((row) => row.name == name)[field])
 }
 
+function getKanbanColumn(fieldName) {
+  return (
+    deals.value?.data?.fields?.find((field) => field.fieldname === fieldName) ||
+    deals.value?.data?.columns?.find((col) => col.key === fieldName)
+  )
+}
+
+function getKanbanCellLabel(itemName, fieldName) {
+  const item = getRow(itemName, fieldName)
+  if (!item) return ''
+
+  if (fieldName === 'sla_status' && item.value != null) {
+    return translateLabel(item.value)
+  }
+
+  const label = item.label ?? item
+  if (typeof label !== 'string') return label
+
+  return getListCellLabel(label, getKanbanColumn(fieldName) || { key: fieldName })
+}
+
 // Rows
 const rows = computed(() => {
   if (!deals.value?.data?.data) return []
@@ -335,7 +357,7 @@ const columns = computed(() => {
     })
   }
 
-  return _columns
+  return translateListColumns(_columns)
 })
 
 function getGroupedByRows(listRows, groupByField, columns) {
@@ -354,7 +376,7 @@ function getGroupedByRows(listRows, groupByField, columns) {
 
     let groupDetail = {
       label: groupByField.label,
-      group: option || __(' '),
+      group: option ? translateLabel(option) : __(' '),
       collapsed: false,
       rows: parseRows(filteredRows, columns),
     }

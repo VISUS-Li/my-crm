@@ -1,4 +1,5 @@
 import { evaluateExpression } from '@/utils/expressions'
+import { translateLabel, translateSelectOptions } from '@/utils/translateField'
 
 /**
  * Safely parse link_filters which can be a JSON string or already an object.
@@ -53,12 +54,13 @@ export function processField(rawField, options = {}) {
 
   // 4. Select options: string → array
   if (field.fieldtype === 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => ({
-      label: option,
-      value: option,
-    }))
+    field.options = translateSelectOptions(field.options)
 
-    if (field.options[0]?.value !== '' && field.reqd !== 1) {
+    if (
+      Array.isArray(field.options) &&
+      field.options[0]?.value !== '' &&
+      field.reqd !== 1
+    ) {
       field.options.unshift({ label: '', value: '' })
     }
   }
@@ -66,6 +68,12 @@ export function processField(rawField, options = {}) {
   // 5. Link with options='User' → fieldtype='User'
   if (field.fieldtype === 'Link' && field.options === 'User') {
     field.fieldtype = 'User'
+  }
+
+  // 6. Translate label and description for display
+  field.label = translateLabel(field.label)
+  if (field.description) {
+    field.description = translateLabel(field.description)
   }
 
   return field
@@ -117,7 +125,7 @@ export function findMissingMandatory(fields, doc, options = {}) {
       (typeof value === 'string' && value.trim() === '') ||
       (Array.isArray(value) && value.length === 0)
     ) {
-      missingFields.push(df.label || df.fieldname)
+      missingFields.push(translateLabel(df.label || df.fieldname))
     }
   }
 

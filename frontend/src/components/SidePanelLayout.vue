@@ -10,7 +10,7 @@
           <CollapsibleSection
             labelClass="px-2 font-semibold"
             headerClass="h-8"
-            :label="section.label"
+            :label="translateLabel(section.label)"
             :hideLabel="!section.label"
             :opened="section.opened"
           >
@@ -95,16 +95,16 @@
                           class="flex h-7 cursor-pointer items-center px-2 py-1 text-ink-gray-5"
                         >
                           <Tooltip :text="__(field.tooltip)">
-                            <div>{{ doc[field.fieldname] }}</div>
+                            <div>{{ translateFieldValue(field, doc[field.fieldname]) }}</div>
                           </Tooltip>
                         </div>
                         <PrimaryDropdown
                           v-else-if="field.fieldtype === 'Dropdown'"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :options="field.options"
                           :create="field.create"
-                          :label="field.label"
+                          :label="translateLabel(field.label)"
                         />
                         <FormControl
                           v-else-if="field.fieldtype == 'Check'"
@@ -128,7 +128,7 @@
                           class="form-control"
                           type="textarea"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           @change.stop="fieldChange($event.target.value, field)"
                         />
@@ -138,7 +138,7 @@
                           class="form-control cursor-pointer [&_select]:cursor-pointer truncate [&>*]:!ring-0"
                           type="select"
                           :options="field.options"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           @update:modelValue="(v) => fieldChange(v, field)"
                         />
                         <Link
@@ -151,7 +151,7 @@
                           doctype="User"
                           :filters="field.filters"
                           :placeholder="
-                            __('Select') + ' ' + field.label + '...'
+                            __('Select {0}...', [translateLabel(field.label)])
                           "
                           :hideMe="true"
                           @change="(v) => fieldChange(v, field)"
@@ -190,7 +190,7 @@
                               : doc[field.options]
                           "
                           :filters="field.filters"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :onCreate="field.create"
                           @change="(v) => fieldChange(v, field)"
                         />
@@ -201,7 +201,7 @@
                           <TimePicker
                             :value="doc[field.fieldname]"
                             :format="getFormat('', '', false, true, false)"
-                            :placeholder="field.placeholder"
+                            :placeholder="getFieldPlaceholder(field)"
                             @change="(v) => fieldChange(v, field)"
                           />
                         </div>
@@ -212,7 +212,7 @@
                           <DateTimePicker
                             :value="doc[field.fieldname]"
                             :format="getFormat('', '', true, true, false)"
-                            :placeholder="field.placeholder"
+                            :placeholder="getFieldPlaceholder(field)"
                             placement="left-start"
                             @change="(v) => fieldChange(v, field)"
                           />
@@ -224,7 +224,7 @@
                           <DatePicker
                             :value="doc[field.fieldname]"
                             :format="getFormat('', '', true, false, false)"
-                            :placeholder="field.placeholder"
+                            :placeholder="getFieldPlaceholder(field)"
                             placement="left-start"
                             @change="(v) => fieldChange(v, field)"
                           />
@@ -234,7 +234,7 @@
                           class="form-control"
                           type="text"
                           :value="getFormattedPercent(field.fieldname, doc)"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           :disabled="Boolean(field.read_only)"
                           @change.stop="
@@ -245,7 +245,7 @@
                           v-else-if="field.fieldtype === 'Password'"
                           class="form-control"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           :disabled="Boolean(field.read_only)"
                           @change.stop="fieldChange($event.target.value, field)"
@@ -255,7 +255,7 @@
                           class="form-control"
                           type="text"
                           :value="doc[field.fieldname] || '0'"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           :disabled="Boolean(field.read_only)"
                           @change.stop="fieldChange($event.target.value, field)"
@@ -265,7 +265,7 @@
                           class="form-control"
                           type="text"
                           :value="getFormattedFloat(field.fieldname, doc)"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           :disabled="Boolean(field.read_only)"
                           @change.stop="
@@ -277,7 +277,7 @@
                           class="form-control"
                           type="text"
                           :value="getFormattedCurrency(field.fieldname, doc)"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           :disabled="Boolean(field.read_only)"
                           @change.stop="
@@ -288,7 +288,7 @@
                           v-else-if="field.fieldtype === 'Duration'"
                           class="form-control"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :disabled="Boolean(field.read_only)"
                           @change="(v) => fieldChange(v, field)"
                         />
@@ -302,7 +302,7 @@
                         />
                         <ButtonControl
                           v-else-if="field.fieldtype === 'Button'"
-                          :label="field.label"
+                          :label="translateLabel(field.label)"
                           :icon="field.icon"
                           :theme="getButtonTheme(field.button_color)"
                           :variant="getButtonVariant(field.button_color)"
@@ -345,7 +345,7 @@
                           :bubble-menu="true"
                           editorClass="w-full !min-h-[38px] !h-[38px] ml-1"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :disabled="Boolean(field.read_only)"
                           @change="(v) => fieldChange(v, field)"
                         />
@@ -354,7 +354,7 @@
                           class="form-control"
                           type="text"
                           :value="doc[field.fieldname]"
-                          :placeholder="field.placeholder"
+                          :placeholder="getFieldPlaceholder(field)"
                           :debounce="500"
                           @change.stop="fieldChange($event.target.value, field)"
                         />
@@ -428,6 +428,7 @@ import {
   isNull,
   interpolateTemplate,
 } from '@/utils'
+import { translateLabel, translateSelectOptions, translateFieldValue } from '@/utils/translateField'
 import { flt } from '@/utils/numberFormat.js'
 import { Tooltip, DateTimePicker, DatePicker, TimePicker } from 'frappe-ui'
 import { useDocument } from '@/data/document'
@@ -480,6 +481,14 @@ const _sections = computed(() => {
   })
 })
 
+function getFieldPlaceholder(field) {
+  if (field.placeholder) return translateLabel(field.placeholder)
+  if (['Select', 'Link', 'User', 'Dynamic Link'].includes(field.fieldtype)) {
+    return __('Select {0}...', [translateLabel(field.label)])
+  }
+  return __('Enter {0}', [translateLabel(field.label)])
+}
+
 function parsedField(field) {
   // Clone to avoid mutating the cached layout data
   field = { ...field }
@@ -491,11 +500,9 @@ function parsedField(field) {
   }
 
   if (field.fieldtype == 'Select' && typeof field.options === 'string') {
-    field.options = field.options.split('\n').map((option) => {
-      return { label: option, value: option }
-    })
+    field.options = translateSelectOptions(field.options)
 
-    if (field.options[0].value !== '' && !field.reqd) {
+    if (field.options[0]?.value !== '' && !field.reqd) {
       field.options.unshift({ label: '', value: '' })
     }
   }

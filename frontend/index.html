@@ -11,6 +11,18 @@
     <meta name="apple-mobile-web-app-title" content="Frappe CRM" />
     <meta name="apple-mobile-web-app-status-bar-style" content="white" />
 
+    <script>
+      ;(function () {
+        var v = localStorage.getItem('fontScale')
+        var scale = 1
+        if (v) {
+          var n = parseFloat(v)
+          if (!isNaN(n) && n >= 1 && n <= 1.25) scale = n
+        }
+        document.documentElement.style.setProperty('--font-scale', String(scale))
+      })()
+    </script>
+
     <!-- PWA -->
     <link
       rel="icon"

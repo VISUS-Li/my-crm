@@ -9,6 +9,9 @@ from typing import Any
 
 import requests
 
+import frappe
+from frappe import _
+
 from crm.amap.poi.errors import format_amap_error
 from crm.amap.poi.mock_data import generate_mock_pois
 
@@ -47,11 +50,11 @@ class AmapClient:
 
 	def test_connection(self) -> dict[str, Any]:
 		if self.use_mock:
-			return {"success": True, "message": "Mock API mode enabled"}
+			return {"success": True, "message": _("Mock API mode enabled")}
 
 		api_key = self._get_current_key()
 		if not api_key:
-			return {"success": False, "message": "未配置 API Key，请先添加并保存"}
+			return {"success": False, "message": _("No API keys configured. Please add and save one first.")}
 
 		# Use district API — same Web服务 key type as POI search, lighter payload
 		params = {
@@ -65,7 +68,7 @@ class AmapClient:
 			return {"success": False, "message": error}
 
 		if data.get("status") == "1":
-			return {"success": True, "message": "连接成功，Web服务 Key 有效"}
+			return {"success": True, "message": _("Connection successful, Web服务 Key is valid")}
 
 		info = data.get("info", "")
 		return {"success": False, "message": format_amap_error(info), "code": info}
@@ -168,7 +171,7 @@ class AmapClient:
 	def _search(self, url: str, params: dict[str, Any]) -> APIResult:
 		api_key = self._get_current_key()
 		if not api_key:
-			return APIResult(success=False, error_message="No API keys configured")
+			return APIResult(success=False, error_message=_("No API keys configured"))
 
 		params = {**params, "key": api_key}
 		data, error = self._make_request(url, params, api_key)
@@ -237,9 +240,9 @@ class AmapClient:
 				if attempt < MAX_RETRIES - 1:
 					time.sleep(RETRY_DELAYS[attempt])
 			except json.JSONDecodeError as exc:
-				return None, f"Invalid JSON response: {exc}"
+				return None, _("Invalid JSON response: {0}").format(exc)
 
-		return None, f"Request failed after {MAX_RETRIES} retries"
+		return None, _("Request failed after {0} retries").format(MAX_RETRIES)
 
 
 def build_client_from_settings(settings=None) -> AmapClient:

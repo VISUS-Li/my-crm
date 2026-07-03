@@ -199,6 +199,7 @@ import { useDoctypeModal } from '@/composables/doctypeModal'
 import { getMeta } from '@/stores/meta'
 import { usersStore } from '@/stores/users'
 import { formatDate } from '@/utils'
+import { translateListColumns } from '@/utils/translateField'
 import { timestampCell } from '@/composables/useTimelinePreferences'
 import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
 import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'frappe-ui'
@@ -256,7 +257,7 @@ const columns = computed(() => {
     })
   }
 
-  return _columns
+  return translateListColumns(_columns)
 })
 
 function getKanbanRows(data, columns) {

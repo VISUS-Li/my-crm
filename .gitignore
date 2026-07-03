@@ -44,3 +44,9 @@ docs/amap-poi-sales-dev-plan.md
 
 # pytest
 .pytest_cache/
+
+# Yarn Berry local state (keep .yarnrc.yml)
+frontend/.yarn/
+
+# Local i18n diagnostics (one-off dev utility)
+scripts/list_empty_po.py

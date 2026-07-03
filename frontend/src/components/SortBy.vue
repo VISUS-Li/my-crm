@@ -169,6 +169,7 @@ import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
 import { useSortable } from '@vueuse/integrations/useSortable'
 import { createResource, Popover } from 'frappe-ui'
 import { computed, nextTick, onMounted } from 'vue'
+import { translateLabel, translateFieldOptions } from '@/utils/translateField'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -182,6 +183,7 @@ const sortOptions = createResource({
   url: 'crm.api.doc.sort_options',
   cache: ['sortOptions', props.doctype],
   params: { doctype: props.doctype },
+  transform: (data) => translateFieldOptions(data),
 })
 
 onMounted(() => {
@@ -228,7 +230,7 @@ function getSortLabel() {
   let label = sortOptions.data?.find(
     (option) => option.fieldname === values[0].fieldname,
   )?.label
-  return label || values[0].fieldname
+  return label ? translateLabel(label) : values[0].fieldname
 }
 
 function setSort(data) {

@@ -1,6 +1,7 @@
 import { createResource } from 'frappe-ui'
 import { noValueFieldTypes, standardFieldsMeta } from '@/utils/model.js'
 import { formatCurrency, formatNumber } from '@/utils/numberFormat.js'
+import { translateSelectOptions, translateLabel } from '@/utils/translateField'
 import { computed, reactive } from 'vue'
 
 const doctypesMeta = reactive({})
@@ -100,29 +101,38 @@ export function getMeta(doctype) {
               !restrictedFieldTypes.includes(f.fieldtype)),
         )
         .map((f) => {
-          if (f.fieldtype === 'Select' && typeof f.options === 'string') {
-            f.options = f.options.split('\n').map((option) => {
-              return {
-                label: option,
-                value: option,
-              }
-            })
+          const field = { ...f }
+          if (field.fieldtype === 'Select' && typeof field.options === 'string') {
+            field.options = translateSelectOptions(field.options)
 
-            if (f.options[0]?.value !== '' && f.reqd !== 1) {
-              f.options.unshift({
+            if (
+              Array.isArray(field.options) &&
+              field.options[0]?.value !== '' &&
+              field.reqd !== 1
+            ) {
+              field.options.unshift({
                 label: '',
                 value: '',
               })
             }
           }
-          if (f.fieldtype === 'Link' && f.options == 'User') {
-            f.fieldtype = 'User'
+          if (field.fieldtype === 'Link' && field.options == 'User') {
+            field.fieldtype = 'User'
           }
-          return f
+          field.label = translateLabel(field.label)
+          if (field.description) {
+            field.description = translateLabel(field.description)
+          }
+          return field
         }) || []
 
     if (withStandardFields) {
-      fieldsMeta = fieldsMeta.concat(standardFieldsMeta)
+      fieldsMeta = fieldsMeta.concat(
+        standardFieldsMeta.map((f) => ({
+          ...f,
+          label: translateLabel(f.label),
+        })),
+      )
     }
 
     return fieldsMeta || []

@@ -30,14 +30,14 @@
         <slot name="item-label" v-bind="{ active, selected, option }">
           <div v-if="option.description" class="flex flex-col gap-1">
             <div class="flex-1 font-semibold truncate text-ink-gray-7">
-              {{ option.label }}
+              {{ optionLabel(option) }}
             </div>
             <div class="flex-1 text-sm truncate text-ink-gray-5">
               {{ option.description }}
             </div>
           </div>
           <div v-else class="flex-1 truncate text-ink-gray-7">
-            {{ option.label }}
+            {{ optionLabel(option) }}
           </div>
         </slot>
       </template>
@@ -100,6 +100,11 @@ const value = computed({
     )
   },
 })
+
+function optionLabel(option) {
+  if (!option?.label) return option?.label
+  return isTranslatable(props.doctype) ? __(option.label) : option.label
+}
 
 const autocomplete = ref(null)
 const text = ref('')

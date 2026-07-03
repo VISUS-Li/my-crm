@@ -3,7 +3,7 @@
     <Button
       :variant="$attrs.variant"
       class="border-0"
-      :label="activeButton.label"
+      :label="translateLabel(activeButton.label)"
       :size="$attrs.size"
       :class="[
         $attrs.class,
@@ -31,6 +31,7 @@
 import { DropdownOption } from '@/utils'
 import { Button, Dropdown } from 'frappe-ui'
 import { computed, ref } from 'vue'
+import { translateLabel } from '@/utils/translateField'
 
 const props = defineProps({
   options: { type: Array, default: () => [] },
@@ -43,10 +44,10 @@ const parsedOptions = computed(() => {
   return (
     props.options?.map((option) => {
       return {
-        label: option.label,
+        label: translateLabel(option.label),
         component: (props) =>
           DropdownOption({
-            option: option.label,
+            option: translateLabel(option.label),
             active: props.active,
             selected: option.label === activeButton.value.label,
             onClick: () => (activeButton.value = option),

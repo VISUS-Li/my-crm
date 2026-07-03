@@ -1,4 +1,5 @@
 import frappe
+from frappe import _
 
 
 @frappe.whitelist()
@@ -6,7 +7,7 @@ def create_email_account(data: dict):
 	service = data.get("service")
 	service_config = email_service_config.get(service)
 	if not service_config:
-		return "Service not supported"
+		return _("Service not supported")
 
 	try:
 		email_doc = frappe.get_doc(
@@ -43,7 +44,7 @@ def create_email_account(data: dict):
 		# if correct credentials, save the email account
 		email_doc.save()
 	except Exception as e:
-		frappe.throw(str(e))
+		frappe.throw(_("Could not create email account: {0}").format(str(e)))
 
 
 email_service_config = {

@@ -19,6 +19,7 @@
 7. [formDialog API](#formdialog-api)
 8. [Available Helpers](#available-helpers)
 9. [Testing](#testing)
+10. [i18n contracts](#i18n-contracts)
 
 ---
 
@@ -322,3 +323,38 @@ describe('processField', () => {
 ```
 
 > See `tests/setup.js` for available globals (`__`, `window.sysdefaults`)
+
+---
+
+## i18n contracts
+
+> Full guide: [feats/i18n/guide.md](./feats/i18n/guide.md)  
+> **Default locale for this project**: Chinese (Simplified) — `zh`, China, `Asia/Shanghai`, `CNY`.
+
+### Frontend
+
+| API | Contract |
+|---|---|
+| `__('msgid')` / `__('msgid', [args])` | Global from `translation.js`. Lookup in `window.translated_messages` (from `crm/locale/zh.po`). Missing entry → shows msgid (English). |
+| `translateLabel(label)` | `@/utils/translateField` — wraps `window.__`. Use for DocType field labels, descriptions, placeholders. |
+| `translateSelectOptions(options)` | Converts Select string or `{label,value}[]` — **translates labels only**; `value` stays English DB key. |
+| `processField(rawField)` | Applies `translateSelectOptions` to Select fields. Do not bypass for UI-bound fields. |
+| `isTranslatable(doctype)` | `@/utils` — true when DocType has `translated_doctype` in boot. Use before `__(recordName)` for Link/list/status values. |
+
+**Stable rule**: User-visible strings use English msgid in source; Chinese lives in `zh.po`. Display layer must call `__()` / `translateLabel` / `translateSelectOptions` — never raw meta or DB enum strings.
+
+### Backend
+
+| API | Contract |
+|---|---|
+| `_('msgid')` | Frappe standard. All throws, progress messages, and API user messages. |
+| `translated_doctype: 1` | DocType JSON — record **name** is translatable via same msgid in `.po`. |
+
+### System defaults (stable for this fork)
+
+Set by `crm/setup/defaults.py` + `crm/public/js/setup_wizard.js`:
+
+- `System Settings`: language `zh`, country `China`, time_zone `Asia/Shanghai`, currency `CNY`
+- `FCRM Settings.currency`: `CNY` when unset or `USD`
+
+Do not regress these defaults in new install/patch code unless explicitly requested.

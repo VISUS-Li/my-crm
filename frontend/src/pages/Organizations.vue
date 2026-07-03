@@ -67,6 +67,7 @@ import OrganizationsListView from '@/components/ListViews/OrganizationsListView.
 import ViewControls from '@/components/ViewControls.vue'
 import { getMeta } from '@/stores/meta'
 import { formatDate, website } from '@/utils'
+import { translateListColumns } from '@/utils/translateField'
 import { timestampCell } from '@/composables/useTimelinePreferences'
 import { ref, computed } from 'vue'
 import EmptyState from '../components/ListViews/EmptyState.vue'
@@ -152,6 +153,6 @@ const columns = computed(() => {
     })
   }
 
-  return _columns
+  return translateListColumns(_columns)
 })
 </script>

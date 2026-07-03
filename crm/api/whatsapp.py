@@ -304,7 +304,7 @@ def send_whatsapp_template(reference_doctype: str, reference_name: str, template
 			"reference_doctype": reference_doctype,
 			"reference_name": reference_name,
 			"message_type": "Template",
-			"message": "Template message",
+			"message": _("Template message"),
 			"content_type": "text",
 			"use_template": True,
 			"template": template,

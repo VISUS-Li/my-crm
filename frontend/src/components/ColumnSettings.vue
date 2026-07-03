@@ -150,6 +150,7 @@ import { Popover } from 'frappe-ui'
 import Draggable from 'vuedraggable'
 import { computed, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
+import { translateLabel } from '@/utils/translateField'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -206,12 +207,18 @@ const fields = computed(() => {
     existingFields = columns.value.map((column) => column.key)
   }
 
-  return _fields.filter((field) => {
-    return (
-      !columns.value.find((column) => column.key === field.fieldname) &&
-      !existingFields.includes(field.fieldname)
-    )
-  })
+  return _fields
+    .filter((field) => {
+      return (
+        !columns.value.find((column) => column.key === field.fieldname) &&
+        !existingFields.includes(field.fieldname)
+      )
+    })
+    .map((field) => ({
+      ...field,
+      label: translateLabel(field.label),
+      value: field.fieldname,
+    }))
 })
 
 function addColumn(c) {

@@ -42,7 +42,7 @@ d:\code\GitHub\my-crm   ──SFTP──►  ~/crm-src          (源码)
 | `sync_to_server.py` | Windows | SFTP 增量同步 + 可选触发远程部署 |
 | `sync-and-deploy.ps1` | Windows | PowerShell 封装 |
 | `watch_and_sync.py` | Windows | 监听文件变化，空闲后自动 `--deploy` |
-| `deploy-remote.sh` | Ubuntu | `yarn build`、清缓存、重启 bench |
+| `deploy-remote.sh` | Ubuntu | `yarn build`、`bench build --app crm`（编译 zh.po）、清缓存、重启 bench |
 | `setup-ubuntu-crm.sh` | Ubuntu | **一次性**安装 bench + site + CRM |
 | `finish-setup.sh` | Ubuntu | 修复/补全安装（注册 app、建 site、启动） |
 | `docker-compose.crm.yml` | Ubuntu | 独立 MariaDB（3307，避免与现有 MySQL 冲突） |
@@ -79,7 +79,9 @@ d:\code\GitHub\my-crm   ──SFTP──►  ~/crm-src          (源码)
 python scripts/sync_to_server.py --deploy
 ```
 
-远程会执行 `deploy-remote.sh`：`yarn build` → `bench clear-cache` → `bench restart`（若未运行则 `nohup bench start`）。
+远程会执行 `deploy-remote.sh`：`yarn build` → `bench migrate` → **`bench build --app crm`**（将 `crm/locale/zh.po` 编译为 `.mo`，注入 `translated_messages`）→ `bench clear-cache` → `bench restart`（若未运行则 `nohup bench start`）。
+
+部署后请在浏览器 **硬刷新**（Ctrl+Shift+R），确保加载新的前端与翻译词典。
 
 ### 自动监听（长时间开发）
 
@@ -147,5 +149,6 @@ cd ~/frappe-bench && nohup bench start > ~/crm-bench.log 2>&1 &
 | 8010 无响应 | `pgrep -af honcho`；若无进程则 `cd ~/frappe-bench && bench start` |
 | `/crm` 白屏、JS/CSS 404 | 运行 `ln -sfn ~/frappe-bench/apps/crm/crm/public ~/frappe-bench/sites/assets/crm`；`deploy-remote.sh` 已自动处理 |
 | `/crm` 返回 Not Permitted | 先访问 `/login` 登录 |
+| 选中文仍大量英文（Leads、Calls 等） | 确认已 `--deploy`（含 `bench build --app crm`）；检查用户 Language=中文；硬刷新浏览器 |
 
 日志：`~/crm-bench.log`（Ubuntu）。

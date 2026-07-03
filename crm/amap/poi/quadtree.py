@@ -6,6 +6,9 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Callable
 
+import frappe
+from frappe import _
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_THRESHOLD = 180
@@ -117,12 +120,12 @@ class QuadTreeSplitter:
 
 		if bounds.width < self.min_grid_span or bounds.height < self.min_grid_span:
 			if on_log:
-				on_log("Grid reached minimum span, stopping split")
+				on_log(_("Grid reached minimum span, stopping split"))
 			return []
 
 		if current_depth >= self.max_depth:
 			if on_log:
-				on_log("Reached max recursion depth, stopping split")
+				on_log(_("Reached max recursion depth, stopping split"))
 			return []
 
 		all_pois: list[dict[str, Any]] = []

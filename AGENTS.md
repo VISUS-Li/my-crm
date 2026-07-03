@@ -14,6 +14,7 @@ they run as evaluated strings in the browser.
 |---|---|
 | What are we building next | [PLAN.md](./.pi/PLAN.md) |
 | Stable API contracts (setFieldProperty, formDialog, helpers) | [SPEC.md](./.pi/SPEC.md) |
+| **i18n / 多语言（默认中文）** | [feats/i18n/guide.md](./.pi/feats/i18n/guide.md) |
 | Why code is the way it is (decisions, bugs fixed, history) | [ARCHIVE.md](./.pi/ARCHIVE.md) |
 | Form scripting user guide | [feats/form-scripting/guide.md](./.pi/feats/form-scripting/guide.md) |
 | formDialog() API reference | [feats/form-scripting/form-dialog.md](./.pi/feats/form-scripting/form-dialog.md) |
@@ -34,6 +35,43 @@ python scripts/sync_to_server.py --deploy
 This syncs changed files to `~/crm-src` on the server, runs `yarn build`, and restarts bench. Full details, config, and troubleshooting: **[scripts/README.md](./scripts/README.md)**.
 
 Do **not** commit `scripts/deploy.config.json` (local credentials; gitignored).
+
+---
+
+## i18n / 多语言（默认中文）
+
+**This deployment defaults to Chinese (Simplified).** All production code must keep language switching correct — not only wrap strings, but ensure `crm/locale/zh.po` has matching translations.
+
+Full guide: **[feats/i18n/guide.md](./.pi/feats/i18n/guide.md)**
+
+### Agent checklist (every UI/backend change)
+
+| Layer | Rule |
+|---|---|
+| **Frontend** | User-visible text → `__('English msgid')`. Field labels → `translateLabel(field.label)`. Select options → `translateSelectOptions()` / `processField()`. Status/enum values from DB → `__(value)` at display. |
+| **Backend** | User-visible text → `_('English msgid')`. Progress messages, API errors, validation throws — never raw English literals. |
+| **DocType** | Master data shown by name (status, source, …) → `"translated_doctype": 1` + `zh.po` entry for each record name. |
+| **Translations** | New msgids → add `msgstr` to `crm/locale/zh.po` or extend `scripts/fill_zh_translations.py` and run it. |
+| **Defaults** | Do not change system defaults away from zh / China / Asia/Shanghai / CNY without explicit user request. |
+
+### Key files
+
+| File | Role |
+|---|---|
+| `frontend/src/translation.js` | Global `__()` |
+| `frontend/src/utils/translateField.js` | `translateLabel`, `translateSelectOptions` |
+| `frontend/src/utils/fieldTransforms.js` | Select option translation in `processField()` |
+| `crm/locale/zh.po` | Chinese catalog |
+| `crm/setup/defaults.py` | Install/migrate Chinese system defaults |
+| `crm/public/js/setup_wizard.js` | Setup Wizard prefills 中文/中国/CNY |
+| `scripts/fill_zh_translations.py` | Safely fill missing `zh.po` entries |
+
+### Anti-patterns (never ship)
+
+- Hardcoded English in templates: `description="..."`, `label: 'Set'`, `{{ job.status }}`
+- Raw meta: `:label="field.label"`, `:options="field.options"`
+- Backend: `progress_message = "Starting sync"` without `_()`
+- New features with `__()` calls but no `zh.po` entries → UI stays English for Chinese users
 
 ---
 
@@ -66,6 +104,7 @@ Do **not** commit `scripts/deploy.config.json` (local credentials; gitignored).
 | File | Role |
 |---|---|
 | `frontend/src/utils/fieldTransforms.js` | `processField()`, `findMissingMandatory()`, `parseLinkFilters()` — pure, tested |
+| `frontend/src/utils/translateField.js` | `translateLabel()`, `translateSelectOptions()` — i18n for field meta |
 | `frontend/src/utils/expressions.js` | `evaluateDependsOnValue()`, `evaluateExpression()` |
 
 ### Meta & stores
@@ -113,7 +152,7 @@ Pre-commit hooks run prettier + eslint + oxlint automatically. If they modify a 
 PLAN.md          — future only (phases 3B, 4, 5, 6)
 SPEC.md          — stable contracts
 ARCHIVE.md       — completed phases + decision rationale
-feats/           — user-facing feature docs
+feats/           — user-facing feature docs (incl. feats/i18n/guide.md)
 archives/        — old docs preserved verbatim
 ```
 

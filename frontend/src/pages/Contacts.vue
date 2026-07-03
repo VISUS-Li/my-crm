@@ -71,6 +71,7 @@ import ViewControls from '@/components/ViewControls.vue'
 import { getMeta } from '@/stores/meta'
 import { organizationsStore } from '@/stores/organizations.js'
 import { formatDate } from '@/utils'
+import { translateListColumns } from '@/utils/translateField'
 import { timestampCell } from '@/composables/useTimelinePreferences'
 import { ref, computed } from 'vue'
 
@@ -156,6 +157,6 @@ const columns = computed(() => {
     })
   }
 
-  return _columns
+  return translateListColumns(_columns)
 })
 </script>

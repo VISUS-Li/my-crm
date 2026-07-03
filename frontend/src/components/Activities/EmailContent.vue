@@ -7,11 +7,15 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useFontScale } from '@/composables/useFontScale'
+import { fontScaleCssValue } from '@/utils/fontScale'
 
 const props = defineProps({
   content: { type: String, required: true },
 })
+
+const { currentFontScale } = useFontScale()
 
 const files = import.meta.glob('/src/index.css', {
   eager: true,
@@ -105,13 +109,17 @@ function replaceReplyToContent(replyToContentElement, forGmail) {
   )
 }
 
-const htmlContent = `
+const htmlContent = computed(() => {
+  const scale = fontScaleCssValue(currentFontScale.value)
+  return `
 <!DOCTYPE html>
 <html>
 <head>
   <style>
     ${css}
     :root {
+      --font-scale: ${scale};
+      --prose-font-size: calc(15px * var(--font-scale, 1));
       --bg-surface-gray-3: #ededed;
       --bg-surface-gray-4: #e2e2e2;
     }
@@ -151,6 +159,7 @@ const htmlContent = `
 
     .email-content {
         word-break: break-word;
+        font-size: calc(14px * var(--font-scale, 1));
     }
     .email-content
         :is(:where(table):not(:where([class~='not-prose'], [class~='not-prose']
@@ -228,6 +237,7 @@ const htmlContent = `
 </body>
 </html>
 `
+})
 
 watch(iframeRef, (iframe) => {
   if (iframe) {

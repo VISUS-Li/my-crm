@@ -11,4 +11,5 @@ globalThis.__ = (msg, args) => {
 }
 
 globalThis.window = globalThis.window || {}
-globalThis.window.sysdefaults = { currency: 'USD' }
+globalThis.window.__ = globalThis.__
+globalThis.window.sysdefaults = { currency: 'CNY' }

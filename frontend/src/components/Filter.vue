@@ -62,7 +62,7 @@
                     v-model="f.operator"
                     type="select"
                     :options="
-                      getOperators(f.field.fieldtype, f.field.fieldname)
+                      getFilterOperators(f.field.fieldtype, f.field.fieldname)
                     "
                     :placeholder="__('Equals')"
                     @update:modelValue="() => updateOperator(f)"
@@ -95,7 +95,7 @@
                       v-model="f.operator"
                       type="select"
                       :options="
-                        getOperators(f.field.fieldtype, f.field.fieldname)
+                        getFilterOperators(f.field.fieldtype, f.field.fieldname)
                       "
                       :placeholder="__('Equals')"
                       @update:modelValue="() => updateOperator(f)"
@@ -171,6 +171,8 @@ import {
 } from 'frappe-ui'
 import { h, computed, onMounted } from 'vue'
 import { isMobileView } from '@/composables/settings'
+import { translateFieldOptions } from '@/utils/translateField'
+import { getFilterOperators } from '@/utils/filterOperators'
 
 const typeCheck = ['Check']
 const typeLink = ['Link', 'Dynamic Link']
@@ -194,6 +196,10 @@ const filterableFields = createResource({
   url: 'crm.api.doc.get_filterable_fields',
   cache: ['filterableFields', props.doctype],
   params: { doctype: props.doctype },
+  transform: (data) =>
+    translateFieldOptions(
+      data.filter((field) => !field.fieldname.startsWith('_')),
+    ),
 })
 
 onMounted(() => {
@@ -265,115 +271,6 @@ function convertFilters(data, allFilters) {
   return new Set(f)
 }
 
-function getOperators(fieldtype, fieldname) {
-  let options = []
-  if (typeString.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('Like'), value: 'like' },
-        { label: __('Not like'), value: 'not like' },
-        { label: __('In'), value: 'in' },
-        { label: __('Not in'), value: 'not in' },
-        { label: __('Is'), value: 'is' },
-      ],
-    )
-  }
-  if (fieldname === '_assign') {
-    // TODO: make equals and not equals work
-    options = [
-      { label: __('Like'), value: 'like' },
-      { label: __('Not like'), value: 'not like' },
-      { label: __('Is'), value: 'is' },
-    ]
-  }
-  if (typeNumber.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('Like'), value: 'like' },
-        { label: __('Not like'), value: 'not like' },
-        { label: __('In'), value: 'in' },
-        { label: __('Not in'), value: 'not in' },
-        { label: __('Is'), value: 'is' },
-        { label: __('<'), value: '<' },
-        { label: __('>'), value: '>' },
-        { label: __('<='), value: '<=' },
-        { label: __('>='), value: '>=' },
-      ],
-    )
-  }
-  if (typeSelect.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('In'), value: 'in' },
-        { label: __('Not in'), value: 'not in' },
-        { label: __('Is'), value: 'is' },
-      ],
-    )
-  }
-  if (typeLink.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('Like'), value: 'like' },
-        { label: __('Not like'), value: 'not like' },
-        { label: __('In'), value: 'in' },
-        { label: __('Not in'), value: 'not in' },
-        { label: __('Is'), value: 'is' },
-      ],
-    )
-  }
-  if (typeCheck.includes(fieldtype)) {
-    options.push(...[{ label: __('Equals'), value: 'equals' }])
-  }
-  if (typeDuration.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Like'), value: 'like' },
-        { label: __('Not like'), value: 'not like' },
-        { label: __('In'), value: 'in' },
-        { label: __('Not in'), value: 'not in' },
-        { label: __('Is'), value: 'is' },
-      ],
-    )
-  }
-  if (typeDate.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('Is'), value: 'is' },
-        { label: __('>'), value: '>' },
-        { label: __('<'), value: '<' },
-        { label: __('>='), value: '>=' },
-        { label: __('<='), value: '<=' },
-        { label: __('Between'), value: 'between' },
-        { label: __('Timespan'), value: 'timespan' },
-      ],
-    )
-  }
-  if (typeRating.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: __('Equals'), value: 'equals' },
-        { label: __('Not equals'), value: 'not equals' },
-        { label: __('Greater than'), value: '>' },
-        { label: __('Less than'), value: '<' },
-        { label: __('Greater than or equal to'), value: '>=' },
-        { label: __('Less than or equal to'), value: '<=' },
-        { label: __('Is'), value: 'is' },
-      ],
-    )
-  }
-  return options
-}
-
 function getValueControl(f) {
   const { field, operator } = f
   const { fieldtype, options } = field
@@ -382,11 +279,11 @@ function getValueControl(f) {
       type: 'select',
       options: [
         {
-          label: 'Set',
+          label: __('Set'),
           value: 'set',
         },
         {
-          label: 'Not Set',
+          label: __('Not Set'),
           value: 'not set',
         },
       ],
@@ -404,11 +301,11 @@ function getValueControl(f) {
     return h(FormControl, { type: 'text' })
   } else if (typeSelect.includes(fieldtype) || typeCheck.includes(fieldtype)) {
     const _options =
-      fieldtype == 'Check' ? ['Yes', 'No'] : getSelectOptions(options)
+      fieldtype == 'Check' ? [__('Yes'), __('No')] : getSelectOptions(options)
     return h(FormControl, {
       type: 'select',
       options: _options.map((o) => ({
-        label: o,
+        label: __(o),
         value: o,
       })),
       modelValue: f.value,

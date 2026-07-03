@@ -4,8 +4,8 @@
       <Button
         :label="
           hideLabel
-            ? groupByValue?.label
-            : __('Group By: ') + groupByValue?.label
+            ? translateLabel(groupByValue?.label)
+            : __('Group By: ') + translateLabel(groupByValue?.label)
         "
         :iconLeft="DetailsIcon"
         :iconRight="isOpen ? 'chevron-up' : 'chevron-down'"
@@ -19,6 +19,7 @@ import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
 import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
 import { createResource } from 'frappe-ui'
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { translateLabel, translateFieldOptions } from '@/utils/translateField'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -38,6 +39,7 @@ const groupByOptions = createResource({
   url: 'crm.api.doc.get_group_by_fields',
   cache: ['groupByOptions', props.doctype],
   params: { doctype: props.doctype },
+  transform: (data) => translateFieldOptions(data),
 })
 
 onMounted(() => {

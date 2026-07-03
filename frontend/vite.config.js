@@ -60,6 +60,15 @@ export default defineConfig(async ({ mode }) => {
         // barrel, which `export *`s components (Grid/Phone/FormLayout) that need a newer
         // frappe-ui (`frappe-ui/internals`) than this app pins.
         '@framework/ui': path.resolve(__dirname, '../../frappe/ui/src'),
+        // CRM-only aliases: frappe-ui package.json exports do not expose chart helpers.
+        'frappe-ui/charts/axisChartOptions': path.resolve(
+          __dirname,
+          'node_modules/frappe-ui/src/components/Charts/axisChartOptions.ts',
+        ),
+        'frappe-ui/charts/donutChartOptions': path.resolve(
+          __dirname,
+          'node_modules/frappe-ui/src/components/Charts/donutChartOptions.ts',
+        ),
       },
       // ensure the linked framework package reuses the host app's single copy of each peer.
       // `dompurify` is an implicit dep of @framework/ui's sanitize util (not declared in its

@@ -186,7 +186,7 @@ def get_quick_filters(doctype: str, cached: bool = True):
 		options = field.get("options")
 		if field.get("fieldtype") == "Select" and options and isinstance(options, str):
 			options = options.split("\n")
-			options = [{"label": option, "value": option} for option in options]
+			options = [{"label": _(option), "value": option} for option in options]
 			if not any([not option.get("value") for option in options]):
 				options.insert(0, {"label": "", "value": ""})
 		quick_filters.append(
@@ -700,7 +700,7 @@ def get_linked_docs_of_document(doctype: str, docname: str):
 
 		title = data.get("title")
 		if data.doctype == "CRM Call Log":
-			title = f"Call from {data.get('from')} to {data.get('to')}"
+			title = _("Call from {0} to {1}").format(data.get("from"), data.get("to"))
 
 		if data.doctype == "CRM Deal":
 			title = data.get("organization")

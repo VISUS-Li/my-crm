@@ -37,29 +37,29 @@ def _create_form_script():
   onLoad() {
     if (!this.doc.amap_poi_id) return
 
-    this.addButton('Mark Contacted', () => {
+    this.addButton('标记已联系', () => {
       this.doc.status = '已联系'
       this.save()
     })
 
-    this.addButton('Mark Interested', () => {
+    this.addButton('标记有意向', () => {
       this.doc.status = '有意向'
       this.save()
     })
 
-    this.addButton('Mark Invalid', () => {
+    this.addButton('标记无效', () => {
       this.doc.status = '无效'
       this.save()
     })
 
-    this.addButton('Log Follow-up', async () => {
+    this.addButton('记录跟进', async () => {
       await this.formDialog({
-        title: 'Follow-up Note',
+        title: '跟进备注',
         fields: [
-          { fieldname: 'note', fieldtype: 'Small Text', label: 'Note', reqd: 1 },
+          { fieldname: 'note', fieldtype: 'Small Text', label: '备注', reqd: 1 },
         ],
         primaryAction: {
-          label: 'Save',
+          label: '保存',
           action: async (values) => {
             await this.addComment(values.note)
           },

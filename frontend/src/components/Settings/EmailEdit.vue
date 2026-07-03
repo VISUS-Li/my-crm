@@ -37,10 +37,10 @@
         >
           <FormControl
             v-model="state[field.name]"
-            :label="field.label"
+            :label="translateLabel(field.label)"
             :name="field.name"
             :type="field.type"
-            :placeholder="field.placeholder"
+            :placeholder="translateLabel(field.placeholder)"
           />
         </div>
       </div>
@@ -52,11 +52,11 @@
           >
             <FormControl
               v-model="state[field.name]"
-              :label="field.label"
+              :label="translateLabel(field.label)"
               :name="field.name"
               :type="field.type"
             />
-            <p class="text-ink-gray-4 text-p-sm">{{ field.description }}</p>
+            <p class="text-ink-gray-4 text-p-sm">{{ translateLabel(field.description) }}</p>
           </div>
         </template>
       </div>
@@ -85,6 +85,7 @@
 import { computed, reactive, ref } from 'vue'
 import { call, toast } from 'frappe-ui'
 import EmailProviderIcon from './EmailProviderIcon.vue'
+import { translateLabel } from '@/utils/translateField'
 import {
   emailIcon,
   services,

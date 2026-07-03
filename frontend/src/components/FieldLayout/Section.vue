@@ -12,7 +12,7 @@
       class="flex sm:flex-row flex-col gap-4 text-lg-medium"
       :class="{ 'px-3 sm:px-5': hasTabs }"
       :labelClass="['text-lg font-medium', { 'px-3 sm:px-5': hasTabs }]"
-      :label="section.label"
+      :label="translateLabel(section.label)"
       :hideLabel="section.hideLabel || !section.label"
       :opened="section.opened"
       :collapsible="section.collapsible"
@@ -32,6 +32,7 @@
 import CollapsibleSection from '@/components/CollapsibleSection.vue'
 import Column from '@/components/FieldLayout/Column.vue'
 import { inject } from 'vue'
+import { translateLabel } from '@/utils/translateField'
 
 defineProps({
   section: { type: Object, required: true },

@@ -185,9 +185,9 @@ async function testConnection() {
     try {
       const result = await call('crm.amap.api.test_connection')
       if (result?.success) {
-        toast.success(result.message || __('Connection successful'))
+        toast.success(__(result.message) || __('Connection successful'))
       } else {
-        toast.error(result?.message || __('Connection failed'))
+        toast.error(__(result.message) || __('Connection failed'))
       }
     } catch (error) {
       toast.error(error.messages?.[0] || __('Connection failed'))
@@ -216,9 +216,9 @@ async function testConnection() {
       apiKeyFromForm ? { api_key: apiKeyFromForm } : {},
     )
     if (result?.success) {
-      toast.success(result.message || __('Connection successful'))
-    } else {
-      toast.error(result?.message || __('Connection failed'))
+      toast.success(__(result.message) || __('Connection successful'))
+      } else {
+        toast.error(__(result.message) || __('Connection failed'))
     }
   } catch (error) {
     toast.error(error.messages?.[0] || __('Connection failed'))

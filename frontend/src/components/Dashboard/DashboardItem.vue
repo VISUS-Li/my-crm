@@ -24,18 +24,20 @@
       v-else-if="item.type == 'axis_chart'"
       class="h-full w-full rounded-md bg-surface-base shadow"
     >
-      <AxisChart v-if="item.data" :config="item.data" />
+      <ScaledAxisChart v-if="item.data" :config="item.data" />
     </div>
     <div
       v-else-if="item.type == 'donut_chart'"
       class="h-full w-full rounded-md bg-surface-base shadow overflow-hidden"
     >
-      <DonutChart v-if="item.data" :config="item.data" />
+      <ScaledDonutChart v-if="item.data" :config="item.data" />
     </div>
   </div>
 </template>
 <script setup>
-import { AxisChart, DonutChart, NumberChart, Tooltip } from 'frappe-ui'
+import ScaledAxisChart from '@/components/Dashboard/ScaledAxisChart.vue'
+import ScaledDonutChart from '@/components/Dashboard/ScaledDonutChart.vue'
+import { NumberChart, Tooltip } from 'frappe-ui'
 
 defineProps({
   index: { type: Number, required: true },

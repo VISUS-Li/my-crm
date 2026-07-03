@@ -29,6 +29,7 @@
 <script setup>
 import Section from '@/components/FieldLayout/Section.vue'
 import { useDocument } from '@/data/document'
+import { translateLabel } from '@/utils/translateField'
 import { Tabs } from 'frappe-ui'
 import { ref, computed, provide } from 'vue'
 
@@ -69,6 +70,7 @@ const processedTabs = computed(() => {
       const processedTab = tabOverrides ? { ...tab, ...tabOverrides } : tab
       return {
         ...processedTab,
+        label: processedTab.label ? translateLabel(processedTab.label) : processedTab.label,
         sections: processedTab.sections.map((section) => {
           const sectionOverrides = ov[section.name]
           return sectionOverrides

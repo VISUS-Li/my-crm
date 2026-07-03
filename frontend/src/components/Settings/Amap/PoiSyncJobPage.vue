@@ -42,7 +42,7 @@
         <div class="rounded-lg border p-4">
           <div class="text-sm text-ink-gray-5">{{ __('Status') }}</div>
           <Badge :theme="STATUS_COLORS[job.status] || 'gray'" class="mt-2">
-            {{ job.status }}
+            {{ __(job.status) }}
           </Badge>
         </div>
         <div class="rounded-lg border p-4">
@@ -70,13 +70,13 @@
           <div><span class="text-ink-gray-5">{{ __('Started') }}:</span> {{ formatDate(job.started_at) }}</div>
           <div><span class="text-ink-gray-5">{{ __('Completed') }}:</span> {{ formatDate(job.completed_at) }}</div>
           <div><span class="text-ink-gray-5">{{ __('Skipped') }}:</span> {{ job.leads_skipped || 0 }}</div>
-          <div><span class="text-ink-gray-5">{{ __('Progress') }}:</span> {{ job.progress_message || '-' }}</div>
+          <div><span class="text-ink-gray-5">{{ __('Progress') }}:</span> {{ job.progress_message ? __(job.progress_message) : '-' }}</div>
         </div>
       </div>
 
       <div v-if="job.error_log" class="rounded-lg border border-red-200 bg-red-50 p-4">
         <div class="text-p-base-medium text-red-700">{{ __('Error Log') }}</div>
-        <pre class="mt-2 whitespace-pre-wrap text-sm text-red-700">{{ job.error_log }}</pre>
+        <pre class="mt-2 whitespace-pre-wrap text-sm text-red-700">{{ __(job.error_log) }}</pre>
       </div>
     </template>
   </div>

@@ -1,4 +1,5 @@
 import frappeUIPreset from 'frappe-ui/tailwind'
+import fontScalePlugin from './tailwind/fontScalePlugin.js'
 
 export default {
   presets: [frappeUIPreset],
@@ -17,5 +18,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [fontScalePlugin],
 }

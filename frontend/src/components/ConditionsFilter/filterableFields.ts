@@ -1,4 +1,5 @@
 import { createResource } from 'frappe-ui'
+import { translateLabel } from '@/utils/translateField'
 
 export const filterableFields = createResource({
   url: 'crm.api.doc.get_filterable_fields',
@@ -7,7 +8,7 @@ export const filterableFields = createResource({
       .filter((field) => !field.fieldname.startsWith('_'))
       .map((field) => {
         return {
-          label: field.label,
+          label: translateLabel(field.label),
           value: field.fieldname,
           ...field,
         }

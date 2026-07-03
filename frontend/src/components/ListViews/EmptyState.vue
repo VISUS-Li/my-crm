@@ -19,6 +19,7 @@
 </template>
 <script setup>
 import Icon from '@/components/Icon.vue'
+import { translateLabel } from '@/utils/translateField'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -34,12 +35,12 @@ const props = defineProps({
 })
 
 const computedTitle = computed(() => {
-  return props.title ? props.title : __('No {0} Found', [__(props.name)])
+  return props.title ? translateLabel(props.title) : __('No {0} Found', [__(props.name)])
 })
 
 const computedDescription = computed(() => {
   return props.description
-    ? props.description
+    ? translateLabel(props.description)
     : __(
         'It appears that there are currently no {0} available. You can create more {0} by using the Create button.',
         [__(props.name)],

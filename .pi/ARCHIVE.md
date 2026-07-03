@@ -168,3 +168,37 @@ Three patterns were considered:
 
 > Current stable API: [SPEC.md — formDialog API](./SPEC.md#formdialog-api)  
 > Full guide with examples: [feats/form-scripting/form-dialog.md](./feats/form-scripting/form-dialog.md)
+
+---
+
+## i18n — Chinese defaults & field translation
+
+> **Completed (2026-07).** Default locale Chinese; systematic field/status translation at render time.
+
+### Problem
+
+Switching user language to 中文 left much UI in English: empty `zh.po` entries, raw `field.label` / `field.options`, hardcoded template strings, English install seed data displayed without translations, Amap module not in catalog.
+
+### Decisions
+
+| Decision | Rationale |
+|---|---|
+| Frappe gettext (`__()` / `_()` + `.po`), not vue-i18n | Matches Frappe stack; boot injects `translated_messages` once per page load |
+| English msgid, Chinese msgstr | DB Select values and master data keys stay English; display via lookup |
+| `translateField.js` helpers | Single place for label/option translation; used in `processField`, Field, SidePanel, Grid |
+| `EmptyState` auto-translates `description` prop | Callers can pass English msgid; component runs `translateLabel` |
+| Chinese system defaults | `crm/setup/defaults.py` + Setup Wizard JS + patch for existing sites |
+| `scripts/fill_zh_translations.py` | Safe regex fill for `zh.po` — never reformat entire file with naive parser |
+
+### Key files added/changed
+
+| File | Role |
+|---|---|
+| `frontend/src/utils/translateField.js` | `translateLabel`, `translateSelectOptions` |
+| `crm/setup/defaults.py` | zh / China / Asia/Shanghai / CNY |
+| `crm/public/js/setup_wizard.js` | Wizard first-slide defaults |
+| `crm/patches/v1_0/set_chinese_system_defaults.py` | Migrate existing sites |
+| `scripts/fill_zh_translations.py` | Bulk-fill `zh.po` |
+| `.pi/feats/i18n/guide.md` | Agent/developer i18n guide |
+
+> Stable contracts: [SPEC.md — i18n contracts](./SPEC.md#i18n-contracts)

@@ -25,7 +25,7 @@
             class="w-max"
             icon-right="lucide-refresh-cw"
             :disabled="props.itemIndex > 2"
-            :label="conjunction"
+            :label="__(conjunction)"
             @click="toggleConjunction"
           />
         </div>
@@ -126,6 +126,16 @@ import {
 } from 'frappe-ui'
 import { filterableFields } from './filterableFields'
 import { reactive, computed, h, ref } from 'vue'
+import {
+  getConditionOperators,
+  typeCheck,
+  typeLink,
+  typeNumber,
+  typeSelect,
+  typeString,
+  typeDate,
+  typeRating,
+} from '@/utils/filterOperators'
 
 const show = ref(false)
 const emit = defineEmits([
@@ -190,14 +200,6 @@ const dropdownOptions = computed(() => {
   return options
 })
 
-const typeCheck = ['Check']
-const typeLink = ['Link', 'Dynamic Link']
-const typeNumber = ['Float', 'Int', 'Currency', 'Percent']
-const typeSelect = ['Select']
-const typeString = ['Data', 'Long Text', 'Small Text', 'Text Editor', 'Text']
-const typeDate = ['Date', 'Datetime']
-const typeRating = ['Rating']
-
 function toggleConjunction() {
   emit('toggleConjunction', props.conjunction)
 }
@@ -222,11 +224,11 @@ function getValueControl() {
       type: 'select',
       options: [
         {
-          label: 'Set',
+          label: __('Set'),
           value: 'set',
         },
         {
-          label: 'Not Set',
+          label: __('Not Set'),
           value: 'not set',
         },
       ],
@@ -235,11 +237,11 @@ function getValueControl() {
     return h(FormControl, { type: 'text' })
   } else if (typeSelect.includes(fieldtype) || typeCheck.includes(fieldtype)) {
     const _options =
-      fieldtype == 'Check' ? ['Yes', 'No'] : getSelectOptions(options)
+      fieldtype == 'Check' ? [__('Yes'), __('No')] : getSelectOptions(options)
     return h(FormControl, {
       type: 'select',
       options: _options.map((o) => ({
-        label: o,
+        label: __(o),
         value: o,
       })),
     })
@@ -291,116 +293,16 @@ function updateOperator() {
 }
 
 function getOperators() {
-  let options = []
   const field = condition[0]
-  if (!field) return options
+  if (!field) return []
   const fieldData = filterableFields.data?.find((f) => f.fieldname == field)
-  if (!fieldData) return options
-  const { fieldtype, fieldname } = fieldData
-  if (typeString.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'Like', value: 'like' },
-        { label: 'Not Like', value: 'not like' },
-        { label: 'In', value: 'in' },
-        { label: 'Not In', value: 'not in' },
-        { label: 'Is', value: 'is' },
-      ],
-    )
-  }
-  if (fieldname === '_assign') {
-    options = [
-      { label: 'Like', value: 'like' },
-      { label: 'Not Like', value: 'not like' },
-      { label: 'Is', value: 'is' },
-    ]
-  }
-  if (typeNumber.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'Like', value: 'like' },
-        { label: 'Not Like', value: 'not like' },
-        { label: 'In', value: 'in' },
-        { label: 'Not In', value: 'not in' },
-        { label: 'Is', value: 'is' },
-        { label: '<', value: '<' },
-        { label: '>', value: '>' },
-        { label: '<=', value: '<=' },
-        { label: '>=', value: '>=' },
-      ],
-    )
-  }
-  if (typeSelect.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'In', value: 'in' },
-        { label: 'Not In', value: 'not in' },
-        { label: 'Is', value: 'is' },
-      ],
-    )
-  }
-  if (typeLink.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'Like', value: 'like' },
-        { label: 'Not Like', value: 'not like' },
-        { label: 'In', value: 'in' },
-        { label: 'Not In', value: 'not in' },
-        { label: 'Is', value: 'is' },
-      ],
-    )
-  }
-  if (typeCheck.includes(fieldtype)) {
-    options.push(...[{ label: 'Equals', value: '==' }])
-  }
-  if (['Duration'].includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Like', value: 'like' },
-        { label: 'Not Like', value: 'not like' },
-        { label: 'In', value: 'in' },
-        { label: 'Not In', value: 'not in' },
-        { label: 'Is', value: 'is' },
-      ],
-    )
-  }
-  if (typeDate.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'Is', value: 'is' },
-        { label: '>', value: '>' },
-        { label: '<', value: '<' },
-        { label: '>=', value: '>=' },
-        { label: '<=', value: '<=' },
-        { label: 'Between', value: 'between' },
-      ],
-    )
-  }
-  if (typeRating.includes(fieldtype)) {
-    options.push(
-      ...[
-        { label: 'Equals', value: '==' },
-        { label: 'Not Equals', value: '!=' },
-        { label: 'Is', value: 'is' },
-        { label: '>', value: '>' },
-        { label: '<', value: '<' },
-        { label: '>=', value: '>=' },
-        { label: '<=', value: '<=' },
-      ],
-    )
-  }
+  if (!fieldData) return []
+  const options = getConditionOperators(
+    fieldData.fieldtype,
+    fieldData.fieldname,
+  )
   const op = options.find((o) => o.value == condition[1])
-  condition[1] = op?.value || options[0].value
+  condition[1] = op?.value || options[0]?.value
   return options
 }
 
