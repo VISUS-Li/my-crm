@@ -11,9 +11,10 @@ from crm.amap.poi.normalize import get_primary_phone, has_valid_phone, normalize
 
 
 class POIImporter:
-	def __init__(self, sync_job, settings):
+	def __init__(self, sync_job, settings, tripai_user_id: str | None = None):
 		self.sync_job = sync_job
 		self.settings = settings
+		self.tripai_user_id = tripai_user_id
 		self.import_only_with_phone = bool(
 			sync_job.import_only_with_phone or settings.import_only_with_phone
 		)
@@ -68,8 +69,23 @@ class POIImporter:
 		if lead_name:
 			self.stats["leads_created"] += 1
 			frappe.db.set_value("CRM POI Record", poi_record_name, "lead", lead_name)
+			if valid_phone:
+				self._bill_poi_import()
 		else:
 			self.stats["leads_skipped"] += 1
+
+	def _bill_poi_import(self) -> None:
+		if self.settings.use_mock_api or not self.tripai_user_id:
+			return
+		try:
+			from crm.integrations.tripai.billing import consume_poi_import, should_bill_for_sync
+
+			if not should_bill_for_sync(self.settings):
+				return
+
+			consume_poi_import(self.tripai_user_id, self.sync_job.name, poi_count=1)
+		except Exception:
+			frappe.log_error(title="TripAI POI import billing failed")
 
 
 def upsert_poi_record(

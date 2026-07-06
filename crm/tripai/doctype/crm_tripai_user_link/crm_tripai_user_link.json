@@ -1,0 +1,93 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-07-05 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tripai_user_id",
+  "crm_user",
+  "tripai_role",
+  "agent_tenant_id",
+  "agent_tenant_level",
+  "column_break_meta",
+  "last_login_at",
+  "enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "tripai_user_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "TripAI User ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "crm_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "CRM User",
+   "options": "User",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "tripai_role",
+   "fieldtype": "Data",
+   "label": "TripAI Role"
+  },
+  {
+   "fieldname": "agent_tenant_id",
+   "fieldtype": "Data",
+   "label": "Agent Tenant ID"
+  },
+  {
+   "fieldname": "agent_tenant_level",
+   "fieldtype": "Int",
+   "label": "Agent Tenant Level"
+  },
+  {
+   "fieldname": "column_break_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_login_at",
+   "fieldtype": "Datetime",
+   "label": "Last Login At"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-05 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "TripAI",
+ "name": "CRM TripAI User Link",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -32,3 +32,4 @@ crm.patches.v1_0.add_amap_lead_sources
 crm.patches.v1_0.add_amap_lead_statuses
 crm.patches.v1_0.add_amap_phase2_assets
 crm.patches.v1_0.set_chinese_system_defaults
+crm.patches.v1_0.add_tripai_integration_assets

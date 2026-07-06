@@ -107,6 +107,11 @@ const routes = [
     props: true,
   },
   {
+    path: '/auth/callback',
+    name: 'AuthCallback',
+    component: () => import('@/pages/AuthCallback.vue'),
+  },
+  {
     path: '/welcome',
     name: 'Welcome',
     component: () => import('@/pages/Welcome.vue'),
@@ -170,6 +175,8 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next({ name: route_name, params: { viewType: type } })
     }
+  } else if (to.name === 'AuthCallback') {
+    next()
   } else if (!isLoggedIn) {
     window.location.href = '/login?redirect-to=/crm'
   } else if (to.matched.length === 0) {

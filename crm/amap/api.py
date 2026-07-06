@@ -33,7 +33,29 @@ def test_connection(api_key: str = ""):
 def start_sync_job(job_name: str):
 	job = frappe.get_doc("CRM POI Sync Job", job_name)
 	frappe.has_permission("CRM POI Sync Job", "write", job, throw=True)
-	return job.start_sync()
+	try:
+		return job.start_sync()
+	except Exception as exc:
+		try:
+			from crm.integrations.tripai.billing import InsufficientCreditsError
+			from crm.integrations.tripai.settings import get_tripai_settings
+
+			if isinstance(exc, InsufficientCreditsError):
+				settings = get_tripai_settings()
+				frappe.throw(
+					_(
+						"Insufficient TripAI credits. Required: {0}, balance: {1}. Recharge at {2}"
+					).format(
+						exc.required,
+						exc.balance if exc.balance is not None else _("unknown"),
+						f"{settings['base_url']}/zh/dashboard",
+					),
+					title=_("Insufficient TripAI Credits"),
+					exc=frappe.ValidationError,
+				)
+		except ImportError:
+			pass
+		raise
 
 
 @frappe.whitelist()

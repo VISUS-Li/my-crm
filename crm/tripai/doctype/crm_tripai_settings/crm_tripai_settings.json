@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2026-07-05 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "section_break_connection",
+  "base_url",
+  "project_key",
+  "tool_key",
+  "column_break_auth",
+  "runtime_token",
+  "section_break_defaults",
+  "default_redirect_path"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enable TripAI Integration"
+  },
+  {
+   "fieldname": "section_break_connection",
+   "fieldtype": "Section Break",
+   "label": "Platform Connection"
+  },
+  {
+   "default": "http://127.0.0.1:3000",
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "label": "TripAI Base URL",
+   "reqd": 1
+  },
+  {
+   "default": "nextdevtpl",
+   "fieldname": "project_key",
+   "fieldtype": "Data",
+   "label": "Project Key",
+   "reqd": 1
+  },
+  {
+   "default": "my-crm",
+   "fieldname": "tool_key",
+   "fieldtype": "Data",
+   "label": "Tool Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_auth",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "runtime_token",
+   "fieldtype": "Password",
+   "label": "Runtime Token"
+  },
+  {
+   "fieldname": "section_break_defaults",
+   "fieldtype": "Section Break",
+   "label": "Defaults"
+  },
+  {
+   "default": "/crm",
+   "fieldname": "default_redirect_path",
+   "fieldtype": "Data",
+   "label": "Default Redirect Path"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-05 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "TripAI",
+ "name": "CRM TripAI Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -40,10 +40,12 @@ class AmapClient:
 		api_keys: list[str] | None = None,
 		request_interval: float = 0.35,
 		use_mock: bool = False,
+		on_api_call=None,
 	):
 		self.api_keys = api_keys or []
 		self.request_interval = max(request_interval, MIN_REQUEST_INTERVAL)
 		self.use_mock = use_mock or not self.api_keys
+		self.on_api_call = on_api_call
 		self._current_key_index = 0
 		self._last_request_time = 0.0
 		self._key_last_request: dict[str, float] = {key: 0.0 for key in self.api_keys}
@@ -226,6 +228,11 @@ class AmapClient:
 				self._wait_for_interval(key)
 				response = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
 				response.raise_for_status()
+				if not self.use_mock and self.on_api_call:
+					try:
+						self.on_api_call()
+					except Exception:
+						pass
 				return response.json(), None
 			except requests.exceptions.Timeout:
 				if attempt < MAX_RETRIES - 1:
@@ -245,21 +252,51 @@ class AmapClient:
 		return None, _("Request failed after {0} retries").format(MAX_RETRIES)
 
 
-def build_client_from_settings(settings=None) -> AmapClient:
+def build_client_from_settings(settings=None, tripai_user_id: str | None = None, job_name: str | None = None) -> AmapClient:
 	import frappe
 
 	if settings is None:
 		settings = frappe.get_single("CRM Amap Settings")
 
 	api_keys = []
-	for row in settings.api_keys or []:
-		key = row.get_password("api_key")
-		if key:
-			api_keys.append(key)
+	use_mock = bool(settings.use_mock_api)
+	on_api_call = None
 
-	use_mock = bool(settings.use_mock_api) or not api_keys
+	if not use_mock and tripai_user_id and job_name:
+		try:
+			from crm.integrations.tripai.billing import consume_api_call, should_bill_for_sync
+
+			if should_bill_for_sync(settings):
+
+				def _bill_api_call():
+					consume_api_call(tripai_user_id, job_name)
+
+				on_api_call = _bill_api_call
+		except Exception:
+			pass
+
+	# TripAI runtime keys take precedence when integration is enabled
+	if not use_mock:
+		try:
+			from crm.integrations.tripai.billing import get_runtime_amap_keys, should_bill_for_sync
+
+			if should_bill_for_sync(settings):
+				runtime_keys = get_runtime_amap_keys(tripai_user_id)
+				if runtime_keys:
+					api_keys = runtime_keys
+		except Exception:
+			pass
+
+	if not api_keys:
+		for row in settings.api_keys or []:
+			key = row.get_password("api_key")
+			if key:
+				api_keys.append(key)
+
+	use_mock = use_mock or not api_keys
 	return AmapClient(
 		api_keys=api_keys,
 		request_interval=settings.request_interval or 0.35,
 		use_mock=use_mock,
+		on_api_call=on_api_call,
 	)

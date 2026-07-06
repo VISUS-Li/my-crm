@@ -27,6 +27,7 @@
   "with_phone_count",
   "leads_created",
   "leads_skipped",
+  "daily_usage",
   "column_break_time",
   "started_at",
   "completed_at",
@@ -171,6 +172,15 @@
    "fieldname": "leads_skipped",
    "fieldtype": "Int",
    "label": "Leads Skipped",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "TripAI credits consumed for this sync job",
+   "fieldname": "daily_usage",
+   "fieldtype": "Float",
+   "label": "Credits Used",
+   "precision": "4",
    "read_only": 1
   },
   {

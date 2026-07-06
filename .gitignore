@@ -50,3 +50,18 @@ frontend/.yarn/
 
 # Local i18n diagnostics (one-off dev utility)
 scripts/list_empty_po.py
+
+# Local TripAI verification / remote bench scripts (depend on deploy.config.json)
+scripts/tripai/
+
+# Local TripAI unit tests & acceptance runners (run locally, not committed)
+crm/integrations/tripai/test_*.py
+crm/integrations/tripai/*_acceptance.py
+crm/integrations/tripai/debug_*.py
+crm/integrations/tripai/verify_remote.py
+crm/integrations/tripai/configure_remote.py
+crm/integrations/tripai/test_data.py
+
+# Local TripAI feature planning & tool registration notes (project docs live in .pi/)
+docs/tripai-integration-plan.md
+docs/tripai-tool-definition.json

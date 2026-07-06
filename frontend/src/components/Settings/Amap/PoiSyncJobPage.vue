@@ -151,9 +151,34 @@ async function startJob() {
     toast.success(__('Sync started'))
     await fetchProgress()
   } catch (error) {
-    toast.error(error.messages?.[0] || __('Failed to start sync'))
+    const message = error.messages?.[0] || error.message || __('Failed to start sync')
+    if (
+      message.includes('Insufficient TripAI credits') ||
+      message.includes('积分不足') ||
+      message.includes('TripAI credits')
+    ) {
+      toast.error(message, {
+        action: {
+          label: __('Recharge'),
+          onClick: openTripAIRecharge,
+        },
+      })
+    } else {
+      toast.error(message)
+    }
   } finally {
     starting.value = false
+  }
+}
+
+async function openTripAIRecharge() {
+  try {
+    const status = await call('crm.api.tripai.get_integration_status')
+    if (status?.recharge_url) {
+      window.open(status.recharge_url, '_blank', 'noopener')
+    }
+  } catch {
+    toast.error(__('Unable to open TripAI recharge page'))
   }
 }
 

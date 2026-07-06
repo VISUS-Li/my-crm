@@ -12,6 +12,20 @@ no_cache = 1
 
 
 def get_context():
+	_ticket = frappe.form_dict.get("ticket")
+	_request_path = getattr(getattr(frappe.local, "request", None), "path", "") or ""
+	_is_tripai_callback = "/auth/callback" in _request_path
+
+	if _ticket:
+		return _handle_tripai_launch_callback(_ticket)
+
+	# Allow guest to load SPA for client-side ticket exchange
+	if _is_tripai_callback:
+		frappe.db.commit()
+		context = frappe._dict()
+		context.boot = get_boot()
+		return context
+
 	from crm.api import check_app_permission
 
 	if not check_app_permission():
@@ -23,6 +37,27 @@ def get_context():
 	if frappe.session.user != "Guest":
 		capture("active_site", "crm")
 	return context
+
+
+def _handle_tripai_launch_callback(ticket: str):
+	from crm.integrations.tripai.auth import (
+		get_redirect_path,
+		handle_launch_ticket,
+		is_tripai_enabled,
+	)
+
+	if not is_tripai_enabled():
+		frappe.throw(_("TripAI integration is not enabled"), frappe.PermissionError)
+
+	try:
+		handle_launch_ticket(ticket, frappe.form_dict.get("projectKey"))
+	except frappe.AuthenticationError:
+		frappe.throw(_("Invalid or expired launch ticket"), frappe.AuthenticationError)
+
+	redirect_path = get_redirect_path()
+	frappe.local.response["type"] = "redirect"
+	frappe.local.response["location"] = redirect_path
+	return frappe._dict()
 
 
 @frappe.whitelist(methods=["POST"], allow_guest=True)

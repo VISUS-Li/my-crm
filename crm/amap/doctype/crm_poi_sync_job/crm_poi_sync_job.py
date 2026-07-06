@@ -25,6 +25,8 @@ class CRMPOISyncJob(Document):
 		if self.status == "Completed":
 			self._reset_stats()
 
+		self._check_tripai_credits_before_start()
+
 		self.db_set(
 			{
 				"status": "Queued",
@@ -68,6 +70,32 @@ class CRMPOISyncJob(Document):
 
 	def is_cancelled(self) -> bool:
 		return bool(frappe.cache().get_value(f"poi_sync_cancel:{self.name}"))
+
+	def _check_tripai_credits_before_start(self) -> None:
+		try:
+			from crm.integrations.tripai.billing import (
+				InsufficientCreditsError,
+				check_credits_for_sync,
+				resolve_tripai_user_id,
+				should_bill_for_sync,
+			)
+		except ImportError:
+			return
+
+		settings = frappe.get_single("CRM Amap Settings")
+		if not should_bill_for_sync(settings):
+			return
+
+		tripai_user_id = resolve_tripai_user_id(self.job_owner)
+		if not tripai_user_id:
+			frappe.throw(
+				_("TripAI account is not linked. Please log in via the TripAI platform first."),
+				title=_("TripAI Not Linked"),
+			)
+
+		result = check_credits_for_sync(tripai_user_id, estimated_api_calls=50, estimated_poi_imports=100)
+		if not result.get("sufficient"):
+			raise InsufficientCreditsError(result.get("required", 0), result.get("balance"))
 
 	def update_progress(self, message: str):
 		self.db_set("progress_message", message[:500])

@@ -26,18 +26,44 @@ def run_poi_sync(job_name: str) -> None:
 		)
 		return
 
+	tripai_user_id = _resolve_job_tripai_user(job)
+
+	try:
+		_pre_sync_billing_check(job, tripai_user_id, settings)
+	except Exception as exc:
+		error_log = str(exc)
+		try:
+			from crm.integrations.tripai.billing import InsufficientCreditsError
+
+			if isinstance(exc, InsufficientCreditsError):
+				error_log = _("Insufficient TripAI credits. Required: {0}. Please recharge on the platform.").format(
+					exc.required
+				)
+		except ImportError:
+			pass
+		job.db_set(
+			{
+				"status": "Failed",
+				"completed_at": now_datetime(),
+				"error_log": error_log,
+				"progress_message": _("Sync failed"),
+			}
+		)
+		return
+
 	job.db_set(
 		{
 			"status": "Running",
 			"started_at": now_datetime(),
-			"progress_message": "Starting sync",
+			"progress_message": _("Starting sync"),
+			"daily_usage": 0,
 		}
 	)
 	frappe.db.commit()
 
 	try:
-		client = build_client_from_settings(settings)
-		importer = POIImporter(job, settings)
+		client = build_client_from_settings(settings, tripai_user_id=tripai_user_id, job_name=job_name)
+		importer = POIImporter(job, settings, tripai_user_id=tripai_user_id)
 
 		if job.bbox or job.adcode:
 			splitter = QuadTreeSplitter(
@@ -91,12 +117,22 @@ def run_poi_sync(job_name: str) -> None:
 		)
 	except Exception as exc:
 		frappe.log_error(title=f"POI Sync Job failed: {job_name}", message=frappe.get_traceback())
+		error_log = str(exc)
+		try:
+			from crm.integrations.tripai.billing import InsufficientCreditsError
+
+			if isinstance(exc, InsufficientCreditsError):
+				error_log = _("Insufficient TripAI credits. Required: {0}. Please recharge on the platform.").format(
+					exc.required
+				)
+		except ImportError:
+			pass
 		job.db_set(
 			{
 				"status": "Failed",
 				"completed_at": now_datetime(),
-				"error_log": str(exc),
-				"progress_message": "Sync failed",
+				"error_log": error_log,
+				"progress_message": _("Sync failed"),
 			}
 		)
 
@@ -135,3 +171,36 @@ def _fetch_pois_by_text(client, job) -> list:
 
 def promote_poi_record_to_lead(poi_record_name: str) -> str:
 	return promote_poi_to_lead(poi_record_name)
+
+
+def _resolve_job_tripai_user(job) -> str | None:
+	owner = job.job_owner or frappe.session.user
+	try:
+		from crm.integrations.tripai.billing import resolve_tripai_user_id
+
+		return resolve_tripai_user_id(owner)
+	except Exception:
+		return None
+
+
+def _pre_sync_billing_check(job, tripai_user_id: str | None, settings) -> None:
+	if not tripai_user_id:
+		return
+
+	try:
+		from crm.integrations.tripai.billing import (
+			InsufficientCreditsError,
+			check_credits_for_sync,
+			should_bill_for_sync,
+		)
+	except ImportError:
+		return
+
+	if not should_bill_for_sync(settings):
+		return
+
+	# Conservative estimate: 50 API calls + 100 POI imports
+	result = check_credits_for_sync(tripai_user_id, estimated_api_calls=50, estimated_poi_imports=100)
+	if not result.get("sufficient"):
+		raise InsufficientCreditsError(result.get("required", 0), result.get("balance"))
+

@@ -69,6 +69,7 @@ doctype_js = {
 # }
 
 website_route_rules = [
+	{"from_route": "/crm/auth/callback", "to_route": "tripai_auth_callback"},
 	{"from_route": "/crm/<path:app_path>", "to_route": "crm"},
 ]
 
