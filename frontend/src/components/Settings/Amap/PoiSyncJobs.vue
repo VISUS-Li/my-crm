@@ -130,13 +130,15 @@ const filters = reactive({
   district: '',
 })
 
-const statusFilterOptions = [
+const statusFilterOptions = computed(() => [
   { label: __('All'), value: '' },
   { label: __('Draft'), value: 'Draft' },
+  { label: __('Queued'), value: 'Queued' },
   { label: __('Running'), value: 'Running' },
   { label: __('Completed'), value: 'Completed' },
   { label: __('Failed'), value: 'Failed' },
-]
+  { label: __('Cancelled'), value: 'Cancelled' },
+])
 
 const filteredJobs = computed(() => {
   let list = jobs.data || []

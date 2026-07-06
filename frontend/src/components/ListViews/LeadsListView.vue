@@ -84,8 +84,19 @@
               size="sm"
             />
           </div>
-          <div v-else-if="column.key === 'mobile_no' && item">
+          <div
+            v-else-if="column.key === 'mobile_no' && item"
+            class="flex items-center gap-1"
+          >
             <PhoneIcon class="h-4 w-4" />
+            <Button
+              v-if="phoneSalesMode && row.mobile_no"
+              variant="ghost"
+              class="!h-6 !px-1"
+              :tooltip="__('Call')"
+              :icon="PhoneIcon"
+              @click.stop="makeCall(row.mobile_no)"
+            />
           </div>
         </template>
         <template #default="{ label }">
@@ -240,8 +251,11 @@ import {
   ListFooter,
   Dropdown,
   Tooltip,
+  Button,
 } from 'frappe-ui'
 import { sessionStore } from '@/stores/session'
+import { globalStore } from '@/stores/global'
+import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -283,6 +297,8 @@ const isLikeFilterApplied = computed(() => {
 })
 
 const { user } = sessionStore()
+const { makeCall } = globalStore()
+const { enabled: phoneSalesMode } = usePhoneSalesMode()
 
 function isLiked(item) {
   if (item) {

@@ -35,6 +35,7 @@
         </template>
       </Dropdown>
       <Button
+        v-if="!phoneSalesMode"
         :label="__('Convert to Deal')"
         variant="solid"
         @click="showConvertToDealModal = true"
@@ -123,20 +124,22 @@
               </Tooltip>
               <div class="flex gap-1.5">
                 <Button
-                  v-if="callEnabled"
+                  v-if="doc.mobile_no"
+                  :variant="phoneSalesMode ? 'solid' : 'outline'"
+                  :label="phoneSalesMode ? __('Call') : undefined"
+                  :tooltip="phoneSalesMode ? undefined : __('Make a Call')"
+                  :icon="PhoneIcon"
+                  @click="makeCall(doc.mobile_no)"
+                />
+                <Button
+                  v-else-if="callEnabled"
                   :tooltip="__('Make a Call')"
                   :icon="PhoneIcon"
-                  @click="
-                    () =>
-                      doc.mobile_no
-                        ? makeCall(doc.mobile_no)
-                        : toast.error(
-                            __('Please set a mobile number to make calls'),
-                          )
-                  "
+                  @click="toast.error(__('Please set a mobile number to make calls'))"
                 />
 
                 <Button
+                  v-if="!phoneSalesMode"
                   :tooltip="__('Send an Email')"
                   :icon="Email2Icon"
                   @click="
@@ -148,6 +151,7 @@
                   "
                 />
                 <Button
+                  v-if="!phoneSalesMode"
                   :tooltip="__('Go to Website')"
                   :icon="LinkIcon"
                   @click="
@@ -158,6 +162,7 @@
                 />
 
                 <Button
+                  v-if="!phoneSalesMode"
                   :tooltip="__('Attach a File')"
                   :icon="AttachmentIcon"
                   @click="showFilesUploader = true"
@@ -289,7 +294,7 @@ import {
 } from 'frappe-ui'
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useActiveTabManager } from '@/composables/useActiveTabManager'
+import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
 
 const { brand } = getSettings()
 const { $dialog, $socket, makeCall } = globalStore()
@@ -406,6 +411,8 @@ usePageMeta(() => {
   return { title: title.value, icon: brand.favicon }
 })
 
+const { filterLeadTabs, enabled: phoneSalesMode } = usePhoneSalesMode()
+
 const tabs = computed(() => {
   let tabOptions = [
     {
@@ -460,7 +467,9 @@ const tabs = computed(() => {
       condition: () => whatsappEnabled.value,
     },
   ]
-  return tabOptions.filter((tab) => (tab.condition ? tab.condition() : true))
+  return filterLeadTabs(
+    tabOptions.filter((tab) => (tab.condition ? tab.condition() : true)),
+  )
 })
 
 const { tabIndex, changeTabTo } = useActiveTabManager(tabs, 'lastLeadTab')

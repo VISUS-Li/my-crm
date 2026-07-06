@@ -20,7 +20,7 @@ def run_poi_sync(job_name: str) -> None:
 		job.db_set(
 			{
 				"status": "Failed",
-				"error_log": "Amap POI sync is disabled in settings",
+				"error_log": _("Amap POI sync is disabled in settings"),
 				"completed_at": now_datetime(),
 			}
 		)
@@ -86,7 +86,7 @@ def run_poi_sync(job_name: str) -> None:
 				job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
 				return
 
-			job.update_progress("Fetching POI data with quadtree...")
+			job.update_progress(_("Fetching POI data with quadtree..."))
 			pois = splitter.quadtree_split(
 				bounds,
 				keywords=job.keywords,
@@ -94,14 +94,14 @@ def run_poi_sync(job_name: str) -> None:
 				on_log=on_log,
 			)
 		else:
-			job.update_progress("Fetching POI data via city text search...")
+			job.update_progress(_("Fetching POI data via city text search..."))
 			pois = _fetch_pois_by_text(client, job)
 
 		if job.is_cancelled():
 			job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
 			return
 
-		job.update_progress("Importing {0} POI records...".format(len(pois)))
+		job.update_progress(_("Importing {0} POI records...").format(len(pois)))
 		importer.process_pois(pois)
 
 		job.db_set(
@@ -112,7 +112,7 @@ def run_poi_sync(job_name: str) -> None:
 				"with_phone_count": importer.stats["with_phone_count"],
 				"leads_created": importer.stats["leads_created"],
 				"leads_skipped": importer.stats["leads_skipped"],
-				"progress_message": "Sync completed successfully",
+				"progress_message": _("Sync completed successfully"),
 			}
 		)
 	except Exception as exc:

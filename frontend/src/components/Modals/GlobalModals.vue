@@ -16,6 +16,7 @@
     v-model="showChangePasswordModal"
   />
   <AboutModal v-model="showAboutModal" />
+  <GuideDetailModal v-if="phoneSalesMode" />
   <FieldLayoutDialogContainer />
 </template>
 <script setup>
@@ -24,6 +25,7 @@ import ChangePasswordModal from '@/components/Modals/ChangePasswordModal.vue'
 import CreateDocumentModal from '@/components/Modals/CreateDocumentModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import AboutModal from '@/components/Modals/AboutModal.vue'
+import GuideDetailModal from '@/components/Workbench/GuideDetailModal.vue'
 import {
   showCreateDocumentModal,
   createDocumentDoctype,
@@ -36,4 +38,6 @@ import {
   showAboutModal,
   showChangePasswordModal,
 } from '@/composables/modals'
+
+const phoneSalesMode = Boolean(window.phone_sales_mode)
 </script>

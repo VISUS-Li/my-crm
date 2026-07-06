@@ -3536,11 +3536,11 @@ msgstr "表单脚本更新成功"
 #. Name of a Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
 msgid "Frappe CRM"
-msgstr "Frappe CRM"
+msgstr "Trip CRM"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:638
 msgid "Frappe CRM mobile"
-msgstr "Frappe CRM移动端"
+msgstr "Trip CRM 移动版"
 
 #: frontend/src/components/Settings/emailConfig.js:81
 msgid "Frappe Mail Site"
@@ -9454,5 +9454,806 @@ msgstr "随机"
 msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
 
+msgid "Workbench"
+msgstr "工作台"
+
+msgid "Pending Calls"
+msgstr "待拨打"
+
+msgid "Interested"
+msgstr "有意向"
+
+msgid "Fetch Merchants"
+msgstr "获取商家"
+
+msgid "Getting Started"
+msgstr "快速上手"
+
+msgid "Configure Amap API in Settings → Amap POI"
+msgstr "在设置 → 高德 POI 中配置 API"
+
+msgid "Create a sync job: pick city, district, and industry keywords (e.g. restaurant, beauty)"
+msgstr "创建同步任务：选择城市、区县和行业关键词（如餐饮、美容）"
+
+msgid "Start sync — merchants with phone numbers become leads in Pending Calls"
+msgstr "启动同步 — 有电话的商家会自动进入「待拨打」列表"
+
+msgid "Open a lead, call the merchant, then mark the outcome"
+msgstr "打开线索、拨打电话，然后标记跟进结果"
+
+msgid "Contacted Today"
+msgstr "今日已联系"
+
+msgid "New Leads"
+msgstr "新线索"
+
+msgid "{0} merchants waiting for your call"
+msgstr "有 {0} 个商家等待拨打"
+
+msgid "Start with the first one in the list"
+msgstr "从列表第一个开始拨打"
+
+msgid "Start Calling"
+msgstr "开始拨打"
+
+msgid "Recent POI Sync Jobs"
+msgstr "最近同步任务"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "No sync jobs yet. Create one to fetch merchant data from Amap."
+msgstr "还没有同步任务，创建一个即可从高德获取商家数据"
+
+msgid "Fetched {0}, {1} with phone, {2} leads created"
+msgstr "抓取 {0} 条，{1} 条有电话，创建 {2} 条线索"
+
+msgid "Pull merchant POI data from Amap by region and industry. Leads with phone numbers are created automatically."
+msgstr "按区域和行业从高德抓取商家 POI，有电话的会自动变成线索"
+
+msgid "Configure Amap API"
+msgstr "配置高德 API"
+
+msgid "Create your first sync job"
+msgstr "创建第一个同步任务"
+
+msgid "Start calling merchants"
+msgstr "开始拨打商家"
+
+msgid "Call"
+msgstr "拨打"
+
+msgid "Phone Sales"
+msgstr "电话销售"
+
+msgid "Operation Guides"
+msgstr "操作指南"
+
+msgid "Choose a scenario to see step-by-step instructions for your daily work."
+msgstr "选择业务场景，查看分步操作说明。"
+
+msgid "View detailed guide"
+msgstr "查看详细指南"
+
+msgid "View all on Workbench"
+msgstr "在工作台查看全部"
+
+msgid "Recommended"
+msgstr "推荐"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "New here? Start with a scenario guide below"
+msgstr "第一次使用？从下方场景指南开始"
+
+msgid "For example: fetch restaurant merchants in your city, get their phone numbers, and start calling — each guide walks you through every click."
+msgstr "例如：获取本城餐饮商家、拿到电话号码并开始拨打——每个指南都会逐步说明该点哪里、填什么。"
+
+msgid "How to call"
+msgstr "如何拨打"
+
+msgid "View setup guide"
+msgstr "查看配置指南"
+
+msgid "Example: restaurants in your city"
+msgstr "示例：获取本城餐饮商家"
+
+msgid "Set city + district + keyword 餐饮 to fetch local restaurants with phone numbers, then call from Pending Calls."
+msgstr "填写城市、区县，关键词填「餐饮」，即可抓取本地有电话的餐厅，然后在「待拨打」中开始联系。"
+
+msgid "Fetch restaurant merchants in a region"
+msgstr "按区域获取餐饮商家"
+
+msgid "Get restaurant POI data for a city or district from Amap, import merchants with phone numbers, and start calling."
+msgstr "从高德按城市或区县抓取餐饮 POI，导入有电话的商家并开始拨打。"
+
+msgid "Configure the Amap API (first time only)"
+msgstr "配置高德 API（仅首次）"
+
+msgid "Open Settings → Integrations → Amap POI. Add your Amap Web Service API key and turn on POI sync. Set a default product (e.g. AI Live Assistant) so new leads know what to pitch."
+msgstr "打开 设置 → 集成 → 高德 POI，添加高德 Web 服务 API Key 并开启 POI 同步。设置默认推广产品（如 AI 直播助手），新线索会自动带上推荐产品。"
+
+msgid "Use mock mode only for testing. Turn it off before real outreach."
+msgstr "模拟模式仅用于测试，正式获客前请关闭。"
+
+msgid "Create a sync job"
+msgstr "创建同步任务"
+
+msgid "Go to Fetch Merchants in the sidebar and click New Job."
+msgstr "点击侧边栏「获取商家」，再点「新建任务」。"
+
+msgid "Set the region"
+msgstr "设置区域"
+
+msgid "Fill Province, City (required), and District. Example: Zhejiang → Hangzhou → Xihu District. Narrower regions produce more relevant results."
+msgstr "填写省份、城市（必填）、区县。例如：浙江 → 杭州 → 西湖区。区域越小，结果越精准。"
+
+msgid "Set industry keywords"
+msgstr "设置行业关键词"
+
+msgid "In Keywords, enter terms merchants use on Amap, e.g. 餐饮, 餐厅, 饭店, 火锅. Separate multiple keywords with commas."
+msgstr "在「关键词」中填写高德上的行业词，如：餐饮、餐厅、饭店、火锅。多个关键词用英文逗号分隔。"
+
+msgid "Keywords match merchant names and categories on Amap. Try 餐饮 first; add 快餐 or 奶茶 if you need a sub-segment."
+msgstr "关键词匹配高德上的店名和分类。建议先用「餐饮」；如需细分可加「快餐」「奶茶」等。"
+
+msgid "Import only merchants with phone numbers"
+msgstr "只导入有电话的商家"
+
+msgid "Keep “Import only with phone” enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "建议保持「只导入有电话」开启。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Start sync and wait"
+msgstr "启动同步并等待"
+
+msgid "Save the job, then click Start Sync. Large areas may take several minutes. When status is Completed, check stats: total fetched, with phone, leads created."
+msgstr "保存任务后点击「开始同步」。大范围可能需要几分钟。状态变为「已完成」后，查看抓取总数、有电话数、创建线索数。"
+
+msgid "Open the call list"
+msgstr "打开拨打列表"
+
+msgid "Go to Pending Calls in the sidebar (or Workbench → Pending Calls card). Each row shows merchant name, phone, district, and recommended product."
+msgstr "点击侧边栏「待拨打」（或工作台对应卡片）。列表显示店名、电话、区县和推荐产品。"
+
+msgid "Call and record the outcome"
+msgstr "拨打并记录结果"
+
+msgid "Open a lead → click Call. After the conversation use the quick buttons: Mark Contacted, Mark Interested, Mark Invalid, or Record Follow-up to add notes."
+msgstr "打开线索 → 点击「拨打」。通话结束后用快捷按钮：标记已联系、标记有意向、标记无效，或「记录跟进」写备注。"
+
+msgid "First-time Amap API setup"
+msgstr "首次配置高德 API"
+
+msgid "Connect your Amap developer account so the system can fetch merchant POI data."
+msgstr "绑定高德开放平台账号，系统才能抓取商家 POI 数据。"
+
+msgid "Get an Amap API key"
+msgstr "获取高德 API Key"
+
+msgid "Register at Amap Open Platform (lbs.amap.com), create an application, and enable the Web Service / Place Search API. Copy the API key."
+msgstr "在高德开放平台（lbs.amap.com）注册，创建应用并开通 Web 服务 / 地点搜索 API，复制 Key。"
+
+msgid "Add the key in CRM"
+msgstr "在 CRM 中添加 Key"
+
+msgid "Settings → Amap POI → API Keys table → add a row with your key. Enable “Amap POI Sync”."
+msgstr "设置 → 高德 POI → API Keys 表格添加 Key，并开启「高德 POI 同步」。"
+
+msgid "Set defaults"
+msgstr "设置默认值"
+
+msgid "Choose Default Lead Owner and Default Product. New POI leads inherit these automatically."
+msgstr "选择默认线索负责人和默认产品，新导入的 POI 线索会自动继承。"
+
+msgid "Default product helps sales know which offering to introduce on the first call."
+msgstr "默认产品帮助销售在首通电话中知道该介绍哪款产品。"
+
+msgid "Test the connection"
+msgstr "测试连接"
+
+msgid "Click Test Connection on the settings page. If it succeeds, you are ready to create sync jobs."
+msgstr "在设置页点击「测试连接」，成功即可创建同步任务。"
+
+msgid "Open Amap Settings"
+msgstr "打开高德设置"
+
+msgid "Start calling pending merchants"
+msgstr "开始拨打待联系商家"
+
+msgid "Work through the Pending Calls list and contact merchants one by one."
+msgstr "按「待拨打」列表逐个联系商家。"
+
+msgid "Open Pending Calls"
+msgstr "打开待拨打"
+
+msgid "Sidebar → Pending Calls. The list is filtered to Amap leads with a valid phone and status “Pending Call”."
+msgstr "侧边栏 → 待拨打。列表仅显示高德来源、有有效电话、状态为「待拨打」的线索。"
+
+msgid "Pick a merchant"
+msgstr "选择一家商家"
+
+msgid "Click a row to open the lead detail. Confirm phone, address, POI type, and recommended product on the right panel."
+msgstr "点击列表行打开线索详情，在右侧面板确认电话、地址、POI 类型和推荐产品。"
+
+msgid "Make the call"
+msgstr "拨打电话"
+
+msgid "Click the Call button next to the phone number. If telephony is configured, the call starts in-browser; otherwise use your phone and dial the number shown."
+msgstr "点击电话旁的「拨打」按钮。若已配置话务则在浏览器内拨打；否则用手机拨打显示的号码。"
+
+msgid "Update status immediately"
+msgstr "立即更新状态"
+
+msgid "After hanging up: Mark Contacted if you spoke; Mark Invalid if wrong number or not a fit; Mark Interested if they want to learn more."
+msgstr "挂断后：接通则标记已联系；空号或不匹配则标记无效；有了解意愿则标记有意向。"
+
+msgid "Do not leave status as Pending Call after you dial — it keeps your queue accurate for the team."
+msgstr "拨打后请勿保持「待拨打」状态，否则团队队列统计会不准确。"
+
+msgid "Add a follow-up note"
+msgstr "添加跟进备注"
+
+msgid "Click Record Follow-up to log what was said, objections, and next steps. Notes appear in the Activity timeline."
+msgstr "点击「记录跟进」记录通话内容、异议和下一步。备注会显示在活动时间线中。"
+
+msgid "Open Pending Calls"
+msgstr "打开待拨打"
+
+msgid "Record call outcomes and notes"
+msgstr "记录通话结果与备注"
+
+msgid "Keep every call traceable with status changes and follow-up notes."
+msgstr "通过状态变更和跟进备注，让每次通话可追溯。"
+
+msgid "Use quick action buttons"
+msgstr "使用快捷操作按钮"
+
+msgid "On an Amap lead detail page, use: Mark Contacted, Mark Interested, Mark Invalid, Record Follow-up. These appear for leads imported from Amap."
+msgstr "在高德线索详情页使用：标记已联系、标记有意向、标记无效、记录跟进。这些按钮仅对高德导入的线索显示。"
+
+msgid "Status meanings"
+msgstr "状态含义"
+
+msgid "Pending Call = not yet dialed. Contacted = spoke but no clear interest. Interested = wants demo or quote. Invalid = bad number or not target. No Answer = try again later."
+msgstr "待拨打=尚未拨打；已联系=已接通但意向不明；有意向=希望演示或报价；无效=号码错误或非目标客户；未接=稍后再拨。"
+
+msgid "Write useful notes"
+msgstr "写有用的备注"
+
+msgid "In Record Follow-up, note: who you spoke with, current tools, pain points, agreed next step, and best time to call back."
+msgstr "在「记录跟进」中写明：联系人、现有工具、痛点、约定的下一步、最佳回拨时间。"
+
+msgid "Create a task for callbacks"
+msgstr "创建回访任务"
+
+msgid "If the merchant asked to be called back, create a Task with due date from the lead’s Tasks tab so you do not forget."
+msgstr "若商家要求回电，在线索的「任务」Tab 创建带截止日期的任务，避免遗忘。"
+
+msgid "Follow up interested merchants"
+msgstr "跟进有意向商家"
+
+msgid "Move warm leads toward demo, trial, or closing your product."
+msgstr "把温热线索推进到演示、试用或成交。"
+
+msgid "Open the Interested list"
+msgstr "打开有意向列表"
+
+msgid "Sidebar → Interested, or Workbench → Interested card. These leads already showed buying intent."
+msgstr "侧边栏 → 有意向，或工作台对应卡片。这些线索已表现出购买意向。"
+
+msgid "Review history first"
+msgstr "先查看历史记录"
+
+msgid "Read Activity and Comments before calling again so you continue the conversation naturally."
+msgstr "再次拨打前先阅读活动和评论，便于自然延续对话。"
+
+msgid "Advance the status"
+msgstr "推进状态"
+
+msgid "After scheduling a demo, set status to Demo/Trial. After sending pricing, set to Quote. Update recommended product if pitching a different offering."
+msgstr "预约演示后设为「演示/试用」；发送报价后设为「报价」。若改推其他产品，更新推荐产品字段。"
+
+msgid "Set reminders"
+msgstr "设置提醒"
+
+msgid "Create Tasks for demo dates and follow-up calls. Use Call Logs to record each conversation."
+msgstr "为演示日期和回访创建任务，并用通话记录记录每次沟通。"
+
+msgid "Open Interested"
+msgstr "打开有意向"
+
+msgid "there"
+msgstr "您"
+
+msgid "Ctrl"
+msgstr "Ctrl"
+
+msgid "Search by keyword"
+msgstr "按关键词搜索"
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "user1@example.com, user2@example.com, ..."
+msgstr "user1@example.com, user2@example.com, ..."
+
+msgid "Frankfurter"
+msgstr "Frankfurter"
+
+msgid "Fawaz Ahmed Exchange API"
+msgstr "Fawaz Ahmed Exchange API"
+
+msgid "Exchangerate Host"
+msgstr "Exchangerate Host"
+
+msgid "Exchangerate API"
+msgstr "Exchangerate API"
+
+msgid "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+msgstr "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+msgid "************"
+msgstr "************"
+
+msgid "my_secure_token_123"
+msgstr "my_secure_token_123"
+
+msgid "api.exotel.com"
+msgstr "api.exotel.com"
+
+msgid "https://erpnext.example.com"
+msgstr "https://erpnext.example.com"
+
+msgid "9g3f7693gho2ih23hiuhsad"
+msgstr "9g3f7693gho2ih23hiuhsad"
+
+msgid "o2ih23hiuhsado2ih23hiuhsad"
+msgstr "o2ih23hiuhsado2ih23hiuhsad"
+
+msgid "********"
+msgstr "********"
+
+msgid "11/01/2025"
+msgstr "11/01/2025"
+
+msgid "25/12/2025"
+msgstr "25/12/2025"
+
+msgid "10rem"
+msgstr "10rem"
+
+msgid "Trip CRM"
+msgstr "Trip CRM"
+
+msgid "Trip CRM mobile"
+msgstr "Trip CRM 移动版"
+
+msgid "Trip CRM Deal"
+msgstr "Trip CRM 商机"
+
+msgid "Could not create the Trip CRM custom fields on {0} automatically. If it is running the latest ERPNext, enable <b>Trip CRM Data Synchronization</b> in its CRM Settings, Otherwise check the Error Log."
+msgstr "无法在 {0} 上自动创建 Trip CRM 自定义字段。若 ERPNext 为最新版本，请在其 CRM 设置中启用 <b>Trip CRM 数据同步</b>，否则请查看错误日志。"
+
+msgid "All Views"
+msgstr "全部视图"
+
+msgid "Open Settings"
+msgstr "打开设置"
+
+msgid "Create region and industry specific Amap POI sync jobs. Each agent manages their own jobs and leads."
+msgstr "创建按区域和行业划分的高德 POI 同步任务。每位代理管理自己的任务和线索。"
+
+msgid "Filter by city"
+msgstr "按城市筛选"
+
+msgid "Filter by keywords"
+msgstr "按关键词筛选"
+
+msgid "Filter by district"
+msgstr "按区县筛选"
+
+msgid "Job"
+msgstr "任务"
+
+msgid "Region"
+msgstr "区域"
+
+msgid "Stats"
+msgstr "统计"
+
+msgid "Keywords"
+msgstr "关键词"
+
+msgid "City"
+msgstr "城市"
+
+msgid "District"
+msgstr "区县"
+
+msgid "Province"
+msgstr "省份"
+
+msgid "Adcode"
+msgstr "行政区划代码"
+
+msgid "POI Types"
+msgstr "POI 类型"
+
+msgid "Bounding Box"
+msgstr "边界框"
+
+msgid "Lead Source"
+msgstr "线索来源"
+
+msgid "Assign Leads To"
+msgstr "线索分配给"
+
+msgid "New Sync Job"
+msgstr "新建同步任务"
+
+msgid "Preview Search"
+msgstr "预览搜索"
+
+msgid "Import only POIs with phone"
+msgstr "仅导入有电话的 POI"
+
+msgid "Optional type codes, separated by |"
+msgstr "可选类型代码，用 | 分隔"
+
+msgid "Optional district code for precise area"
+msgstr "可选区县代码以精确定位区域"
+
+msgid "min_lng,min_lat,max_lng,max_lat"
+msgstr "min_lng,min_lat,max_lng,max_lat"
+
+msgid "Keywords and city are required"
+msgstr "关键词和城市为必填项"
+
+msgid "Sync job created"
+msgstr "同步任务已创建"
+
+msgid "Sync job updated"
+msgstr "同步任务已更新"
+
+msgid "Failed to save sync job"
+msgstr "保存同步任务失败"
+
+msgid "Preview failed"
+msgstr "预览失败"
+
+msgid "Activate License"
+msgstr "激活许可证"
+
+msgid "Activate"
+msgstr "激活"
+
+msgid "Leads Created"
+msgstr "已创建线索"
+
+msgid "Activate TripAI License"
+msgstr "激活 TripAI 许可证"
+
+msgid "Enter the license key from your agent or TripAI purchase to enable POI sync."
+msgstr "输入代理或 TripAI 购买获得的许可证密钥以启用 POI 同步。"
+
+msgid "License Key"
+msgstr "许可证密钥"
+
+msgid "XXXX-XXXX-XXXX"
+msgstr "XXXX-XXXX-XXXX"
+
+msgid "License activated"
+msgstr "许可证已激活"
+
+msgid "License activation failed"
+msgstr "许可证激活失败"
+
+msgid "Failed to load job progress"
+msgstr "加载任务进度失败"
+
+msgid "Please enter a license key"
+msgstr "请输入许可证密钥"
+
+msgid "Unable to open TripAI recharge page"
+msgstr "无法打开 TripAI 充值页面"
+
+msgid "Sync cancelled"
+msgstr "同步已取消"
+
+msgid "Failed to cancel sync"
+msgstr "取消同步失败"
+
+msgid "Recharge"
+msgstr "充值"
+
+msgid "CRM Web"
+msgstr "CRM Web"
+
+msgid "Please add a Web Service API Key first"
+msgstr "请先添加 Web 服务 API Key"
+
+msgid "Enable TripAI Integration"
+msgstr "启用 TripAI 集成"
+
+msgid "TripAI"
+msgstr "TripAI"
+
+msgid "Login failed"
+msgstr "登录失败"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Connect ERPNext to Trip CRM"
+msgstr "将 ERPNext 连接到 Trip CRM"
+
 msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "We are changing how permissions work in Trip CRM"
+msgstr "我们正在更改 Trip CRM 的权限机制"
+
+msgid "You do not have enough permissions to access Trip CRM. Please contact your administrator if you believe this is an error."
+msgstr "您没有足够的权限访问 Trip CRM。如认为有误，请联系管理员。"
+
+msgid "You do not have permission to access Trip CRM"
+msgstr "您无权访问 Trip CRM"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "e.g. milk tea, beauty, restaurant"
+msgstr "例如：奶茶、美容、餐饮"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Use Amap Web Service API Key (not JS API / Android / iOS). Add server IP to the key whitelist on Amap console. Save before testing if you changed other settings."
+msgstr "请使用高德「Web 服务」API Key（非 JS API / Android / iOS）。在高德控制台将服务器 IP 加入 Key 白名单。若修改了其他设置，请先保存再测试。"
+
+msgid "Search Criteria"
+msgstr "搜索条件"
+
+msgid "Types"
+msgstr "类型"
+
+msgid "Import Settings"
+msgstr "导入设置"
+
+msgid "Import Only With Phone"
+msgstr "仅导入有电话"
+
+msgid "Statistics"
+msgstr "统计"
+
+msgid "Total Fetched"
+msgstr "抓取总数"
+
+msgid "With Phone Count"
+msgstr "有电话数量"
+
+msgid "Leads Skipped"
+msgstr "跳过线索数"
+
+msgid "Credits Used"
+msgstr "消耗积分"
+
+msgid "Started At"
+msgstr "开始时间"
+
+msgid "Completed At"
+msgstr "完成时间"
+
+msgid "Logs"
+msgstr "日志"
+
+msgid "Progress Message"
+msgstr "进度消息"
+
+msgid "POI type codes, separated by |"
+msgstr "POI 类型代码，用 | 分隔"
+
+msgid "Optional manual bbox: min_lng,min_lat,max_lng,max_lat"
+msgstr "可选手动边界框：min_lng,min_lat,max_lng,max_lat"
+
+msgid "Override default lead owner for imported leads"
+msgstr "覆盖导入线索的默认负责人"
+
+msgid "TripAI credits consumed for this sync job"
+msgstr "此同步任务消耗的 TripAI 积分"
+
+msgid "Sync Settings"
+msgstr "同步设置"
+
+msgid "Request Interval (seconds)"
+msgstr "请求间隔（秒）"
+
+msgid "POI Threshold (quadtree split)"
+msgstr "POI 阈值（四叉树拆分）"
+
+msgid "Import Only POIs With Valid Phone"
+msgstr "仅导入有有效电话的 POI"
+
+msgid "Use simulated POI data instead of calling Amap API (for testing)"
+msgstr "使用模拟 POI 数据而非调用高德 API（用于测试）"
+
+msgid "Daily Usage"
+msgstr "每日用量"
+
+msgid "Amap POI ID"
+msgstr "高德 POI ID"
+
+msgid "Normalized Phone"
+msgstr "规范化电话"
+
+msgid "POI Details"
+msgstr "POI 详情"
+
+msgid "Raw Data"
+msgstr "原始数据"
+
+msgid "Raw JSON"
+msgstr "原始 JSON"
+
+msgid "Sync Job"
+msgstr "同步任务"
+
+msgid "POI Address"
+msgstr "POI 地址"
+
+msgid "POI Location"
+msgstr "POI 位置"
+
+msgid "POI Type"
+msgstr "POI 类型"
+
+msgid "POI Type Code"
+msgstr "POI 类型代码"
+
+msgid "Has Valid Phone"
+msgstr "有有效电话"
+
+msgid "Recommended Product"
+msgstr "推荐产品"
+
+msgid "AI Call Score"
+msgstr "AI 通话评分"
+
+msgid "AI Call Summary"
+msgstr "AI 通话摘要"
+
+msgid "Enable Phone Sales Mode"
+msgstr "启用电话销售模式"
+
+msgid "Simplify CRM UI for Amap POI merchant outreach and phone follow-up"
+msgstr "简化 CRM 界面，用于高德 POI 商家外呼与电话跟进"
+
+msgid "TripAI License Required"
+msgstr "需要 TripAI 许可证"
+
+msgid "{0} Visit {1} to purchase or activate a license."
+msgstr "{0} 请访问 {1} 购买或激活许可证。"
+
+msgid "Insufficient TripAI credits. Required: {0}, balance: {1}. Recharge at {2}"
+msgstr "TripAI 积分不足。需要：{0}，余额：{1}。请在 {2} 充值"
+
+msgid "Insufficient TripAI Credits"
+msgstr "TripAI 积分不足"
+
+msgid "unknown"
+msgstr "未知"
+
+msgid "TripAI Configuration Error"
+msgstr "TripAI 配置错误"
+
+msgid "AI outbound callback is not configured yet"
+msgstr "AI 外呼回调尚未配置"
+
+msgid "Bounding box must be min_lng,min_lat,max_lng,max_lat"
+msgstr "边界框格式必须为 min_lng,min_lat,max_lng,max_lat"
+
+msgid "Sync is already running or queued"
+msgstr "同步已在运行或排队中"
+
+msgid "Only running or queued jobs can be cancelled"
+msgstr "仅运行中或排队中的任务可以取消"
+
+msgid "TripAI account is not linked. Please log in via the TripAI platform first."
+msgstr "TripAI 账户未关联。请先通过 TripAI 平台登录。"
+
+msgid "TripAI Not Linked"
+msgstr "TripAI 未关联"
+
+msgid "Amap API keys are not available from TripAI"
+msgstr "无法从 TripAI 获取高德 API Key"
+
+msgid "Insufficient TripAI credits. Required: {0}. Please recharge on the platform."
+msgstr "TripAI 积分不足。需要：{0}。请在平台充值。"
+
+msgid "TripAI billing account is not linked for this job owner"
+msgstr "此任务负责人的 TripAI 计费账户未关联"
+
+msgid "TripAI license required for POI sync"
+msgstr "POI 同步需要有效的 TripAI 许可证"
+
+msgid "Active TripAI license required for POI sync. Activate a license key or purchase one at {0}"
+msgstr "POI 同步需要有效的 TripAI 许可证。请激活许可证密钥或在 {0} 购买"
+
+msgid "TripAI dashboard"
+msgstr "TripAI 控制台"
+
+msgid "License Activation Failed"
+msgstr "许可证激活失败"
+
+msgid "Lead has no phone number for AI outbound call"
+msgstr "线索没有可用于 AI 外呼的电话号码"
+
+msgid "Insufficient TripAI credits for AI outbound call"
+msgstr "AI 外呼 TripAI 积分不足"
+
+msgid "AI outbound call for lead {0}"
+msgstr "线索 {0} 的 AI 外呼"
+
+msgid "AI outbound call queued"
+msgstr "AI 外呼已排队"
+
+msgid "AI outbound call queued. Full telephony integration is pending."
+msgstr "AI 外呼已排队。完整电话集成待上线。"
+
+msgid "Missing launch ticket"
+msgstr "缺少启动票据"
+
+msgid "Invalid or expired launch ticket"
+msgstr "启动票据无效或已过期"
+
+msgid "TripAI authentication failed: {0}"
+msgstr "TripAI 认证失败：{0}"
+
+msgid "TripAI user payload is incomplete"
+msgstr "TripAI 用户数据不完整"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to clear assignment for {0} item(s)?"
+msgstr "确定要清除 {0} 个项目的分配吗？"
+
+msgid "Are you sure you want to convert {0} lead(s) to deal(s)?"
+msgstr "确定要将 {0} 条线索转化为商机吗？"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Are you sure you want to delete {0} - {1}?"
+msgstr "确定要删除 {0} - {1} 吗？"
+
+msgid "Are you sure you want to delete {0} items?"
+msgstr "确定要删除 {0} 个项目吗？"
+
+msgid "Are you sure you want to delete {0} linked doc(s)?"
+msgstr "确定要删除 {0} 个关联文档吗？"
+
+msgid "Are you sure you want to unlink {0} linked doc(s)?"
+msgstr "确定要取消关联 {0} 个关联文档吗？"
+
+msgid "Please provide a reason for marking this {0} as lost"
+msgstr "请说明将此{0}标记为丢单的原因"
+
+msgid "User with email {0} already exists"
+msgstr "邮箱 {0} 的用户已存在"
+
+msgid "User with email {0} already invited"
+msgstr "邮箱 {0} 的用户已被邀请"
+
+msgid "{0} has been granted {1} access"
+msgstr "已为 {0} 授予 {1} 访问权限"

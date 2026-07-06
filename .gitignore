@@ -51,6 +51,7 @@ frontend/.yarn/
 # Local i18n diagnostics / codemods (one-off dev utilities)
 scripts/list_empty_po.py
 scripts/batch_i18n_empty_state.py
+scripts/find_missing_i18n.py
 
 # Local TripAI verification / remote bench scripts (depend on deploy.config.json)
 scripts/tripai/

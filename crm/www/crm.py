@@ -32,7 +32,7 @@ def get_context():
 	from crm.api import check_app_permission
 
 	if not check_app_permission():
-		frappe.throw(_("You do not have permission to access Frappe CRM"), frappe.PermissionError)
+		frappe.throw(_("You do not have permission to access Trip CRM"), frappe.PermissionError)
 
 	frappe.db.commit()
 	context = frappe._dict()
@@ -67,6 +67,7 @@ def get_boot():
 			"demo_data_created": frappe.db.get_default("crm_demo_data_created") == "1",
 			"is_fc_site": is_fc_site(),
 			"show_sales_hierarchy_banner": frappe.db.count("CRM Lead") > 0,
+			"phone_sales_mode": _get_phone_sales_mode(),
 			"translated_doctypes": get_translated_doctypes(),
 			"translated_messages": get_messages_for_boot(),
 			"timezone": {
@@ -80,3 +81,9 @@ def get_boot():
 
 def get_default_route():
 	return "/crm"
+
+
+def _get_phone_sales_mode() -> bool:
+	if not frappe.db.exists("DocType", "FCRM Settings"):
+		return False
+	return bool(frappe.db.get_single_value("FCRM Settings", "enable_phone_sales_mode"))

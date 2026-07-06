@@ -19,6 +19,16 @@ const routes = [
     component: () => import('@/pages/Dashboard.vue'),
   },
   {
+    path: '/workbench',
+    name: 'Workbench',
+    component: () => import('@/pages/Workbench.vue'),
+  },
+  {
+    path: '/poi-sync',
+    name: 'PoiSync',
+    component: () => import('@/pages/PoiSync.vue'),
+  },
+  {
     alias: '/leads',
     path: '/leads/view/:viewType?',
     name: 'Leads',
@@ -162,6 +172,11 @@ router.beforeEach(async (to, from, next) => {
   if (isLoggedIn && to.name !== 'Not Permitted' && !isCrmUser()) {
     next({ name: 'Not Permitted' })
   } else if (to.name === 'Home' && isLoggedIn) {
+    if (window.phone_sales_mode) {
+      next({ name: 'Workbench' })
+      return
+    }
+
     const { views, getDefaultView } = viewsStore()
     await views.promise
 

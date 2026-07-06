@@ -72,6 +72,12 @@ function handleClick() {
 }
 
 let isActive = computed(() => {
+  if (typeof props.to === 'object' && props.to) {
+    if (props.to.query?.view && route.query.view) {
+      return route.query.view === props.to.query.view
+    }
+    return route.name === props.to.name
+  }
   if (route.query.view) {
     return route.query.view == props.to?.query?.view
   }

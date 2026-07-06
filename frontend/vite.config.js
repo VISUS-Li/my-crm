@@ -18,8 +18,8 @@ export default defineConfig(async ({ mode }) => {
         },
         manifest: {
           display: 'standalone',
-          name: 'Frappe CRM',
-          short_name: 'Frappe CRM',
+          name: 'Trip CRM',
+          short_name: 'Trip CRM',
           start_url: '/crm',
           description:
             'Modern & 100% Open-source CRM tool to supercharge your sales operations',

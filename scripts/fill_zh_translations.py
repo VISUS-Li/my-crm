@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ZH_PO = ROOT / "crm" / "locale" / "zh.po"
 
 from i18n_translations import BULK_TRANSLATIONS
+from phone_sales_guide_translations import PHONE_SALES_GUIDE_TRANSLATIONS
+from amap_i18n_translations import AMAP_I18N_TRANSLATIONS
 
 # fmt: off
 TRANSLATIONS: dict[str, str] = {
@@ -344,6 +346,64 @@ TRANSLATIONS: dict[str, str] = {
     "25/12/2025": "25/12/2025",
     "10rem": "10rem",
     "Status": "状态",
+    # Trip CRM branding
+    "Trip CRM": "Trip CRM",
+    "Trip CRM mobile": "Trip CRM 移动版",
+    "Trip CRM Deal": "Trip CRM 商机",
+    "Could not create the Trip CRM custom fields on {0} automatically. If it is running the latest ERPNext, enable <b>Trip CRM Data Synchronization</b> in its CRM Settings, Otherwise check the Error Log.": "无法在 {0} 上自动创建 Trip CRM 自定义字段。若 ERPNext 为最新版本，请在其 CRM 设置中启用 <b>Trip CRM 数据同步</b>，否则请查看错误日志。",
+    # Sidebar / workbench
+    "All Views": "全部视图",
+    "Open Settings": "打开设置",
+    # Amap POI sync UI
+    "Create region and industry specific Amap POI sync jobs. Each agent manages their own jobs and leads.": "创建按区域和行业划分的高德 POI 同步任务。每位代理管理自己的任务和线索。",
+    "Filter by city": "按城市筛选",
+    "Filter by keywords": "按关键词筛选",
+    "Filter by district": "按区县筛选",
+    "Job": "任务",
+    "Search": "搜索",
+    "Region": "区域",
+    "Stats": "统计",
+    "Keywords": "关键词",
+    "City": "城市",
+    "District": "区县",
+    "Province": "省份",
+    "Adcode": "行政区划代码",
+    "POI Types": "POI 类型",
+    "Bounding Box": "边界框",
+    "Lead Source": "线索来源",
+    "Assign Leads To": "线索分配给",
+    "New Sync Job": "新建同步任务",
+    "Preview Search": "预览搜索",
+    "Import only POIs with phone": "仅导入有电话的 POI",
+    "Optional type codes, separated by |": "可选类型代码，用 | 分隔",
+    "Optional district code for precise area": "可选区县代码以精确定位区域",
+    "min_lng,min_lat,max_lng,max_lat": "min_lng,min_lat,max_lng,max_lat",
+    "Keywords and city are required": "关键词和城市为必填项",
+    "Sync job created": "同步任务已创建",
+    "Sync job updated": "同步任务已更新",
+    "Failed to save sync job": "保存同步任务失败",
+    "Preview failed": "预览失败",
+    "Activate License": "激活许可证",
+    "Activate": "激活",
+    "Leads Created": "已创建线索",
+    "Activate TripAI License": "激活 TripAI 许可证",
+    "Enter the license key from your agent or TripAI purchase to enable POI sync.": "输入代理或 TripAI 购买获得的许可证密钥以启用 POI 同步。",
+    "License Key": "许可证密钥",
+    "XXXX-XXXX-XXXX": "XXXX-XXXX-XXXX",
+    "License activated": "许可证已激活",
+    "License activation failed": "许可证激活失败",
+    "Failed to load job progress": "加载任务进度失败",
+    "Please enter a license key": "请输入许可证密钥",
+    "Unable to open TripAI recharge page": "无法打开 TripAI 充值页面",
+    "Sync cancelled": "同步已取消",
+    "Failed to cancel sync": "取消同步失败",
+    "Recharge": "充值",
+    "CRM Web": "CRM Web",
+    "Please add a Web Service API Key first": "请先添加 Web 服务 API Key",
+    "Enable TripAI Integration": "启用 TripAI 集成",
+    "TripAI": "TripAI",
+    "Login failed": "登录失败",
+    "Lost Notes are required when Lost Reason is \"Other\"": "丢单原因为「其他」时必须填写丢单备注",
 }
 # fmt: on
 
@@ -386,6 +446,8 @@ def append_missing(content: str) -> tuple[str, int]:
 
 def main() -> None:
     TRANSLATIONS.update(BULK_TRANSLATIONS)
+    TRANSLATIONS.update(PHONE_SALES_GUIDE_TRANSLATIONS)
+    TRANSLATIONS.update(AMAP_I18N_TRANSLATIONS)
     content = ZH_PO.read_text(encoding="utf-8")
     content, filled = fill_empty_msgstr(content)
     content, appended = append_missing(content)

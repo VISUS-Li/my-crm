@@ -9,6 +9,14 @@
         :actions="leadsListView.customListActions"
       />
       <Button
+        v-if="phoneSalesMode"
+        variant="outline"
+        :label="__('Fetch Merchants')"
+        icon-left="map-pin"
+        @click="router.push({ name: 'PoiSync' })"
+      />
+      <Button
+        v-if="!phoneSalesMode"
         variant="solid"
         :label="__('Create')"
         iconLeft="plus"
@@ -25,7 +33,7 @@
     doctype="CRM Lead"
     :filters="{ converted: 0 }"
     :options="{
-      allowedViews: ['list', 'group_by', 'kanban'],
+      allowedViews: phoneSalesMode ? ['list'] : ['list', 'group_by', 'kanban'],
     }"
   />
   <KanbanView
@@ -296,8 +304,12 @@ import { translateLabel, translateListColumns, getListCellLabel } from '@/utils/
 import { timestampCell } from '@/composables/useTimelinePreferences'
 import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
 import { Avatar, Tooltip, Dropdown } from 'frappe-ui'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, reactive, h } from 'vue'
+import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
+
+const { enabled: phoneSalesMode } = usePhoneSalesMode()
+const router = useRouter()
 
 const { getFormattedPercent, getFormattedFloat, getFormattedCurrency } =
   getMeta('CRM Lead')

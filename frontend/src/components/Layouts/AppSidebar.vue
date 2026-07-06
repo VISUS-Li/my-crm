@@ -86,7 +86,7 @@
           :afterUpgrade="() => capture('upgrade_plan_from_trial_banner')"
         />
         <GettingStartedBanner
-          v-if="!isOnboardingStepsCompleted"
+          v-if="!isOnboardingStepsCompleted && !phoneSalesMode"
           :isSidebarCollapsed="isSidebarCollapsed"
         />
       </div>
@@ -103,14 +103,9 @@
       </SidebarLink>
       <SidebarLink
         v-if="isOnboardingStepsCompleted"
-        :label="__('Help')"
+        :label="phoneSalesMode ? __('Operation Guides') : __('Help')"
         :isCollapsed="isSidebarCollapsed"
-        @click="
-          () => {
-            showHelpModal = minimize ? true : !showHelpModal
-            minimize = !showHelpModal
-          }
-        "
+        @click="openHelp"
       >
         <template #icon>
           <HelpIcon class="h-4 w-4" />
@@ -205,7 +200,11 @@ import {
 import router from '@/router'
 import { useStorage } from '@vueuse/core'
 import { useDemoData } from '@/composables/demoData'
+import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
+import { getSidebarLinks } from '@/config/sidebarLinks'
 import { ref, reactive, computed, markRaw, onMounted } from 'vue'
+
+const { enabled: phoneSalesMode } = usePhoneSalesMode()
 
 const { getPinnedViews, getPublicViews } = viewsStore()
 const { toggle: toggleNotificationPanel } = notificationsStore()
@@ -219,69 +218,33 @@ const isFCSite = ref(window.is_fc_site)
 const isDemoSite = ref(window.is_demo_site)
 const showSalesHierarchyBanner = ref(!!window.show_sales_hierarchy_banner)
 
-const links = [
-  {
-    label: 'Dashboard',
-    icon: LucideLayoutDashboard,
-    to: 'Dashboard',
-  },
-  {
-    label: 'Leads',
-    icon: LeadsIcon,
-    to: 'Leads',
-  },
-  {
-    label: 'Deals',
-    icon: DealsIcon,
-    to: 'Deals',
-  },
-  {
-    label: 'Contacts',
-    icon: ContactsIcon,
-    to: 'Contacts',
-  },
-  {
-    label: 'Organizations',
-    icon: OrganizationsIcon,
-    to: 'Organizations',
-  },
-  {
-    label: 'Notes',
-    icon: NoteIcon,
-    to: 'Notes',
-  },
-  {
-    label: 'Tasks',
-    icon: TaskIcon,
-    to: 'Tasks',
-  },
-  {
-    label: 'Calendar',
-    icon: CalendarIcon,
-    to: 'Calendar',
-  },
-  {
-    label: 'Call Logs',
-    icon: PhoneIcon,
-    to: 'Call Logs',
-  },
-]
+function openHelp() {
+  if (phoneSalesMode.value) {
+    router.push({ name: 'Workbench', hash: '#operation-guides' })
+    return
+  }
+  showHelpModal.value = minimize.value ? true : !showHelpModal.value
+  minimize.value = !showHelpModal.value
+}
+
+const links = computed(() => getSidebarLinks(phoneSalesMode.value))
 
 const allViews = computed(() => {
   let _views = [
     {
-      name: 'All Views',
+      name: phoneSalesMode.value ? 'Phone Sales' : 'All Views',
       hideLabel: true,
       opened: true,
-      views: links.filter((link) => {
-        if (link.condition) {
-          return link.condition()
-        }
-        return true
-      }),
+      views: links.value
+        .filter((link) => (link.condition ? link.condition() : true))
+        .map((link) => ({
+          label: link.label,
+          icon: link.icon,
+          to: link.to,
+        })),
     },
   ]
-  if (getPublicViews().length) {
+  if (!phoneSalesMode.value && getPublicViews().length) {
     _views.push({
       name: 'Public Views',
       opened: true,
@@ -289,7 +252,7 @@ const allViews = computed(() => {
     })
   }
 
-  if (getPinnedViews().length) {
+  if (!phoneSalesMode.value && getPinnedViews().length) {
     _views.push({
       name: 'Pinned Views',
       opened: true,
@@ -314,7 +277,7 @@ function parseView(views) {
 }
 
 function getIcon(routeName, icon) {
-  if (icon) return icon
+  if (icon && typeof icon !== 'string') return icon
 
   switch (routeName) {
     case 'Leads':
@@ -353,6 +316,47 @@ async function getFirstDeal() {
 
 const showIntermediateModal = ref(false)
 const currentStep = ref({})
+
+const phoneSalesSteps = reactive([
+  {
+    name: 'configure_amap',
+    title: __('Configure Amap API'),
+    icon: markRaw(LucideLayoutDashboard),
+    completed: false,
+    onClick: () => {
+      minimize.value = true
+      showSettings.value = true
+      activeSettingsPage.value = 'Amap POI'
+      capture('onboarding_step_clicked_configure_amap')
+    },
+  },
+  {
+    name: 'create_poi_sync_job',
+    title: __('Create your first sync job'),
+    icon: markRaw(LeadsIcon),
+    completed: false,
+    onClick: () => {
+      minimize.value = true
+      router.push({ name: 'PoiSync' })
+      capture('onboarding_step_clicked_create_poi_sync_job')
+    },
+  },
+  {
+    name: 'start_calling',
+    title: __('Start calling merchants'),
+    icon: markRaw(PhoneIcon),
+    completed: false,
+    onClick: () => {
+      minimize.value = true
+      router.push({
+        name: 'Leads',
+        params: { viewType: 'list' },
+        query: { view: '高德-待拨打' },
+      })
+      capture('onboarding_step_clicked_start_calling')
+    },
+  },
+])
 
 const steps = reactive([
   {
@@ -543,7 +547,8 @@ const steps = reactive([
 onMounted(async () => {
   await users.promise
 
-  const filteredSteps = steps.filter((step) => {
+  const stepList = phoneSalesMode.value ? phoneSalesSteps : steps
+  const filteredSteps = stepList.filter((step) => {
     if (step.condition) {
       return step.condition()
     }
@@ -635,7 +640,7 @@ const articles = ref([
     ],
   },
   {
-    title: __('Frappe CRM mobile'),
+    title: __('Trip CRM mobile'),
     opened: false,
     subArticles: [
       { name: 'mobile-app-installation', title: __('Mobile App Installation') },

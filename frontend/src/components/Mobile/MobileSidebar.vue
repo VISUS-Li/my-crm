@@ -106,57 +106,28 @@ import { viewsStore } from '@/stores/views'
 import { unreadNotificationsCount } from '@/stores/notifications'
 import { computed, h } from 'vue'
 import { mobileSidebarOpened as sidebarOpened } from '@/composables/settings'
+import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
+import { getSidebarLinks } from '@/config/sidebarLinks'
 
+const { enabled: phoneSalesMode } = usePhoneSalesMode()
 const { getPinnedViews, getPublicViews } = viewsStore()
 
-const links = [
-  {
-    label: 'Leads',
-    icon: LeadsIcon,
-    to: 'Leads',
-  },
-  {
-    label: 'Deals',
-    icon: DealsIcon,
-    to: 'Deals',
-  },
-  {
-    label: 'Contacts',
-    icon: ContactsIcon,
-    to: 'Contacts',
-  },
-  {
-    label: 'Organizations',
-    icon: OrganizationsIcon,
-    to: 'Organizations',
-  },
-  {
-    label: 'Notes',
-    icon: NoteIcon,
-    to: 'Notes',
-  },
-  {
-    label: 'Tasks',
-    icon: TaskIcon,
-    to: 'Tasks',
-  },
-  {
-    label: 'Call Logs',
-    icon: PhoneIcon,
-    to: 'Call Logs',
-  },
-]
+const links = computed(() => getSidebarLinks(phoneSalesMode.value))
 
 const allViews = computed(() => {
   let _views = [
     {
-      name: 'All Views',
+      name: phoneSalesMode.value ? 'Phone Sales' : 'All Views',
       hideLabel: true,
       opened: true,
-      views: links,
+      views: links.value.map((link) => ({
+        label: link.label,
+        icon: link.icon,
+        to: link.to,
+      })),
     },
   ]
-  if (getPublicViews().length) {
+  if (!phoneSalesMode.value && getPublicViews().length) {
     _views.push({
       name: 'Public Views',
       opened: true,
@@ -164,7 +135,7 @@ const allViews = computed(() => {
     })
   }
 
-  if (getPinnedViews().length) {
+  if (!phoneSalesMode.value && getPinnedViews().length) {
     _views.push({
       name: 'Pinned Views',
       opened: true,

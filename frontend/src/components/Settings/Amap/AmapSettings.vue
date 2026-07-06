@@ -112,7 +112,7 @@
           <div class="rounded-lg border border-blue-100 bg-blue-50 p-4 text-p-sm text-blue-900">
             {{
               __(
-                'Use Amap「Web服务」API Key (not JS API / Android / iOS). Add server IP to the key whitelist on Amap console. Save before testing if you changed other settings.',
+                'Use Amap Web Service API Key (not JS API / Android / iOS). Add server IP to the key whitelist on Amap console. Save before testing if you changed other settings.',
               )
             }}
           </div>
@@ -202,7 +202,7 @@ async function testConnection() {
   const hasSavedKeyRows = (settings.doc.api_keys?.length || 0) > 0
 
   if (!apiKeyFromForm && !hasSavedKeyRows) {
-    toast.error(__('Please add a Web服务 API Key first'))
+    toast.error(__('Please add a Web Service API Key first'))
     return
   }
 

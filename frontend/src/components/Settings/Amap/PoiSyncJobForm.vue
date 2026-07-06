@@ -26,12 +26,15 @@
     </div>
 
     <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2 text-p-base-medium text-ink-gray-7">
+        {{ __('Search Criteria') }}
+      </div>
       <FormControl
         v-model="syncJob.keywords"
         type="text"
         required
         :label="__('Keywords')"
-        :placeholder="__('e.g. 奶茶, 美容, 餐饮')"
+        :placeholder="__('e.g. milk tea, beauty, restaurant')"
       />
       <FormControl
         v-model="syncJob.types"
@@ -39,6 +42,10 @@
         :label="__('POI Types')"
         :placeholder="__('Optional type codes, separated by |')"
       />
+
+      <div class="col-span-2 text-p-base-medium text-ink-gray-7">
+        {{ __('Region') }}
+      </div>
       <FormControl
         v-model="syncJob.province"
         type="text"
@@ -64,9 +71,14 @@
       <FormControl
         v-model="syncJob.bbox"
         type="text"
+        class="col-span-2"
         :label="__('Bounding Box')"
         :placeholder="__('min_lng,min_lat,max_lng,max_lat')"
       />
+
+      <div class="col-span-2 text-p-base-medium text-ink-gray-7">
+        {{ __('Import Settings') }}
+      </div>
       <FormControl
         v-model="syncJob.lead_source"
         type="link"
@@ -79,7 +91,7 @@
         doctype="User"
         :label="__('Assign Leads To')"
       />
-      <div class="flex items-center gap-2 self-end pb-2">
+      <div class="col-span-2 flex items-center gap-2 pb-2">
         <Switch v-model="syncJob.import_only_with_phone" size="sm" />
         <span class="text-p-sm">{{ __('Import only POIs with phone') }}</span>
       </div>
