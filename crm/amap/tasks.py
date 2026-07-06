@@ -176,20 +176,18 @@ def promote_poi_record_to_lead(poi_record_name: str) -> str:
 def _resolve_job_tripai_user(job) -> str | None:
 	owner = job.job_owner or frappe.session.user
 	try:
-		from crm.integrations.tripai.billing import resolve_tripai_user_id
+		from crm.integrations.tripai.billing import resolve_billing_tripai_user_id
 
-		return resolve_tripai_user_id(owner)
+		return resolve_billing_tripai_user_id(owner)
 	except Exception:
 		return None
 
 
 def _pre_sync_billing_check(job, tripai_user_id: str | None, settings) -> None:
-	if not tripai_user_id:
-		return
-
 	try:
 		from crm.integrations.tripai.billing import (
 			InsufficientCreditsError,
+			RuntimeConfigError,
 			check_credits_for_sync,
 			should_bill_for_sync,
 		)
@@ -198,6 +196,9 @@ def _pre_sync_billing_check(job, tripai_user_id: str | None, settings) -> None:
 
 	if not should_bill_for_sync(settings):
 		return
+
+	if not tripai_user_id:
+		raise RuntimeConfigError(_("TripAI billing account is not linked for this job owner"))
 
 	# Conservative estimate: 50 API calls + 100 POI imports
 	result = check_credits_for_sync(tripai_user_id, estimated_api_calls=50, estimated_poi_imports=100)

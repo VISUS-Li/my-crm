@@ -26,7 +26,7 @@
       <!-- Brand Anm -->
       <div class="flex items-center justify-between gap-8">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Brand Name') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">

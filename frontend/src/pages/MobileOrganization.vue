@@ -92,7 +92,7 @@
       <template #tab-item="{ tab, selected }">
         <button
           v-if="tab.name !== 'Details'"
-          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
+          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-p-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
           :class="{ 'text-ink-gray-9': selected }"
         >
           <component :is="tab.icon" v-if="tab.icon" class="h-5" />

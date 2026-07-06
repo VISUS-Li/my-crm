@@ -51,7 +51,7 @@
                 <div class="flex flex-col gap-1">
                   <div v-if="!editName" class="flex items-center gap-1">
                     <span
-                      class="text-lg sm:text-2xl !font-semibold text-ink-gray-8"
+                      class="text-p-lg sm:text-p-2xl !font-semibold text-ink-gray-8"
                     >
                       {{ fullName }}
                     </span>
@@ -77,7 +77,13 @@
                     />
                   </div>
                   <span class="text-p-sm text-ink-gray-6">
-                    {{ user.doc.email }}
+                    {{ contactDisplay }}
+                  </span>
+                  <span
+                    v-if="secondaryContact"
+                    class="text-p-xs text-ink-gray-5"
+                  >
+                    {{ secondaryContact }}
                   </span>
                 </div>
                 <ErrorMessage :message="__(_error)" />
@@ -147,11 +153,24 @@ import {
   createDocumentResource,
 } from 'frappe-ui'
 import { ref, computed, inject, useTemplateRef, nextTick } from 'vue'
+import { usersStore } from '@/stores/users'
+import {
+  getUserContactDisplay,
+  getUserSecondaryContact,
+} from '@/utils/userContact'
 
 const emit = defineEmits(['updateStep'])
 
 const { user: sessionUser } = inject('session')
+const { getUser } = usersStore()
 const user = createDocumentResource({ doctype: 'User', name: sessionUser })
+
+const contactDisplay = computed(() =>
+  getUserContactDisplay(getUser(sessionUser)),
+)
+const secondaryContact = computed(() =>
+  getUserSecondaryContact(getUser(sessionUser)),
+)
 
 const showChangePasswordModal = ref(false)
 const isHoveringRemove = ref(false)

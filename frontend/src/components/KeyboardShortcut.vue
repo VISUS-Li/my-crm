@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-flex items-center gap-0.5 text-sm"
+    class="inline-flex items-center gap-0.5 text-p-sm"
     :class="{
       'bg-surface-gray-2 rounded-sm text-ink-gray-5 py-0.5 px-1': bg,
       'text-ink-gray-4': !bg,
@@ -8,7 +8,7 @@
   >
     <span v-if="ctrl || meta">
       <LucideCommand v-if="isMac" class="w-3 h-3" />
-      <span v-else>Ctrl</span>
+      <span v-else>{{ __('Ctrl') }}</span>
     </span>
     <span v-if="shift"><LucideShift class="w-3 h-3" /></span>
     <span v-if="alt"><LucideAlt class="w-3 h-3" /></span>

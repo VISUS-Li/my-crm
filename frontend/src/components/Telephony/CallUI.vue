@@ -32,7 +32,7 @@
             :label="__('Make {0} as default calling medium', [callMedium])"
           />
 
-          <div v-if="isDefaultMedium" class="text-sm text-ink-gray-4">
+          <div v-if="isDefaultMedium" class="text-p-sm text-ink-gray-4">
             {{
               __('You can change the default calling medium from the settings')
             }}
@@ -64,8 +64,8 @@ const mobileNumber = ref('')
 
 const enabledIntegrations = computed(() =>
   [
-    { key: 'twilio', label: 'Twilio', ref: twilio },
-    { key: 'exotel', label: 'Exotel', ref: exotel },
+    { key: 'twilio', label: __('Twilio'), ref: twilio },
+    { key: 'exotel', label: __('Exotel'), ref: exotel },
   ].filter(({ key }) => isEnabled(key)),
 )
 

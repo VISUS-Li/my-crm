@@ -26,6 +26,13 @@
           @click="startJob"
         />
         <Button
+          v-if="showActivateLicense"
+          variant="outline"
+          :label="__('Activate License')"
+          icon-left="lucide-key-round"
+          @click="openLicenseDialog"
+        />
+        <Button
           variant="outline"
           :label="__('Edit')"
           @click="emit('updateStep', 'new-job', job)"
@@ -40,21 +47,21 @@
     <template v-else-if="job">
       <div class="grid grid-cols-4 gap-4">
         <div class="rounded-lg border p-4">
-          <div class="text-sm text-ink-gray-5">{{ __('Status') }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ __('Status') }}</div>
           <Badge :theme="STATUS_COLORS[job.status] || 'gray'" class="mt-2">
             {{ __(job.status) }}
           </Badge>
         </div>
         <div class="rounded-lg border p-4">
-          <div class="text-sm text-ink-gray-5">{{ __('Total POI') }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ __('Total POI') }}</div>
           <div class="text-2xl-semibold mt-2">{{ job.total_fetched || 0 }}</div>
         </div>
         <div class="rounded-lg border p-4">
-          <div class="text-sm text-ink-gray-5">{{ __('With Phone') }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ __('With Phone') }}</div>
           <div class="text-2xl-semibold mt-2">{{ job.with_phone_count || 0 }}</div>
         </div>
         <div class="rounded-lg border p-4">
-          <div class="text-sm text-ink-gray-5">{{ __('Leads Created') }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ __('Leads Created') }}</div>
           <div class="text-2xl-semibold mt-2">{{ job.leads_created || 0 }}</div>
         </div>
       </div>
@@ -64,7 +71,7 @@
           <div><span class="text-ink-gray-5">{{ __('Keywords') }}:</span> {{ job.keywords }}</div>
           <div><span class="text-ink-gray-5">{{ __('City') }}:</span> {{ job.city }}</div>
           <div><span class="text-ink-gray-5">{{ __('District') }}:</span> {{ job.district || '-' }}</div>
-          <div><span class="text-ink-gray-5">{{ __('Owner') }}:</span> {{ job.job_owner }}</div>
+          <div><span class="text-ink-gray-5">{{ __('Owner') }}:</span> {{ ownerLabel(job.job_owner) }}</div>
         </div>
         <div class="rounded-lg border p-4 space-y-2">
           <div><span class="text-ink-gray-5">{{ __('Started') }}:</span> {{ formatDate(job.started_at) }}</div>
@@ -75,16 +82,38 @@
       </div>
 
       <div v-if="job.error_log" class="rounded-lg border border-red-200 bg-red-50 p-4">
-        <div class="text-p-base-medium text-red-700">{{ __('Error Log') }}</div>
-        <pre class="mt-2 whitespace-pre-wrap text-sm text-red-700">{{ __(job.error_log) }}</pre>
+        <div class="text-base-medium text-red-700">{{ __('Error Log') }}</div>
+        <pre class="mt-2 whitespace-pre-wrap text-p-sm text-red-700">{{ __(job.error_log) }}</pre>
       </div>
+
+      <Dialog v-model="licenseDialogOpen" :options="{ title: __('Activate TripAI License'), size: 'sm' }">
+        <template #body-content>
+          <div class="space-y-3 p-1">
+            <p class="text-p-sm text-ink-gray-6">
+              {{ __('Enter the license key from your agent or TripAI purchase to enable POI sync.') }}
+            </p>
+            <FormControl
+              v-model="licenseKeyInput"
+              type="text"
+              :label="__('License Key')"
+              :placeholder="__('XXXX-XXXX-XXXX')"
+            />
+          </div>
+        </template>
+        <template #actions>
+          <Button variant="solid" :label="__('Activate')" :loading="activatingLicense" @click="submitLicense" />
+        </template>
+      </Dialog>
     </template>
   </div>
 </template>
 
 <script setup>
-import { Badge, toast, call } from 'frappe-ui'
+import { Badge, toast, call, Dialog, FormControl, Button } from 'frappe-ui'
 import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
+import { usersStore } from '@/stores/users'
+import { getUserContactDisplay } from '@/utils/userContact'
+import { getTripAILicenseDeviceId, isLicenseError } from '@/utils/tripaiLicense'
 import { STATUS_COLORS } from './amapConfig'
 
 const props = defineProps({
@@ -96,21 +125,31 @@ const props = defineProps({
 
 const emit = defineEmits(['updateStep'])
 const jobs = inject('poiSyncJobs')
+const { getUser } = usersStore()
+
+function ownerLabel(owner) {
+  return getUserContactDisplay(getUser(owner))
+}
 
 const job = ref(null)
 const loading = ref(true)
 const starting = ref(false)
 const cancelling = ref(false)
+const licenseDialogOpen = ref(false)
+const licenseKeyInput = ref('')
+const activatingLicense = ref(false)
+const licenseRequired = ref(false)
+const licenseEntitled = ref(true)
 let pollTimer = null
+
+const showActivateLicense = computed(
+  () => licenseRequired.value && !licenseEntitled.value && canStart.value,
+)
 
 const canStart = computed(() =>
   ['Draft', 'Completed', 'Failed', 'Cancelled'].includes(job.value?.status),
 )
 const canCancel = computed(() => ['Running', 'Queued'].includes(job.value?.status))
-
-function formatDate(value) {
-  return value || '-'
-}
 
 async function fetchProgress() {
   if (!props.jobName) return
@@ -144,6 +183,52 @@ function clearPoll() {
   }
 }
 
+function formatDate(value) {
+  return value || '-'
+}
+
+async function loadLicenseStatus() {
+  try {
+    const [status, entitlement] = await Promise.all([
+      call('crm.api.tripai.get_integration_status'),
+      call('crm.api.tripai.get_license_status'),
+    ])
+    licenseRequired.value = Boolean(status?.require_license)
+    licenseEntitled.value = Boolean(entitlement?.entitled ?? entitlement?.skipped)
+  } catch {
+    licenseRequired.value = false
+    licenseEntitled.value = true
+  }
+}
+
+function openLicenseDialog() {
+  licenseDialogOpen.value = true
+}
+
+async function submitLicense() {
+  if (!licenseKeyInput.value?.trim()) {
+    toast.error(__('Please enter a license key'))
+    return
+  }
+
+  activatingLicense.value = true
+  try {
+    await call('crm.api.tripai.activate_license_key', {
+      license_key: licenseKeyInput.value.trim(),
+      device_id: getTripAILicenseDeviceId(),
+      device_label: __('CRM Web'),
+    })
+    toast.success(__('License activated'))
+    licenseDialogOpen.value = false
+    licenseKeyInput.value = ''
+    await loadLicenseStatus()
+  } catch (error) {
+    toast.error(error.messages?.[0] || error.message || __('License activation failed'))
+  } finally {
+    activatingLicense.value = false
+  }
+}
+
 async function startJob() {
   starting.value = true
   try {
@@ -161,6 +246,14 @@ async function startJob() {
         action: {
           label: __('Recharge'),
           onClick: openTripAIRecharge,
+        },
+      })
+    } else if (isLicenseError(message)) {
+      licenseEntitled.value = false
+      toast.error(message, {
+        action: {
+          label: __('Activate License'),
+          onClick: openLicenseDialog,
         },
       })
     } else {
@@ -195,6 +288,8 @@ async function cancelJob() {
   }
 }
 
-onMounted(fetchProgress)
+onMounted(async () => {
+  await Promise.all([fetchProgress(), loadLicenseStatus()])
+})
 onBeforeUnmount(clearPoll)
 </script>

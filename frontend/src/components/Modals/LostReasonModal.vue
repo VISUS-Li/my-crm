@@ -10,7 +10,7 @@
       </div>
       <div class="flex flex-col gap-3">
         <div>
-          <div class="mb-2 text-sm text-ink-gray-5">
+          <div class="mb-2 text-p-sm text-ink-gray-5">
             {{ __('Lost Reason') }}
             <span class="text-ink-red-5">*</span>
           </div>
@@ -24,7 +24,7 @@
           />
         </div>
         <div>
-          <div class="mb-2 text-sm text-ink-gray-5">
+          <div class="mb-2 text-p-sm text-ink-gray-5">
             {{ __('Lost Notes') }}
             <span v-if="lostReason == 'Other'" class="text-ink-red-5">*</span>
           </div>

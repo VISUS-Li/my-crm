@@ -5,7 +5,7 @@
       <div class="flex flex-col gap-1 w-9/12">
         <h2 class="flex gap-2 text-2xl-semibold leading-none h-5 items-center">
           {{ __('Lead Sources') }}
-          <Badge theme="orange" size="sm">Beta</Badge>
+          <Badge theme="orange" size="sm">{{ __('Beta') }}</Badge>
         </h2>
         <p class="text-p-base text-ink-gray-6">
           {{
@@ -41,8 +41,12 @@
     <!-- Empty State -->
     <EmptyState
       v-if="!sources.loading && !sources.data?.length"
-      name="Lead Sources"
-      description="Manage your lead sources here. Add new sources to start syncing leads automatically."
+      :name="__('Lead Sources')"
+      :description="
+        __(
+          'Manage your lead sources here. Add new sources to start syncing leads automatically.',
+        )
+      "
       icon="refresh-cw"
     />
 
@@ -51,7 +55,7 @@
       v-if="!sources.loading && sources.data?.length"
       class="flex flex-col overflow-hidden"
     >
-      <div class="flex items-center py-2 px-4 text-sm text-ink-gray-5">
+      <div class="flex items-center py-2 px-4 text-p-sm text-ink-gray-5">
         <div class="w-4/6">{{ __('Name') }}</div>
         <div class="w-1/6">{{ __('Source') }}</div>
         <div class="w-1/6">{{ __('Enabled') }}</div>
@@ -64,13 +68,13 @@
             @click="() => emit('updateStep', 'edit-source', { ...source })"
           >
             <div class="flex flex-col w-4/6 pr-5">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ source.name }}
               </div>
             </div>
 
             <div class="flex flex-col w-1/6 pr-5">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ source.type }}
               </div>
             </div>

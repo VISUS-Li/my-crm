@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="flex items-center justify-between px-3 py-2 border-t">
-        <div class="text-base text-ink-gray-7">
+        <div class="text-p-base text-ink-gray-7">
           {{ __('Light') }}
         </div>
         <div
@@ -85,7 +85,7 @@
         </div>
       </div>
       <div class="flex items-center justify-between px-3 py-2 border-t">
-        <div class="text-base text-ink-gray-7">
+        <div class="text-p-base text-ink-gray-7">
           {{ __('Dark') }}
         </div>
         <div
@@ -158,7 +158,7 @@
         </div>
       </div>
       <div class="flex items-center justify-between px-3 py-2 border-t">
-        <div class="text-base text-ink-gray-7">
+        <div class="text-p-base text-ink-gray-7">
           {{ __('System') }}
         </div>
         <div

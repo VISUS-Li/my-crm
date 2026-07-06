@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-5.5">
     <div
-      class="flex items-center justify-between gap-2 text-base bg-surface-gray-2 rounded py-2 px-2.5 overflow-x-auto max-w-full"
+      class="flex items-center justify-between gap-2 text-p-base bg-surface-gray-2 rounded py-2 px-2.5 overflow-x-auto max-w-full"
     >
       <Draggable
         v-if="tabs.length && tabs[tabIndex].label"
@@ -148,7 +148,7 @@
                   v-if="
                     section.columns.reduce((n, c) => n + c.fields.length, 0) > 0
                   "
-                  class="text-xs text-ink-gray-4 bg-surface-gray-3 rounded px-1.5 py-0.5 leading-none"
+                  class="text-p-xs text-ink-gray-4 bg-surface-gray-3 rounded px-1.5 py-0.5 leading-none"
                 >
                   {{ section.columns.reduce((n, c) => n + c.fields.length, 0) }}
                   {{
@@ -193,7 +193,7 @@
                   >
                     <template #item="{ element: field }">
                       <div
-                        class="field px-2.5 py-2 border border-outline-gray-2 rounded text-base bg-surface-elevation-2 text-ink-gray-8 flex items-center leading-4 justify-between gap-2 cursor-auto"
+                        class="field px-2.5 py-2 border border-outline-gray-2 rounded text-p-base bg-surface-elevation-2 text-ink-gray-8 flex items-center leading-4 justify-between gap-2 cursor-auto"
                       >
                         <div class="flex items-center gap-2 truncate">
                           <DragVerticalIcon
@@ -234,7 +234,7 @@
                     <template #item-label="{ option }">
                       <div class="flex flex-col gap-1 text-ink-gray-9">
                         <div>{{ option.label }}</div>
-                        <div class="text-ink-gray-4 text-sm">
+                        <div class="text-ink-gray-4 text-p-sm">
                           {{ `${option.fieldname} - ${option.fieldtype}` }}
                         </div>
                       </div>
@@ -248,7 +248,7 @@
         <template #footer>
           <div
             v-if="tab.sections.length === 0"
-            class="flex items-center justify-center min-h-20 text-sm text-ink-gray-4 pointer-events-none select-none"
+            class="flex items-center justify-center min-h-20 text-p-sm text-ink-gray-4 pointer-events-none select-none"
           >
             {{ __('Drag a section or a field here to get started') }}
           </div>

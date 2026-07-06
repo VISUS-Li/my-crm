@@ -44,21 +44,21 @@
               v-model="exotel.doc.api_key"
               :label="__('API Key')"
               type="text"
-              placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+              :placeholder="__('ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')"
               required
               autocomplete="off"
             />
             <Password
               v-model="exotel.doc.api_token"
               :label="__('API Token')"
-              placeholder="************"
+              :placeholder="__('************')"
               required
             />
             <FormControl
               v-model="exotel.doc.account_sid"
               :label="__('Account SID')"
               type="text"
-              placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+              :placeholder="__('ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')"
               required
               autocomplete="off"
             />
@@ -66,7 +66,7 @@
               v-model="exotel.doc.webhook_verify_token"
               :label="__('Webhook Verify Token')"
               type="text"
-              placeholder="my_secure_token_123"
+              :placeholder="__('my_secure_token_123')"
               required
               autocomplete="off"
             />
@@ -74,7 +74,7 @@
               v-model="exotel.doc.subdomain"
               :label="__('Subdomain')"
               type="text"
-              placeholder="api.exotel.com"
+              :placeholder="__('api.exotel.com')"
               required
               autocomplete="off"
             />
@@ -82,7 +82,7 @@
           <div class="h-px border-t border-outline-elevation-2" />
           <div class="flex items-center justify-between">
             <div class="flex flex-col">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ __('Record Calls') }}
               </div>
               <div class="text-p-sm text-ink-gray-5 truncate">

@@ -43,7 +43,7 @@
               ref="search"
               :value="query"
               autocomplete="off"
-              class="bg-transparent p-0 outline-none border-0 text-base text-ink-gray-8 h-full placeholder:text-ink-gray-4 w-full focus:outline-none focus:ring-0 focus:border-0"
+              class="bg-transparent p-0 outline-none border-0 text-p-base text-ink-gray-8 h-full placeholder:text-ink-gray-4 w-full focus:outline-none focus:ring-0 focus:border-0"
               :placeholder="placeholder"
               @focus="showOptions = true"
               @input="onInput"
@@ -61,7 +61,7 @@
             >
               <ComboboxViewport class="max-h-60 overflow-auto p-1.5">
                 <ComboboxEmpty
-                  class="flex gap-2 rounded px-2 py-1 text-base text-ink-gray-5"
+                  class="flex gap-2 rounded px-2 py-1 text-p-base text-ink-gray-5"
                 >
                   <span
                     v-if="showSearchIcon"
@@ -74,13 +74,13 @@
                   v-for="option in options"
                   :key="option.value"
                   :value="option.value"
-                  class="text-base leading-none text-ink-gray-7 rounded flex items-center px-2 py-1 relative select-none data-[highlighted]:outline-none data-[highlighted]:bg-surface-gray-3 cursor-pointer"
+                  class="text-p-base leading-none text-ink-gray-7 rounded flex items-center px-2 py-1 relative select-none data-[highlighted]:outline-none data-[highlighted]:bg-surface-gray-3 cursor-pointer"
                   @mousedown.prevent="onSelect(option.value)"
                 >
                   <UserAvatar class="mr-2" :user="option.value" size="lg" />
                   <div class="flex flex-col gap-1 p-1 text-ink-gray-8">
                     <div class="text-base-medium">{{ option.label }}</div>
-                    <div class="text-sm text-ink-gray-5">
+                    <div class="text-p-sm text-ink-gray-5">
                       {{ option.value }}
                     </div>
                   </div>
@@ -94,7 +94,7 @@
     <ErrorMessage v-if="error" class="mt-2 pl-2" :message="error" />
     <div
       v-if="info"
-      class="whitespace-pre-line text-sm text-ink-blue-6 mt-2 pl-2"
+      class="whitespace-pre-line text-p-sm text-ink-blue-6 mt-2 pl-2"
     >
       {{ info }}
     </div>

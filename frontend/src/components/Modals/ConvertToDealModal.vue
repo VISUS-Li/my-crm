@@ -22,10 +22,10 @@
     <template #default>
       <div class="mb-4 flex items-center gap-2 text-ink-gray-5">
         <OrganizationsIcon class="h-4 w-4" />
-        <label class="block text-base">{{ __('Organization') }}</label>
+        <label class="block text-p-base">{{ __('Organization') }}</label>
       </div>
       <div class="ml-6 text-ink-gray-9">
-        <div class="flex items-center justify-between text-base">
+        <div class="flex items-center justify-between text-p-base">
           <div>{{ __('Choose Existing') }}</div>
           <Switch v-model="existingOrganizationChecked" />
         </div>
@@ -37,7 +37,7 @@
           doctype="CRM Organization"
           @change="(data) => (existingOrganization = data)"
         />
-        <div v-else class="mt-2.5 text-base">
+        <div v-else class="mt-2.5 text-p-base">
           {{
             __(
               'New organization will be created based on the data in details section',
@@ -48,10 +48,10 @@
 
       <div class="mb-4 mt-6 flex items-center gap-2 text-ink-gray-5">
         <ContactsIcon class="h-4 w-4" />
-        <label class="block text-base">{{ __('Contact') }}</label>
+        <label class="block text-p-base">{{ __('Contact') }}</label>
       </div>
       <div class="ml-6 text-ink-gray-9">
-        <div class="flex items-center justify-between text-base">
+        <div class="flex items-center justify-between text-p-base">
           <div>{{ __('Choose Existing') }}</div>
           <Switch v-model="existingContactChecked" />
         </div>
@@ -63,7 +63,7 @@
           doctype="Contact"
           @change="(data) => (existingContact = data)"
         />
-        <div v-else class="mt-2.5 text-base">
+        <div v-else class="mt-2.5 text-p-base">
           {{ __("New contact will be created based on the person's details") }}
         </div>
       </div>

@@ -1,13 +1,13 @@
 <template>
   <div
-    class="cursor-pointer flex flex-col rounded-md shadow bg-surface-elevation-1 px-3 py-1.5 text-base transition-all duration-300 ease-in-out"
+    class="cursor-pointer flex flex-col rounded-md shadow bg-surface-elevation-1 px-3 py-1.5 text-p-base transition-all duration-300 ease-in-out"
   >
     <div
       class="-mb-0.5 flex items-center justify-between gap-2 truncate text-ink-gray-9"
     >
       <div class="flex items-center gap-2 truncate">
         <span>{{ activity.data.sender_full_name }}</span>
-        <span class="sm:flex hidden text-sm text-ink-gray-5">
+        <span class="sm:flex hidden text-p-sm text-ink-gray-5">
           {{ '<' + activity.data.sender + '>' }}
         </span>
         <Badge
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-1 text-base leading-5 text-ink-gray-8">
+    <div class="flex flex-col gap-1 text-p-base leading-5 text-ink-gray-8">
       <div>{{ activity.data.subject }}</div>
       <div>
         <span class="mr-1 text-ink-gray-5"> {{ __('To') }}: </span>

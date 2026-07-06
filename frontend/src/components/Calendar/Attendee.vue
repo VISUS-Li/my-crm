@@ -10,14 +10,14 @@
         @update:modelValue="onSelect"
       >
         <ComboboxAnchor
-          class="flex w-full text-base items-center gap-1 rounded border border-outline-gray-2 bg-surface-base hover:border-outline-gray-3 focus:border-outline-gray-4 focus:ring-0 focus-visible:ring-2 focus-visible:ring-outline-gray-3 px-2 py-1"
+          class="flex w-full text-p-base items-center gap-1 rounded border border-outline-gray-2 bg-surface-base hover:border-outline-gray-3 focus:border-outline-gray-4 focus:ring-0 focus-visible:ring-2 focus-visible:ring-outline-gray-3 px-2 py-1"
           :class="[size === 'sm' ? 'h-7' : 'h-8 ', inputClass]"
           @click="showOptions = true"
         >
           <ComboboxInput
             ref="search"
             autocomplete="off"
-            class="bg-transparent p-0 outline-none border-0 text-base text-ink-gray-8 h-full placeholder:text-ink-gray-4 w-full focus:outline-none focus:ring-0 focus:border-0"
+            class="bg-transparent p-0 outline-none border-0 text-p-base text-ink-gray-8 h-full placeholder:text-ink-gray-4 w-full focus:outline-none focus:ring-0 focus:border-0"
             :placeholder="placeholder"
             :value="query"
             @input="onInput"
@@ -40,7 +40,7 @@
           >
             <ComboboxViewport class="max-h-60 overflow-auto p-1.5">
               <ComboboxEmpty
-                class="flex gap-2 rounded px-2 py-1 text-base text-ink-gray-5"
+                class="flex gap-2 rounded px-2 py-1 text-p-base text-ink-gray-5"
               >
                 <span
                   v-if="fetchContacts"
@@ -53,13 +53,13 @@
                 v-for="option in options"
                 :key="option.value"
                 :value="option.value"
-                class="text-base leading-none text-ink-gray-7 rounded flex items-center px-2 py-1 relative select-none data-[highlighted]:outline-none data-[highlighted]:bg-surface-gray-3 cursor-pointer"
+                class="text-p-base leading-none text-ink-gray-7 rounded flex items-center px-2 py-1 relative select-none data-[highlighted]:outline-none data-[highlighted]:bg-surface-gray-3 cursor-pointer"
                 @mousedown.prevent="onSelect(option.value, option)"
               >
                 <UserAvatar class="mr-2" :user="option.value" size="lg" />
                 <div class="flex flex-col gap-1 p-1 text-ink-gray-8">
                   <div class="text-base-medium">{{ option.label }}</div>
-                  <div class="text-sm text-ink-gray-5">{{ option.value }}</div>
+                  <div class="text-p-sm text-ink-gray-5">{{ option.value }}</div>
                 </div>
               </ComboboxItem>
             </ComboboxViewport>

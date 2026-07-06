@@ -47,8 +47,14 @@
 import AvatarIcon from '@/components/Icons/AvatarIcon.vue'
 import GoogleIcon from '@/components/Icons/GoogleIcon.vue'
 import LeadModal from '@/components/Modals/LeadModal.vue'
-import { ref } from 'vue'
+import { usersStore } from '@/stores/users'
+import { sessionStore } from '@/stores/session'
+import { computed, ref } from 'vue'
 
-const name = ref('John Doe')
+const { users } = usersStore()
+const { user: sessionUser } = sessionStore()
+const name = computed(
+  () => users.data?.[sessionUser]?.full_name || __('there'),
+)
 const showLeadModal = ref(false)
 </script>

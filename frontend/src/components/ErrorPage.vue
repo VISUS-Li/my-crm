@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid h-full place-items-center px-4 py-20 text-center text-lg text-ink-gray-5"
+    class="grid h-full place-items-center px-4 py-20 text-center text-p-lg text-ink-gray-5"
   >
     <div class="flex flex-col justify-between items-center gap-3">
       <span

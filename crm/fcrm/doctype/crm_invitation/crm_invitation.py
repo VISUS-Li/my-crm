@@ -70,6 +70,10 @@ class CRMInvitation(Document):
 			self.update_module_in_user(user, "FCRM")
 		user.save(ignore_permissions=True)
 
+		from crm.permissions.agent_tenant import inherit_agent_tenant_from_inviter
+
+		inherit_agent_tenant_from_inviter(self.email, self.invited_by)
+
 		self.status = "Accepted"
 		self.accepted_at = frappe.utils.now()
 		self.key = None

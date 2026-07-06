@@ -31,7 +31,7 @@
           <template #default="{ label }">
             <div
               v-if="column.key === 'title'"
-              class="truncate text-base flex gap-2 w-full"
+              class="truncate text-p-base flex gap-2 w-full"
             >
               <span class="max-w-[90%] truncate">
                 {{ label }}
@@ -44,7 +44,7 @@
             </div>
             <span
               v-if="column.key === 'reference_doctype'"
-              class="truncate text-base flex gap-2"
+              class="truncate text-p-base flex gap-2"
             >
               {{ getDoctypeName(row.reference_doctype) }}
             </span>

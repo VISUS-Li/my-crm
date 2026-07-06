@@ -15,7 +15,7 @@
     <NestedPopover>
       <template #target="{ open }">
         <Button
-          class="text-sm"
+          class="text-p-sm"
           :icon-right="open ? 'chevron-up' : 'chevron-down'"
           :label="slaData.holiday_list || __('Select Holiday List')"
         />
@@ -28,7 +28,7 @@
             <div
               v-for="holiday in holidayListData.data"
               :key="holiday.name"
-              class="flex items-center justify-between gap-4 rounded px-2 py-1.5 text-base text-ink-gray-8 cursor-pointer hover:bg-surface-gray-3"
+              class="flex items-center justify-between gap-4 rounded px-2 py-1.5 text-p-base text-ink-gray-8 cursor-pointer hover:bg-surface-gray-3"
               @click="
                 slaData.holiday_list =
                   slaData.holiday_list === holiday.name ? '' : holiday.name
@@ -52,7 +52,7 @@
             </div>
             <div
               v-if="holidayListData?.data?.length === 0"
-              class="text-sm text-ink-gray-5 p-2.5 text-center"
+              class="text-p-sm text-ink-gray-5 p-2.5 text-center"
             >
               {{ __('No holiday list found') }}
             </div>
@@ -73,7 +73,7 @@
     </NestedPopover>
   </div>
   <div class="mt-5">
-    <div class="rounded-md border px-2 border-outline-gray-2 text-sm">
+    <div class="rounded-md border px-2 border-outline-gray-2 text-p-sm">
       <div
         v-if="slaData.working_hours?.length !== 0"
         class="grid p-3 px-4 items-center"
@@ -121,7 +121,7 @@
             <div v-else class="ml-2">
               <select
                 v-model="row[column.key]"
-                class="w-full h-7 text-base hover:bg-surface-gray-3 rounded-md p-0 pl-2 pr-5 bg-transparent -ml-2 border-0 text-ink-gray-8 focus-visible:!ring-0 bg-none truncate"
+                class="w-full h-7 text-p-base hover:bg-surface-gray-3 rounded-md p-0 pl-2 pr-5 bg-transparent -ml-2 border-0 text-ink-gray-8 focus-visible:!ring-0 bg-none truncate"
               >
                 <option
                   v-for="option in workDayOptions"

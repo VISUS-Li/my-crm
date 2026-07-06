@@ -41,7 +41,7 @@
     >
       <div v-if="column.key === 'due_date' && item">
         <Tooltip :text="item && formatDate(item, 'ddd, MMM D, YYYY | hh:mm a')">
-          <div class="flex items-center gap-2 truncate text-base">
+          <div class="flex items-center gap-2 truncate text-p-base">
             <div><CalendarIcon /></div>
             <div class="truncate">
               {{ formatDate(item, 'D MMM, hh:mm a') }}
@@ -75,7 +75,7 @@
         <template #default="{ label }">
           <div
             v-if="['modified', 'creation'].includes(column.key)"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {
@@ -93,7 +93,7 @@
           </div>
           <div
             v-else-if="column.type === 'Text Editor'"
-            class="truncate text-base h-4 [&>p]:truncate"
+            class="truncate text-p-base h-4 [&>p]:truncate"
             v-html="sanitizeHTML(item)"
           />
           <div v-else-if="column.type === 'Check'">
@@ -135,7 +135,7 @@
           />
           <div
             v-else-if="label"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {

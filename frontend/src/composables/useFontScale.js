@@ -45,3 +45,5 @@ export function useFontScale() {
     FONT_SCALE_OPTIONS,
   }
 }
+
+export { initializeFontScale }

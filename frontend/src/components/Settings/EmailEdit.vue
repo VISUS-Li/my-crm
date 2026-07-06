@@ -19,7 +19,7 @@
       <CircleAlert
         class="size-6 text-ink-gray-4 w-min-5 w-max-5 min-h-5 max-w-5"
       />
-      <div class="text-xs text-ink-gray-6 text-wrap">
+      <div class="text-p-xs text-ink-gray-6 text-wrap">
         {{ info.description }}
         <a :href="info.link" target="_blank" class="underline">
           {{ __('here') }}

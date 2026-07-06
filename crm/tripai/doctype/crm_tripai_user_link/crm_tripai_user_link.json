@@ -8,6 +8,12 @@
   "tripai_user_id",
   "crm_user",
   "tripai_role",
+  "section_break_contact",
+  "tripai_phone",
+  "tripai_email",
+  "primary_contact_type",
+  "contact_display",
+  "secondary_contact",
   "agent_tenant_id",
   "agent_tenant_level",
   "column_break_meta",
@@ -36,6 +42,43 @@
    "fieldname": "tripai_role",
    "fieldtype": "Data",
    "label": "TripAI Role"
+  },
+  {
+   "fieldname": "section_break_contact",
+   "fieldtype": "Section Break",
+   "label": "Contact"
+  },
+  {
+   "fieldname": "tripai_phone",
+   "fieldtype": "Data",
+   "label": "TripAI Phone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tripai_email",
+   "fieldtype": "Data",
+   "label": "TripAI Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "primary_contact_type",
+   "fieldtype": "Select",
+   "label": "Primary Contact Type",
+   "options": "Phone\nEmail",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact_display",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Contact Display",
+   "read_only": 1
+  },
+  {
+   "fieldname": "secondary_contact",
+   "fieldtype": "Data",
+   "label": "Secondary Contact",
+   "read_only": 1
   },
   {
    "fieldname": "agent_tenant_id",

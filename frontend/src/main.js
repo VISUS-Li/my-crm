@@ -7,6 +7,7 @@ import { initSocket } from './socket'
 import router from './router'
 import translationPlugin from './translation'
 import App from './App.vue'
+import { initializeFontScale } from '@/composables/useFontScale'
 
 import {
   FrappeUI,
@@ -51,6 +52,8 @@ for (let key in globalComponents) {
   app.component(key, globalComponents[key])
 }
 app.use(telemetryPlugin, { app_name: 'crm' })
+
+initializeFontScale()
 
 app.config.globalProperties.$dialog = createDialog
 

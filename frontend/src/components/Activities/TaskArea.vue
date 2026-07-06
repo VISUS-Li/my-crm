@@ -5,7 +5,7 @@
         class="activity flex cursor-pointer gap-6 rounded p-2.5 duration-300 ease-in-out hover:bg-surface-gray-1"
         @click="modalRef.showTask(task)"
       >
-        <div class="flex flex-1 flex-col gap-1.5 text-base truncate">
+        <div class="flex flex-1 flex-col gap-1.5 text-p-base truncate">
           <div class="font-medium text-ink-gray-9 truncate">
             {{ task.title }}
           </div>

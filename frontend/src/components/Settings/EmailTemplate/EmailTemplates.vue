@@ -40,8 +40,8 @@
     <!-- Empty State -->
     <EmptyState
       v-else-if="!templates.loading && !templates.data?.length"
-      name="Email Templates"
-      description="Add one to get started."
+      :name="__('Email Templates')"
+      :description="__('Add one to get started.')"
       :icon="EmailTemplateIcon"
     />
 
@@ -78,7 +78,7 @@
           ]"
         />
       </div>
-      <div class="flex items-center py-2 px-4 text-sm text-ink-gray-5">
+      <div class="flex items-center py-2 px-4 text-p-sm text-ink-gray-5">
         <div class="w-4/6">{{ __('Template Name') }}</div>
         <div class="w-1/6">{{ __('For') }}</div>
         <div class="w-1/6">{{ __('Enabled') }}</div>
@@ -91,14 +91,14 @@
             @click="() => emit('updateStep', 'edit-template', { ...template })"
           >
             <div class="flex flex-col w-4/6 pr-5">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ template.name }}
               </div>
               <div class="text-p-sm text-ink-gray-5 truncate">
                 {{ template.subject }}
               </div>
             </div>
-            <div class="text-base text-ink-gray-6 w-1/6">
+            <div class="text-p-base text-ink-gray-6 w-1/6">
               {{ template.reference_doctype.replace('CRM ', '') }}
             </div>
             <div class="flex items-center justify-between w-1/6">

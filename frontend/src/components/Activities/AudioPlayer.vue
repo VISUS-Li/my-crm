@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full text-sm text-ink-gray-5">
+  <div class="w-full text-p-sm text-ink-gray-5">
     <div class="flex items-center gap-2">
       <Button
         variant="ghost"

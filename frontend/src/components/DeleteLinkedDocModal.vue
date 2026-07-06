@@ -21,7 +21,7 @@
         </div>
         <div>
           <div v-if="linkedDocs?.length > 0">
-            <span class="text-ink-gray-5 text-base">
+            <span class="text-ink-gray-5 text-p-base">
               {{
                 __(
                   'Delete or unlink these linked documents before deleting this document',
@@ -33,12 +33,12 @@
               :rows="linkedDocs"
               :columns="[
                 {
-                  label: 'Document',
+                  label: __('Document'),
                   key: 'title',
                   width: '19rem',
                 },
                 {
-                  label: 'Master',
+                  label: __('Master'),
                   key: 'reference_doctype',
                   width: '12rem',
                 },
@@ -50,7 +50,7 @@
               "
             />
           </div>
-          <div v-if="linkedDocs?.length == 0" class="text-ink-gray-5 text-base">
+          <div v-if="linkedDocs?.length == 0" class="text-ink-gray-5 text-p-base">
             {{
               __('Are you sure you want to delete {0} - {1}?', [
                 props.doctype,
@@ -111,7 +111,7 @@
             <Button variant="ghost" icon="lucide-x" @click="show = false" />
           </div>
         </div>
-        <div class="text-ink-gray-5 text-base">
+        <div class="text-ink-gray-5 text-p-base">
           {{ confirmDeleteInfo.message }}
         </div>
         <div class="flex justify-end gap-2 mt-6">

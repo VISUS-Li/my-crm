@@ -27,7 +27,7 @@
     <div class="flex-1 flex flex-col overflow-y-auto">
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Currency') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -48,7 +48,7 @@
       </div>
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Currency Precision') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -67,7 +67,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Number Format') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -88,7 +88,7 @@
       </div>
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Float Precision') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -107,7 +107,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Date Format') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -124,7 +124,7 @@
       </div>
       <div class="flex items-center justify-between gap-4 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Time Format') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">

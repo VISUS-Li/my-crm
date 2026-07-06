@@ -7,7 +7,7 @@
             class="flex items-center justify-between rounded px-2.5 py-2 bg-surface-gray-2"
           >
             <div
-              class="flex max-w-fit cursor-pointer items-center gap-2 text-base leading-4 text-ink-gray-9"
+              class="flex max-w-fit cursor-pointer items-center gap-2 text-p-base leading-4 text-ink-gray-9"
               @click="section.opened = !section.opened"
             >
               <span
@@ -64,7 +64,7 @@
             >
               <template #item="{ element: field }">
                 <div
-                  class="px-2.5 py-2 border border-outline-elevation-2 rounded text-base leading-4 text-ink-gray-8 flex items-center justify-between gap-2"
+                  class="px-2.5 py-2 border border-outline-elevation-2 rounded text-p-base leading-4 text-ink-gray-8 flex items-center justify-between gap-2"
                 >
                   <div class="flex items-center gap-2">
                     <DragVerticalIcon class="h-3.5 cursor-grab" />
@@ -102,7 +102,7 @@
               <template #item-label="{ option }">
                 <div class="flex flex-col gap-1 text-ink-gray-9">
                   <div>{{ option.label }}</div>
-                  <div class="text-ink-gray-4 text-sm">
+                  <div class="text-ink-gray-4 text-p-sm">
                     {{ `${option.fieldname} - ${option.fieldtype}` }}
                   </div>
                 </div>
@@ -112,7 +112,7 @@
               v-else
               class="flex justify-center items-center border rounded border-dashed border-outline-elevation-2 p-3"
             >
-              <div class="text-sm text-ink-gray-4">
+              <div class="text-p-sm text-ink-gray-4">
                 {{ __('This section is not editable') }}
               </div>
             </div>

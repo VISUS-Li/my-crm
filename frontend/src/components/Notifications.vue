@@ -34,7 +34,7 @@
       <div v-if="activeTab == 'all'" class="flex h-full">
         <div
           v-if="notifications.data?.length"
-          class="divide-y divide-outline-elevation-2 overflow-auto text-base"
+          class="divide-y divide-outline-elevation-2 overflow-auto text-p-base"
         >
           <RouterLink
             v-for="n in notifications.data"
@@ -67,7 +67,7 @@
                   {{ n.reference_name }}
                 </span>
               </div>
-              <div class="text-sm text-ink-gray-5">
+              <div class="text-p-sm text-ink-gray-5">
                 {{ __(timeAgo(n.creation)) }}
               </div>
             </div>
@@ -75,8 +75,8 @@
         </div>
         <EmptyState
           v-else
-          title="No New Notifications"
-          description="You have no new notifications"
+          :title="__('No New Notifications')"
+          :description="__('You have no new notifications')"
           :icon="NotificationsIcon"
           width="lg"
         />

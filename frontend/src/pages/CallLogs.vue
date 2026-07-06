@@ -50,7 +50,7 @@
   />
   <EmptyState
     v-else-if="callLogs.data && !rows.length"
-    name="Call Logs"
+    :name="__('Call Logs')"
     :icon="PhoneIcon"
   />
   <CallLogDetailModal
@@ -134,7 +134,7 @@ const { capture } = useTelemetry()
 function createCallLog() {
   showModal({
     doctype: 'CRM Call Log',
-    title: 'Call Log',
+    title: __('Call Log'),
     callbacks: {
       afterInsert: () => {
         capture('call_log_created')

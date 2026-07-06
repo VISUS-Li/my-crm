@@ -38,7 +38,7 @@
         </div>
         <div
           v-else
-          class="rounded bg-surface-gray-10 px-2 py-1.5 text-xs text-ink-base shadow-xl"
+          class="rounded bg-surface-gray-10 px-2 py-1.5 text-p-xs text-ink-base shadow-xl"
         >
           {{ filename }}
         </div>
@@ -101,10 +101,10 @@ const showUploader = ref(false)
 const sizeClasses = computed(
   () =>
     ({
-      sm: 'h-7 text-base rounded',
-      md: 'h-8 text-base rounded',
-      lg: 'h-10 text-lg rounded-md',
-      xl: 'h-10 text-2xl rounded-md',
+      sm: 'h-7 text-p-base rounded',
+      md: 'h-8 text-p-base rounded',
+      lg: 'h-10 text-p-lg rounded-md',
+      xl: 'h-10 text-p-2xl rounded-md',
     })[attrs.size || 'sm'],
 )
 

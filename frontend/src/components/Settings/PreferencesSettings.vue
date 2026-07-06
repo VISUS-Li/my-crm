@@ -28,7 +28,7 @@
           </div>
           <ThemeSwitcher
             :logo="brand.logo || CRMLogo"
-            :name="brand.name || 'CRM'"
+            :name="brand.name || __('CRM')"
           />
         </div>
         <div class="flex flex-col gap-4 mb-6">

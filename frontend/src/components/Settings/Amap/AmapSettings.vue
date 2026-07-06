@@ -36,7 +36,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex items-center justify-between rounded-lg border p-4">
             <div>
-              <div class="text-p-base-medium">{{ __('Enable Amap POI Sync') }}</div>
+              <div class="text-base-medium">{{ __('Enable Amap POI Sync') }}</div>
               <div class="text-p-sm text-ink-gray-5">
                 {{ __('Turn on POI collection for all agents') }}
               </div>
@@ -45,7 +45,7 @@
           </div>
           <div class="flex items-center justify-between rounded-lg border p-4">
             <div>
-              <div class="text-p-base-medium">{{ __('Use Mock API') }}</div>
+              <div class="text-base-medium">{{ __('Use Mock API') }}</div>
               <div class="text-p-sm text-ink-gray-5">
                 {{ __('Test the full flow without Amap API keys') }}
               </div>
@@ -89,12 +89,12 @@
 
         <div class="flex items-center gap-2">
           <Switch v-model="settings.doc.import_only_with_phone" size="sm" />
-          <span class="text-sm">{{ __('Import only POIs with valid phone') }}</span>
+          <span class="text-p-sm">{{ __('Import only POIs with valid phone') }}</span>
         </div>
 
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="text-p-lg-medium">{{ __('API Keys') }}</h3>
+            <h3 class="text-lg-medium">{{ __('API Keys') }}</h3>
             <Button
               variant="outline"
               size="sm"
@@ -105,11 +105,11 @@
           </div>
           <div
             v-if="!settings.doc.api_keys?.length"
-            class="rounded-lg border border-dashed p-6 text-sm text-ink-gray-5"
+            class="rounded-lg border border-dashed p-6 text-p-sm text-ink-gray-5"
           >
             {{ __('No API keys configured. Enable mock mode or add keys here.') }}
           </div>
-          <div class="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
+          <div class="rounded-lg border border-blue-100 bg-blue-50 p-4 text-p-sm text-blue-900">
             {{
               __(
                 'Use Amap「Web服务」API Key (not JS API / Android / iOS). Add server IP to the key whitelist on Amap console. Save before testing if you changed other settings.',
@@ -124,7 +124,7 @@
             <Password
               v-model="row.api_key"
               :label="__('API Key')"
-              placeholder="********"
+              :placeholder="__('********')"
             />
             <FormControl
               v-model="row.remark"

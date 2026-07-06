@@ -11,7 +11,7 @@
       </template>
       <template #body="{ togglePopover }">
         <div
-          class="mt-1 rounded-lg bg-surface-base py-1 text-base shadow-2xl w-60"
+          class="mt-1 rounded-lg bg-surface-base py-1 text-p-base shadow-2xl w-60"
         >
           <div class="relative px-1.5 pt-0.5">
             <ComboboxInput
@@ -46,7 +46,7 @@
               "
             >
               <li
-                class="flex items-center rounded p-1.5 w-full text-base"
+                class="flex items-center rounded p-1.5 w-full text-p-base"
                 :class="{ 'bg-surface-gray-1': active }"
               >
                 <div class="flex gap-2 items-center w-full select-none">
@@ -67,7 +67,7 @@
             </ComboboxOption>
             <li
               v-if="usersList.length == 0"
-              class="mt-1.5 rounded-md p-1.5 text-base text-ink-gray-5"
+              class="mt-1.5 rounded-md p-1.5 text-p-base text-ink-gray-5"
             >
               {{ __('No Results Found') }}
             </li>

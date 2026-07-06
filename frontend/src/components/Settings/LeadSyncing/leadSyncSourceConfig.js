@@ -2,7 +2,7 @@ import LogoFacebook from '@/components/Icons/FacebookIcon.vue'
 
 export const supportedSourceTypes = [
   {
-    label: 'Facebook',
+    label: __('Facebook'),
     value: 'Facebook',
     icon: LogoFacebook,
     info: __(

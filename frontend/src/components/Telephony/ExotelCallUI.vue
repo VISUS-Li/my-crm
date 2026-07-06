@@ -2,7 +2,7 @@
   <div>
     <div
       v-show="showSmallCallPopup"
-      class="ml-2 flex cursor-pointer select-none items-center justify-between gap-1 rounded-full bg-surface-gray-10 px-2 py-[7px] text-base text-ink-gray-2"
+      class="ml-2 flex cursor-pointer select-none items-center justify-between gap-1 rounded-full bg-surface-gray-10 px-2 py-[7px] text-p-base text-ink-gray-2"
       @click="toggleCallPopup"
     >
       <div
@@ -45,7 +45,7 @@
     >
       <div
         ref="callPopupHeader"
-        class="header flex items-center justify-between gap-1 text-base cursor-move select-none"
+        class="header flex items-center justify-between gap-1 text-p-base cursor-move select-none"
       >
         <div class="flex gap-2 items-center truncate">
           <div
@@ -65,7 +65,7 @@
               <AvatarIcon class="size-3" />
             </div>
             <div
-              class="flex flex-col gap-1 text-base leading-4 overflow-hidden"
+              class="flex flex-col gap-1 text-p-base leading-4 overflow-hidden"
             >
               <div class="font-medium truncate">
                 {{ contact?.full_name ?? contact?.mobile_no }}
@@ -167,7 +167,7 @@
             <div class="text-lg-medium leading-5">
               {{ contact.full_name }}
             </div>
-            <div class="text-base text-ink-gray-6 leading-4">
+            <div class="text-p-base text-ink-gray-6 leading-4">
               {{ contact.mobile_no }}
             </div>
           </div>

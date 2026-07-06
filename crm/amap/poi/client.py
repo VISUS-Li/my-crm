@@ -229,10 +229,7 @@ class AmapClient:
 				response = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
 				response.raise_for_status()
 				if not self.use_mock and self.on_api_call:
-					try:
-						self.on_api_call()
-					except Exception:
-						pass
+					self.on_api_call()
 				return response.json(), None
 			except requests.exceptions.Timeout:
 				if attempt < MAX_RETRIES - 1:
@@ -262,28 +259,31 @@ def build_client_from_settings(settings=None, tripai_user_id: str | None = None,
 	use_mock = bool(settings.use_mock_api)
 	on_api_call = None
 
-	if not use_mock and tripai_user_id and job_name:
-		try:
-			from crm.integrations.tripai.billing import consume_api_call, should_bill_for_sync
+	from crm.integrations.tripai.billing import should_bill_for_sync
 
-			if should_bill_for_sync(settings):
+	billing = should_bill_for_sync(settings) if not use_mock else False
 
-				def _bill_api_call():
-					consume_api_call(tripai_user_id, job_name)
+	if billing:
+		from crm.integrations.tripai.billing import (
+			RuntimeConfigError,
+			consume_api_call,
+			get_runtime_amap_keys,
+		)
 
-				on_api_call = _bill_api_call
-		except Exception:
-			pass
+		api_keys = get_runtime_amap_keys(required=True)
 
-	# TripAI runtime keys take precedence when integration is enabled
-	if not use_mock:
+		if tripai_user_id and job_name:
+
+			def _bill_api_call():
+				consume_api_call(tripai_user_id, job_name)
+
+			on_api_call = _bill_api_call
+	elif not use_mock:
 		try:
 			from crm.integrations.tripai.billing import get_runtime_amap_keys, should_bill_for_sync
 
 			if should_bill_for_sync(settings):
-				runtime_keys = get_runtime_amap_keys(tripai_user_id)
-				if runtime_keys:
-					api_keys = runtime_keys
+				api_keys = get_runtime_amap_keys()
 		except Exception:
 			pass
 
@@ -292,6 +292,11 @@ def build_client_from_settings(settings=None, tripai_user_id: str | None = None,
 			key = row.get_password("api_key")
 			if key:
 				api_keys.append(key)
+
+	if billing and not api_keys:
+		from crm.integrations.tripai.billing import RuntimeConfigError
+
+		raise RuntimeConfigError(_("Amap API keys are not available from TripAI"))
 
 	use_mock = use_mock or not api_keys
 	return AmapClient(

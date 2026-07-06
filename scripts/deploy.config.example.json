@@ -10,6 +10,9 @@
   "socketio_port": 9010,
   "db_root_password": "crm123456",
   "admin_password": "admin",
+  "tripai_base_url": "http://10.0.160.64:3000",
+  "tripai_project_key": "nextdevtpl",
+  "tripai_tool_key": "my-crm",
   "exclude": [
     ".git",
     "node_modules",

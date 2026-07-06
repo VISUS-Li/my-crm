@@ -34,7 +34,7 @@
     <div v-if="telephonyAgent.doc" class="flex-1 flex flex-col overflow-y-auto">
       <div class="flex items-center justify-between gap-8 py-3 pl-2 pr-1">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Default Medium') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -70,7 +70,7 @@
         class="flex items-center justify-between gap-8 py-3 pl-2 pr-1"
       >
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Twilio Number') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -95,7 +95,7 @@
         class="flex items-center justify-between gap-8 py-3 pl-2 pr-1"
       >
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Exotel Number') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -116,7 +116,7 @@
         class="flex items-center justify-between gap-8 py-3 pl-2 pr-1"
       >
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Personal Mobile No.') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">

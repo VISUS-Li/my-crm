@@ -54,7 +54,7 @@
           <div
             v-for="field in detailFields"
             :key="field.name"
-            class="flex gap-2 text-base text-ink-gray-8"
+            class="flex gap-2 text-p-base text-ink-gray-8"
           >
             <div class="grid size-7 place-content-center">
               <component :is="field.icon" />
@@ -100,7 +100,7 @@
               </div>
               <div
                 v-else-if="field.name == 'note'"
-                class="w-full cursor-pointer rounded border px-2 pt-1.5 text-base text-ink-gray-7"
+                class="w-full cursor-pointer rounded border px-2 pt-1.5 text-p-base text-ink-gray-7"
                 @click="() => showNote(field.value?.name)"
               >
                 <FadedScrollableDiv class="max-h-24 min-h-16 overflow-y-auto">
@@ -117,7 +117,7 @@
               </div>
               <div
                 v-else-if="field.name == 'task'"
-                class="w-full cursor-pointer rounded border px-2 pt-1.5 text-base text-ink-gray-7"
+                class="w-full cursor-pointer rounded border px-2 pt-1.5 text-p-base text-ink-gray-7"
                 @click="() => showTask(field.value?.name)"
               >
                 <FadedScrollableDiv class="max-h-24 min-h-16 overflow-y-auto">
@@ -199,7 +199,7 @@ function showNote(name) {
   showModal({
     name,
     doctype: 'FCRM Note',
-    title: 'Note',
+    title: __('Note'),
     callbacks: {
       afterInsert: (d) => addNoteToCallLog(d, true),
       afterUpdate: (d) => addNoteToCallLog(d, false),
@@ -211,7 +211,7 @@ function showTask(name) {
   showModal({
     name,
     doctype: 'CRM Task',
-    title: 'Task',
+    title: __('Task'),
     defaults: { status: 'Backlog', priority: 'Low' },
     callbacks: {
       afterInsert: (d) => addTaskToCallLog(d, true),
@@ -364,7 +364,7 @@ function openCallLogModal() {
   showModal({
     name: callLog.value?.data?.name,
     doctype: 'CRM Call Log',
-    title: 'Call Log',
+    title: __('Call Log'),
     callbacks: {
       afterUpdate: () => {
         callLog.value.reload()

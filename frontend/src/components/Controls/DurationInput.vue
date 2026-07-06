@@ -39,7 +39,7 @@ const errorMessage = ref('')
 const isCommitting = ref(false)
 
 const sizeClass = computed(() => {
-  return { sm: 'text-xs', md: 'text-base' }[attrs.size || 'sm']
+  return { sm: 'text-p-xs', md: 'text-p-base' }[attrs.size || 'sm']
 })
 
 const displayValue = computed(() => {

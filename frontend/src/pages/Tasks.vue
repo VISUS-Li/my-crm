@@ -56,7 +56,7 @@
         </div>
         <div
           v-if="['modified', 'creation'].includes(titleField)"
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           <Tooltip :text="getRow(itemName, titleField).label">
             <div>{{ getRow(itemName, titleField).timeAgo }}</div>
@@ -64,7 +64,7 @@
         </div>
         <div
           v-else-if="getRow(itemName, titleField).label"
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           {{ getRow(itemName, titleField).label }}
         </div>
@@ -96,7 +96,7 @@
         </div>
         <div
           v-if="['modified', 'creation'].includes(fieldName)"
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           <Tooltip :text="getRow(itemName, fieldName).label">
             <div>{{ getRow(itemName, fieldName).timeAgo }}</div>
@@ -104,7 +104,7 @@
         </div>
         <div
           v-else-if="fieldName == 'description'"
-          class="truncate text-base max-h-44"
+          class="truncate text-p-base max-h-44"
         >
           <TextEditor
             v-if="getRow(itemName, fieldName).label"
@@ -114,7 +114,7 @@
             class="flex-1 overflow-hidden"
           />
         </div>
-        <div v-else class="truncate text-base">
+        <div v-else class="truncate text-p-base">
           {{ getRow(itemName, fieldName).label }}
         </div>
       </div>
@@ -178,7 +178,7 @@
   />
   <EmptyState
     v-else-if="tasks.data && !rows.length"
-    name="Tasks"
+    :name="__('Tasks')"
     :icon="Email2Icon"
   />
 </template>
@@ -335,7 +335,7 @@ function showTask(name) {
   showModal({
     name,
     doctype: 'CRM Task',
-    title: 'Task',
+    title: __('Task'),
     callbacks: taskCallbacks,
   })
 }
@@ -352,7 +352,7 @@ function createTask(column) {
 
   showModal({
     doctype: 'CRM Task',
-    title: 'Task',
+    title: __('Task'),
     defaults: defaults,
     callbacks: taskCallbacks,
   })

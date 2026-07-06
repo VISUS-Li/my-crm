@@ -39,7 +39,7 @@
         <TextEditor
           editor-class="prose-sm min-h-28 max-w-full border rounded-b-lg border-t-0 p-2 border-outline-elevation-2"
           :content="user.doc.email_signature"
-          placeholder="Type something..."
+          :placeholder="__('Type something...')"
           :bubbleMenu="true"
           :fixed-menu="true"
           @change="(val) => (user.doc.email_signature = val)"
@@ -71,7 +71,7 @@
             <div
               v-for="e in user.doc.user_emails"
               :key="e.name"
-              class="grid grid-cols-[4fr_4fr_0.3fr] gap-2 group items-center px-4 py-2.5 text-base border-b border-outline-elevation-2 last:border-b-0"
+              class="grid grid-cols-[4fr_4fr_0.3fr] gap-2 group items-center px-4 py-2.5 text-p-base border-b border-outline-elevation-2 last:border-b-0"
             >
               <span class="text-ink-gray-8 font-medium truncate">
                 {{ e.email_account }}
@@ -105,7 +105,7 @@
             <template #item-label="{ option }">
               <div class="flex flex-col gap-1 text-ink-gray-9">
                 <div>{{ option.label }}</div>
-                <div class="text-ink-gray-4 text-sm">
+                <div class="text-ink-gray-4 text-p-sm">
                   {{ option.email }}
                 </div>
               </div>

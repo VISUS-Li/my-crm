@@ -37,8 +37,20 @@ def start_sync_job(job_name: str):
 		return job.start_sync()
 	except Exception as exc:
 		try:
-			from crm.integrations.tripai.billing import InsufficientCreditsError
+			from crm.integrations.tripai.billing import InsufficientCreditsError, RuntimeConfigError
+			from crm.integrations.tripai.license import LicenseNotEntitledError
 			from crm.integrations.tripai.settings import get_tripai_settings
+
+			if isinstance(exc, LicenseNotEntitledError):
+				settings = get_tripai_settings()
+				frappe.throw(
+					_("{0} Visit {1} to purchase or activate a license.").format(
+						str(exc),
+						f"{settings['base_url']}/zh/dashboard",
+					),
+					title=_("TripAI License Required"),
+					exc=frappe.ValidationError,
+				)
 
 			if isinstance(exc, InsufficientCreditsError):
 				settings = get_tripai_settings()
@@ -53,6 +65,9 @@ def start_sync_job(job_name: str):
 					title=_("Insufficient TripAI Credits"),
 					exc=frappe.ValidationError,
 				)
+
+			if isinstance(exc, RuntimeConfigError):
+				frappe.throw(str(exc), title=_("TripAI Configuration Error"), exc=frappe.ValidationError)
 		except ImportError:
 			pass
 		raise

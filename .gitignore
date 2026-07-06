@@ -48,8 +48,9 @@ docs/amap-poi-sales-dev-plan.md
 # Yarn Berry local state (keep .yarnrc.yml)
 frontend/.yarn/
 
-# Local i18n diagnostics (one-off dev utility)
+# Local i18n diagnostics / codemods (one-off dev utilities)
 scripts/list_empty_po.py
+scripts/batch_i18n_empty_state.py
 
 # Local TripAI verification / remote bench scripts (depend on deploy.config.json)
 scripts/tripai/
@@ -61,6 +62,10 @@ crm/integrations/tripai/debug_*.py
 crm/integrations/tripai/verify_remote.py
 crm/integrations/tripai/configure_remote.py
 crm/integrations/tripai/test_data.py
+crm/integrations/tripai/backfill_contacts.py
+
+# Local permissions unit tests (run locally, not committed)
+crm/permissions/test_agent_tenant.py
 
 # Local TripAI feature planning & tool registration notes (project docs live in .pi/)
 docs/tripai-integration-plan.md

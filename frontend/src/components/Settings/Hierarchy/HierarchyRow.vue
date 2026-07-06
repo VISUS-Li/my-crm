@@ -16,7 +16,7 @@
     <span v-else class="size-5 shrink-0"></span>
 
     <div
-      class="group relative flex-1 flex items-center gap-2 px-2 py-1.5 text-base rounded-md select-none after:content-[''] after:absolute after:bottom-0 after:left-1 after:right-3 after:border-outline-elevation-2"
+      class="group relative flex-1 flex items-center gap-2 px-2 py-1.5 text-p-base rounded-md select-none after:content-[''] after:absolute after:bottom-0 after:left-1 after:right-3 after:border-outline-elevation-2"
       :class="[
         rowClass,
         canEdit ? 'cursor-grab' : 'cursor-pointer',

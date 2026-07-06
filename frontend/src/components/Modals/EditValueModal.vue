@@ -2,7 +2,7 @@
   <Dialog v-model:open="show" :title="__('Bulk Edit')">
     <template #default>
       <div class="mb-4">
-        <div class="mb-1.5 text-sm text-ink-gray-5">{{ __('Field') }}</div>
+        <div class="mb-1.5 text-p-sm text-ink-gray-5">{{ __('Field') }}</div>
         <Autocomplete
           :value="field.label"
           :options="fields.data"
@@ -11,7 +11,7 @@
         />
       </div>
       <div>
-        <div class="mb-1.5 text-sm text-ink-gray-5">{{ __('Value') }}</div>
+        <div class="mb-1.5 text-p-sm text-ink-gray-5">{{ __('Value') }}</div>
         <component
           :is="getValueComponent(field)"
           :value="newValue"

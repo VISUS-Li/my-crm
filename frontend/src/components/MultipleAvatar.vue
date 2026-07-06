@@ -7,7 +7,7 @@
     ]"
   >
     <Tooltip v-if="avatars?.length == 1" :text="avatars[0].name">
-      <div class="flex items-center gap-2 text-base">
+      <div class="flex items-center gap-2 text-p-base">
         <Avatar
           shape="circle"
           :image="avatars[0].image"

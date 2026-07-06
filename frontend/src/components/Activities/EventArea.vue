@@ -17,7 +17,7 @@
       </div>
       <div class="mb-5">
         <div
-          class="mb-1 flex items-center justify-stretch gap-2 py-1 text-base"
+          class="mb-1 flex items-center justify-stretch gap-2 py-1 text-p-base"
         >
           <div class="inline-flex items-center flex-wrap gap-1 text-ink-gray-5">
             <Avatar
@@ -42,7 +42,7 @@
             class="flex w-[2px] rounded-lg"
             :style="{ backgroundColor: event.color || '#30A66D' }"
           />
-          <div class="flex-1 flex flex-col gap-1 text-base">
+          <div class="flex-1 flex flex-col gap-1 text-p-base">
             <div
               class="flex items-center justify-between gap-2 font-medium text-ink-gray-7"
             >

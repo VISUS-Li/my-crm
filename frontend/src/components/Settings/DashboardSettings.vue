@@ -27,7 +27,7 @@
     <div class="flex-1 flex flex-col overflow-y-auto">
       <div class="flex items-center justify-between py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Enable Forecasting') }}
           </div>
           <div class="text-p-sm text-ink-gray-5 truncate">
@@ -45,7 +45,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex items-center justify-between py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Auto Update Expected Deal Value') }}
           </div>
           <div class="text-p-sm text-ink-gray-5 truncate">
@@ -66,7 +66,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex items-center justify-between gap-8 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Dashboard Currency') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div>
-          <div v-if="settings.doc?.currency" class="text-base text-ink-gray-8">
+          <div v-if="settings.doc?.currency" class="text-p-base text-ink-gray-8">
             {{ settings.doc.currency }}
           </div>
           <Link
@@ -95,7 +95,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex items-center justify-between gap-8 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Exchange Rate Provider') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -108,13 +108,13 @@
             type="select"
             class="w-44"
             :options="[
-              { label: 'Frankfurter', value: 'frankfurter.app' },
+              { label: __('Frankfurter'), value: 'frankfurter.app' },
               {
-                label: 'Fawaz Ahmed Exchange API',
+                label: __('Fawaz Ahmed Exchange API'),
                 value: 'fawazahmed-exchange-api',
               },
-              { label: 'Exchangerate Host', value: 'exchangerate.host' },
-              { label: 'Exchangerate API', value: 'exchangerate-api' },
+              { label: __('Exchangerate Host'), value: 'exchangerate.host' },
+              { label: __('Exchangerate API'), value: 'exchangerate-api' },
             ]"
             :placeholder="__('Select Provider')"
             :disabled="!settings.doc?.currency"
@@ -131,7 +131,7 @@
         class="flex items-center justify-between gap-8 p-3"
       >
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Access Key') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -188,12 +188,12 @@ const PROVIDERS_REQUIRING_KEY = ['exchangerate.host', 'exchangerate-api']
 
 const PROVIDER_META = {
   'exchangerate.host': {
-    label: 'Exchangerate Host',
+    label: __('Exchangerate Host'),
     docsUrl: 'https://exchangerate.host/#/docs/access_key',
     docsLabel: 'exchangerate.host',
   },
   'exchangerate-api': {
-    label: 'Exchangerate API',
+    label: __('Exchangerate API'),
     docsUrl: 'https://www.exchangerate-api.com',
     docsLabel: 'exchangerate-api.com',
   },

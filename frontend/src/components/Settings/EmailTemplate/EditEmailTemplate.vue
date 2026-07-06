@@ -15,7 +15,7 @@
       <div class="flex item-center space-x-4 w-3/12 justify-end">
         <div class="flex items-center space-x-2">
           <Switch v-model="template.enabled" size="sm" />
-          <span class="text-sm text-ink-gray-7">{{ __('Enabled') }}</span>
+          <span class="text-p-sm text-ink-gray-7">{{ __('Enabled') }}</span>
         </div>
         <Button
           :label="__('Update')"
@@ -98,7 +98,7 @@
           "
         />
         <div v-else>
-          <div class="mb-1.5 text-base text-ink-gray-5">
+          <div class="mb-1.5 text-p-base text-ink-gray-5">
             {{ __('Content') }}
             <span class="text-ink-red-6">*</span>
           </div>

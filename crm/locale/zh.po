@@ -8842,6 +8842,39 @@ msgstr "已取消"
 msgid "Amap Settings"
 msgstr "高德设置"
 
+msgid "TripAI Settings"
+msgstr "TripAI 设置"
+
+msgid "CRM login authenticates via TripAI on the server side. Set the URL that the CRM backend can reach — e.g. your dev machine http://10.0.160.64:3000 or server-local http://127.0.0.1:23000."
+msgstr "CRM 登录由服务端转发到 TripAI 认证。请填写 CRM 后端能访问的地址，例如开发机 http://10.0.160.64:3000 或服务器本机 http://127.0.0.1:23000。"
+
+msgid "Required for TripAI login, licenses, and POI sync billing"
+msgstr "TripAI 登录、许可证与 POI 同步计费均依赖此集成"
+
+msgid "TripAI Base URL"
+msgstr "TripAI 基础地址"
+
+msgid "http://10.0.160.64:3000"
+msgstr "http://10.0.160.64:3000"
+
+msgid "Default Redirect Path"
+msgstr "默认跳转路径"
+
+msgid "Project Key"
+msgstr "项目 Key"
+
+msgid "Tool Key"
+msgstr "工具 Key"
+
+msgid "Runtime Token"
+msgstr "运行时 Token"
+
+msgid "Require TripAI License for POI Sync"
+msgstr "POI 同步需要 TripAI 许可证"
+
+msgid "TripAI reachable at {0} (HTTP {1})"
+msgstr "已连接 TripAI：{0}（HTTP {1}）"
+
 msgid "Amap POI"
 msgstr "高德 POI"
 
@@ -9330,6 +9363,96 @@ msgstr "调整整个应用程序的文字大小，布局和间距保持不变。
 
 msgid "Large"
 msgstr "较大"
+
+msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Sign in to CRM"
+msgstr "登录 CRM"
+
+msgid "Use your TripAI phone number or email"
+msgstr "使用 TripAI 手机号或邮箱登录"
+
+msgid "Phone or Email"
+msgstr "手机号或邮箱"
+
+msgid "15002326234 or name@example.com"
+msgstr "15002326234 或 name@example.com"
+
+msgid "Sign in"
+msgstr "登录"
+
+msgid "Invalid phone, email, or password"
+msgstr "手机号、邮箱或密码无效"
+
+msgid "Starting now"
+msgstr "即将开始"
+
+msgid "Ongoing events"
+msgstr "进行中的事件"
+
+msgid "Upcoming events"
+msgstr "即将到来的事件"
+
+msgid "No SLA Policies Found"
+msgstr "未找到 SLA 策略"
+
+msgid "Users in Hierarchy"
+msgstr "层级中的用户"
+
+msgid "Beta"
+msgstr "测试版"
+
+msgid "Days"
+msgstr "星期"
+
+msgid "Active"
+msgstr "启用"
+
+msgid "Can manage all aspects of the CRM, including user management, customizations and settings."
+msgstr "可管理 CRM 的所有方面，包括用户管理、自定义和设置。"
+
+msgid "Can manage and invite new users, and create public & private views (reports)."
+msgstr "可管理并邀请新用户，创建公开和私有视图（报表）。"
+
+msgid "Can work with leads and deals and create private views (reports)."
+msgstr "可处理线索和商机，并创建私有视图（报表）。"
+
+msgid "Lead Form"
+msgstr "线索表单"
+
+msgid "Conditions for this SLA were created from"
+msgstr "此 SLA 的条件创建于"
+
+msgid "Type something..."
+msgstr "输入内容..."
+
+msgid "100%"
+msgstr "100%"
+
+msgid "112.5%"
+msgstr "112.5%"
+
+msgid "125%"
+msgstr "125%"
+
+msgid "CRM"
+msgstr "CRM"
+
+msgid "Call Logs"
+msgstr "通话记录"
+
+msgid "Document"
+msgstr "文档"
+
+msgid "Master"
+msgstr "主数据"
+
+msgid "Random"
+msgstr "随机"
+
+msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
 
 msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"

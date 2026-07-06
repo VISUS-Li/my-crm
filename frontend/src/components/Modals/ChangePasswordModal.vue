@@ -42,7 +42,7 @@
         <div>
           <p
             v-if="confirmPasswordMessage"
-            class="text-sm text-ink-gray-5"
+            class="text-p-sm text-ink-gray-5"
             :class="
               confirmPasswordMessage === __('Passwords match')
                 ? 'text-ink-green-6'

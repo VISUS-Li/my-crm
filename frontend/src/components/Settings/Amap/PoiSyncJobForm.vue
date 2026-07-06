@@ -81,18 +81,18 @@
       />
       <div class="flex items-center gap-2 self-end pb-2">
         <Switch v-model="syncJob.import_only_with_phone" size="sm" />
-        <span class="text-sm">{{ __('Import only POIs with phone') }}</span>
+        <span class="text-p-sm">{{ __('Import only POIs with phone') }}</span>
       </div>
     </div>
 
     <div v-if="previewResults.length" class="rounded-lg border p-4 space-y-3">
-      <div class="text-p-base-medium">
+      <div class="text-base-medium">
         {{ __('Preview Results') }} ({{ previewResults.length }})
       </div>
       <div
         v-for="poi in previewResults"
         :key="poi.id"
-        class="grid grid-cols-4 gap-2 text-sm border-b pb-2"
+        class="grid grid-cols-4 gap-2 text-p-sm border-b pb-2"
       >
         <div class="truncate">{{ poi.name }}</div>
         <div>{{ poi.tel || __('No phone') }}</div>

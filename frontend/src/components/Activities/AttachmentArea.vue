@@ -2,7 +2,7 @@
   <div v-if="attachments.length">
     <div v-for="(attachment, i) in attachments" :key="attachment.name">
       <div
-        class="activity flex justify-between gap-2 hover:bg-surface-sidebar rounded text-base p-2.5 cursor-pointer"
+        class="activity flex justify-between gap-2 hover:bg-surface-sidebar rounded text-p-base p-2.5 cursor-pointer"
         @click="openFile(attachment)"
       >
         <div class="flex gap-2 truncate">
@@ -23,10 +23,10 @@
             />
           </div>
           <div class="flex flex-col justify-center gap-1 truncate">
-            <div class="text-base text-ink-gray-8 truncate">
+            <div class="text-p-base text-ink-gray-8 truncate">
               {{ attachment.file_name }}
             </div>
-            <div class="mb-1 text-sm text-ink-gray-5">
+            <div class="mb-1 text-p-sm text-ink-gray-5">
               {{ convertSize(attachment.file_size) }}
             </div>
           </div>

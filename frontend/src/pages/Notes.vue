@@ -65,12 +65,12 @@
         <div class="mt-2 flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <UserAvatar :user="note.owner" size="xs" />
-            <div class="text-sm text-ink-gray-8">
+            <div class="text-p-sm text-ink-gray-8">
               {{ getUser(note.owner).full_name }}
             </div>
           </div>
           <Tooltip :text="formatDate(note.modified)">
-            <div class="text-sm text-ink-gray-7">
+            <div class="text-p-sm text-ink-gray-7">
               {{ __(timeAgo(note.modified)) }}
             </div>
           </Tooltip>
@@ -88,7 +88,7 @@
     }"
     @loadMore="() => loadMore++"
   />
-  <EmptyState v-else name="Notes" :icon="NoteIcon" />
+  <EmptyState v-else :name="__('Notes')" :icon="NoteIcon" />
 </template>
 
 <script setup>
@@ -140,7 +140,7 @@ const noteCallbacks = {
 function createNote() {
   showModal({
     doctype: 'FCRM Note',
-    title: 'Note',
+    title: __('Note'),
     callbacks: noteCallbacks,
   })
 }
@@ -149,7 +149,7 @@ function editNote(noteName) {
   showModal({
     name: noteName,
     doctype: 'FCRM Note',
-    title: 'Note',
+    title: __('Note'),
     callbacks: noteCallbacks,
   })
 }

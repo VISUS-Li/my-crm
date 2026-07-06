@@ -46,7 +46,7 @@
                       <div
                         class="w-[35%] min-w-20 shrink-0 flex items-center gap-0.5"
                       >
-                        <div class="truncate text-sm text-ink-gray-5">
+                        <div class="truncate text-p-sm text-ink-gray-5">
                           {{ __(field.label) }}
                         </div>
                         <div
@@ -70,7 +70,7 @@
                       ]"
                     >
                       <div
-                        class="grid min-h-[28px] flex-1 items-center overflow-hidden text-base"
+                        class="grid min-h-[28px] flex-1 items-center overflow-hidden text-p-base"
                       >
                         <div
                           v-if="

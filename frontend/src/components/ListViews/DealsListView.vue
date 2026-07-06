@@ -111,7 +111,7 @@
                 'response_by',
               ].includes(column.key)
             "
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {
@@ -129,7 +129,7 @@
           </div>
           <div
             v-else-if="column.key === 'sla_status'"
-            class="truncate text-base"
+            class="truncate text-p-base"
           >
             <Badge
               v-if="item.value"
@@ -176,7 +176,7 @@
           />
           <div
             v-else-if="label"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {

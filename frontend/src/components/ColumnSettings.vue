@@ -24,7 +24,7 @@
           >
             <template #item="{ element }">
               <div
-                class="flex cursor-grab items-center justify-between gap-6 rounded px-2 py-1.5 text-base text-ink-gray-8 hover:bg-surface-gray-2"
+                class="flex cursor-grab items-center justify-between gap-6 rounded px-2 py-1.5 text-p-base text-ink-gray-8 hover:bg-surface-gray-2"
               >
                 <div class="flex items-center gap-2">
                   <DragIcon class="h-3.5" />
@@ -91,7 +91,7 @@
         </div>
         <div v-else>
           <div
-            class="flex flex-col items-center justify-between gap-2 rounded px-2 py-1.5 text-base text-ink-gray-8"
+            class="flex flex-col items-center justify-between gap-2 rounded px-2 py-1.5 text-p-base text-ink-gray-8"
           >
             <div class="flex flex-col items-center gap-3">
               <FormControl
@@ -108,7 +108,7 @@
                 size="md"
                 :label="__('Width')"
                 class="sm:w-full w-52"
-                placeholder="10rem"
+                :placeholder="__('10rem')"
                 :description="
                   __(
                     'Width can be in number, pixel or rem (eg. 3, 30px, 10rem)',

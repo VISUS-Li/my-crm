@@ -73,11 +73,11 @@
               v-model="slaData.apply_on"
               :options="[
                 {
-                  label: 'Lead',
+                  label: __('Lead'),
                   value: 'CRM Lead',
                 },
                 {
-                  label: 'Deal',
+                  label: __('Deal'),
                   value: 'CRM Deal',
                 },
               ]"
@@ -119,7 +119,7 @@
                 <Popover trigger="hover" :hoverDelay="0.25" placement="top-end">
                   <template #target>
                     <div
-                      class="text-sm text-ink-gray-6 flex gap-1 cursor-default"
+                      class="text-p-sm text-ink-gray-6 flex gap-1 cursor-default"
                     >
                       {{ __('Old Conditions') }}
                       <span class="lucide-info size-4" aria-hidden="true" />
@@ -127,7 +127,7 @@
                   </template>
                   <template #body-main>
                     <div
-                      class="text-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
+                      class="text-p-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
                     >
                       <code>{{ slaData.condition }}</code>
                     </div>
@@ -138,14 +138,18 @@
             <div class="mt-5">
               <div
                 v-if="!useNewUI"
-                class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-sm mb-2 border border-outline-gray-3 rounded-md p-3 py-4"
+                class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-p-sm mb-2 border border-outline-gray-3 rounded-md p-3 py-4"
               >
                 <span class="text-p-sm">
-                  Conditions for this SLA were created from
-                  <a :href="deskUrl" target="_blank" class="underline">desk</a>
-                  which are not compatible with this UI, you will need to
-                  recreate the conditions here if you want to manage and add new
-                  conditions from this UI.
+                  {{ __('Conditions for this SLA were created from') }}
+                  <a :href="deskUrl" target="_blank" class="underline">{{
+                    __('desk')
+                  }}</a>
+                  {{
+                    __(
+                      'which are not compatible with this UI, you will need to recreate the conditions here if you want to manage and add new conditions from this UI.',
+                    )
+                  }}
                 </span>
                 <Button
                   :label="__('I understand, Add Conditions')"
@@ -178,7 +182,7 @@
                 id="start_date"
                 v-model="slaData.start_date"
                 variant="subtle"
-                placeholder="11/01/2025"
+                :placeholder="__('11/01/2025')"
                 class="w-full"
                 :formatter="(date) => getFormattedDate(date)"
                 @change="validateSlaData('start_date')"
@@ -195,7 +199,7 @@
                 id="end_date"
                 v-model="slaData.end_date"
                 variant="subtle"
-                placeholder="25/12/2025"
+                :placeholder="__('25/12/2025')"
                 class="w-full"
                 :formatter="(date) => getFormattedDate(date)"
                 @change="validateSlaData('end_date')"

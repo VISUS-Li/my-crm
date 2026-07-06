@@ -1,6 +1,6 @@
 <template>
   <div v-if="showWebLink">
-    <TextInput v-model="webLink" placeholder="https://example.com" />
+    <TextInput v-model="webLink" :placeholder="__('https://example.com')" />
   </div>
   <div v-else-if="showCamera">
     <video v-show="!cameraImage" ref="video" class="rounded" autoplay></video>
@@ -24,7 +24,7 @@
           {{ __('Drag & Drop files here or upload from') }}
         </div>
         <div
-          class="grid grid-flow-col justify-center gap-4 text-center text-base"
+          class="grid grid-flow-col justify-center gap-4 text-center text-p-base"
         >
           <input
             ref="fileInput"
@@ -79,8 +79,8 @@
             />
             <component :is="fileIcon(file.type)" v-else class="size-4" />
           </div>
-          <div class="flex flex-col gap-1 text-sm text-ink-gray-5 truncate">
-            <div class="text-base text-ink-gray-8 truncate">
+          <div class="flex flex-col gap-1 text-p-sm text-ink-gray-5 truncate">
+            <div class="text-p-base text-ink-gray-8 truncate">
               {{ file.name }}
             </div>
             <div class="mb-1">
@@ -89,7 +89,7 @@
             <FormControl
               v-model="file.private"
               type="checkbox"
-              class="[&>label]:text-sm [&>label]:text-ink-gray-5"
+              class="[&>label]:text-p-sm [&>label]:text-ink-gray-5"
               :label="__('Private')"
             />
             <ErrorMessage

@@ -70,7 +70,7 @@
         <template #default="{ label }">
           <div
             v-if="['modified', 'creation'].includes(column.key)"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {
@@ -125,7 +125,7 @@
           />
           <div
             v-else-if="label"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {

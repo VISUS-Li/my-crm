@@ -23,8 +23,14 @@
           <div class="text-base-medium leading-none text-ink-gray-9 truncate">
             {{ __(brand.name || 'CRM') }}
           </div>
-          <div class="mt-1 text-sm leading-none text-ink-gray-7 truncate">
+          <div class="mt-1 text-p-sm leading-none text-ink-gray-7 truncate">
             {{ user.full_name }}
+          </div>
+          <div
+            v-if="userContact && userContact !== user.full_name"
+            class="mt-0.5 text-p-xs leading-none text-ink-gray-5 truncate"
+          >
+            {{ userContact }}
           </div>
         </div>
         <div
@@ -57,6 +63,7 @@ import { showAboutModal } from '@/composables/modals'
 import { confirmLoginToFrappeCloud } from '@/composables/frappecloud'
 import { Dropdown } from 'frappe-ui'
 import { computed, h, markRaw } from 'vue'
+import { getUserContactDisplay } from '@/utils/userContact'
 
 defineProps({
   isCollapsed: { type: Boolean, default: false },
@@ -67,6 +74,7 @@ const { logout } = sessionStore()
 const { getUser } = usersStore()
 
 const user = computed(() => getUser() || {})
+const userContact = computed(() => getUserContactDisplay(user.value))
 
 const dropdownItems = computed(() => {
   if (!settings.value?.dropdown_items) return []

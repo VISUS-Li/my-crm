@@ -6,7 +6,7 @@
           <template #header="{ opened, toggle: toggleHeader }">
             <div class="flex items-center justify-between">
               <div
-                class="flex text-ink-gray-6 max-w-fit cursor-pointer items-center gap-2 text-base"
+                class="flex text-ink-gray-6 max-w-fit cursor-pointer items-center gap-2 text-p-base"
                 @click="toggleHeader()"
               >
                 <span
@@ -42,7 +42,7 @@
                     {{ eventDate(e).day }}
                   </div>
                 </div>
-                <div class="flex flex-col gap-0.5 text-base truncate">
+                <div class="flex flex-col gap-0.5 text-p-base truncate">
                   <div class="flex items-center gap-1">
                     <div class="flex justify-center items-center size-4">
                       <div
@@ -78,8 +78,8 @@
 
   <EmptyState
     v-else
-    title="No Upcoming Events"
-    description="You have no events scheduled"
+    :title="__('No Upcoming Events')"
+    :description="__('You have no events scheduled')"
     :icon="EventIcon"
     width="lg"
   />
@@ -164,19 +164,19 @@ const computedEvents = computed(() => {
 
   return [
     {
-      type: 'Starting now',
+      type: __('Starting now'),
       collapsed: false,
       count: startingNowEvents.length,
       items: startingNowEvents,
     },
     {
-      type: 'Ongoing events',
+      type: __('Ongoing events'),
       collapsed: false,
       count: ongoingEvents.length,
       items: ongoingEvents,
     },
     {
-      type: 'Upcoming events',
+      type: __('Upcoming events'),
       collapsed: false,
       count: upcomingEvents.length,
       items: upcomingEvents,

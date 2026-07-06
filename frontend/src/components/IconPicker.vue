@@ -2,7 +2,7 @@
   <Popover transition="default">
     <template #target="{ togglePopover, isOpen }">
       <slot v-bind="{ isOpen, togglePopover }">
-        <span class="text-base"> {{ modelValue || '' }} </span>
+        <span class="text-p-base"> {{ modelValue || '' }} </span>
       </slot>
     </template>
     <template #body="{ togglePopover }">
@@ -13,7 +13,7 @@
         <div
           v-for="r in reactionEmojis"
           :key="r"
-          class="size-5 cursor-pointer rounded-full bg-surface-transparent text-2xl"
+          class="size-5 cursor-pointer rounded-full bg-surface-transparent text-p-2xl"
           @click="() => (emoji = r) && togglePopover()"
         >
           <button>
@@ -35,16 +35,16 @@
               <FormControl
                 v-model="search"
                 type="text"
-                placeholder="Search by keyword"
+                :placeholder="__('Search by keyword')"
                 :debounce="300"
               />
             </div>
-            <Button @click="setRandom">Random</Button>
+            <Button @click="setRandom">{{ __('Random') }}</Button>
           </div>
           <div class="w-96"></div>
           <div v-for="(emojis, group) in emojiGroups" :key="group" class="px-3">
             <div
-              class="sticky top-0 bg-surface-elevation-2 pb-2 pt-3 text-sm text-ink-gray-7"
+              class="sticky top-0 bg-surface-elevation-2 pb-2 pt-3 text-p-sm text-ink-gray-7"
             >
               {{ group }}
             </div>
@@ -52,7 +52,7 @@
               <button
                 v-for="_emoji in emojis"
                 :key="_emoji.description"
-                class="h-8 w-8 rounded-md p-1 text-3xl hover:bg-surface-gray-2 focus:outline-none focus:ring focus:ring-blue-200"
+                class="h-8 w-8 rounded-md p-1 text-p-3xl hover:bg-surface-gray-2 focus:outline-none focus:ring focus:ring-blue-200"
                 :title="_emoji.description"
                 @click="() => (emoji = _emoji.emoji) && togglePopover()"
               >

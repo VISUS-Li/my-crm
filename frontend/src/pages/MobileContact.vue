@@ -107,7 +107,7 @@
       <template #tab-item="{ tab, selected }">
         <button
           v-if="tab.name == 'Deals'"
-          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9 !px-4"
+          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-p-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9 !px-4"
           :class="{ 'text-ink-gray-9': selected }"
         >
           <component :is="tab.icon" v-if="tab.icon" class="h-5" />
@@ -340,7 +340,7 @@ function getParsedSections(_sections) {
                   name: email.name,
                   value: email.email_id,
                   selected: email.email_id === contact.doc.email_id,
-                  placeholder: 'john@doe.com',
+                  placeholder: __('john@doe.com'),
                   onClick: () => {
                     setAsPrimary('email', email.email_id)
                   },

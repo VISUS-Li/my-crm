@@ -43,8 +43,8 @@ const displayValue = computed(() => {
 const descriptionClasses = computed(() => {
   return [
     {
-      sm: 'text-xs',
-      md: 'text-base',
+      sm: 'text-p-xs',
+      md: 'text-p-base',
     }[attrs.size || 'sm'],
     'text-ink-gray-5',
   ]

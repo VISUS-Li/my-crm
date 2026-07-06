@@ -7,12 +7,12 @@
   </div>
   <EmptyState
     v-else-if="assignmentRulesList.data?.length === 0"
-    title="No Assignment Rules Found"
+    :title="__('No Assignment Rules Found')"
     :description="__('Add one to get started.')"
     :icon="h(SettingsIcon2, { class: 'rotate-90' })"
   />
   <div v-else class="w-full">
-    <div class="flex items-center p-2 text-sm text-ink-gray-5">
+    <div class="flex items-center p-2 text-p-sm text-ink-gray-5">
       <div class="w-7/12">{{ __('Assignment Rule') }}</div>
       <div class="w-3/12">{{ __('Priority') }}</div>
       <div class="w-2/12">{{ __('Enabled') }}</div>

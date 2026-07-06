@@ -37,7 +37,7 @@ function showTask(task) {
   showModal({
     name: task?.name,
     doctype: 'CRM Task',
-    title: 'Task',
+    title: __('Task'),
     defaults: {
       reference_doctype: props.doctype,
       reference_docname: props.doc?.name,
@@ -73,7 +73,7 @@ function showNote(note) {
   showModal({
     name: note?.name,
     doctype: 'FCRM Note',
-    title: 'Note',
+    title: __('Note'),
     defaults: {
       reference_doctype: props.doctype,
       reference_docname: props.doc?.name,
@@ -114,7 +114,7 @@ function afterDoctype(d, isInsert = false) {
 function createCallLog() {
   showModal({
     doctype: 'CRM Call Log',
-    title: 'Call Log',
+    title: __('Call Log'),
     defaults: {
       reference_doctype: props.doctype,
       reference_docname: props.doc?.name,

@@ -15,7 +15,7 @@
     </template>
     <template #default>
       <div class="mt-4">
-        <div class="text-base text-ink-gray-8 mb-2">
+        <div class="text-p-base text-ink-gray-8 mb-2">
           {{ __('Fields Order') }}
         </div>
         <Draggable
@@ -27,7 +27,7 @@
         >
           <template #item="{ element: field }">
             <div
-              class="px-1 py-0.5 bg-surface-gray-2 border border-outline-elevation-2 rounded text-base text-ink-gray-8 flex items-center justify-between gap-2"
+              class="px-1 py-0.5 bg-surface-gray-2 border border-outline-elevation-2 rounded text-p-base text-ink-gray-8 flex items-center justify-between gap-2"
             >
               <div class="flex items-center gap-2">
                 <DragVerticalIcon class="h-3.5 cursor-grab" />
@@ -66,7 +66,7 @@
           <template #item-label="{ option }">
             <div class="flex flex-col gap-1 text-ink-gray-9">
               <div>{{ option.label }}</div>
-              <div class="text-ink-gray-4 text-sm">
+              <div class="text-ink-gray-4 text-p-sm">
                 {{ `${option.fieldname} - ${option.fieldtype}` }}
               </div>
             </div>

@@ -48,6 +48,7 @@ class POIImporter:
 			poi,
 			sync_job=self.sync_job.name,
 			job_owner=self.sync_job.job_owner,
+			agent_tenant_id=getattr(self.sync_job, "agent_tenant_id", None),
 			phones=phones,
 			primary_phone=primary_phone,
 			valid_phone=valid_phone,
@@ -77,15 +78,12 @@ class POIImporter:
 	def _bill_poi_import(self) -> None:
 		if self.settings.use_mock_api or not self.tripai_user_id:
 			return
-		try:
-			from crm.integrations.tripai.billing import consume_poi_import, should_bill_for_sync
+		from crm.integrations.tripai.billing import consume_poi_import, should_bill_for_sync
 
-			if not should_bill_for_sync(self.settings):
-				return
+		if not should_bill_for_sync(self.settings):
+			return
 
-			consume_poi_import(self.tripai_user_id, self.sync_job.name, poi_count=1)
-		except Exception:
-			frappe.log_error(title="TripAI POI import billing failed")
+		consume_poi_import(self.tripai_user_id, self.sync_job.name, poi_count=1)
 
 
 def upsert_poi_record(
@@ -95,6 +93,7 @@ def upsert_poi_record(
 	phones: list[str],
 	primary_phone: str | None,
 	valid_phone: bool,
+	agent_tenant_id: str | None = None,
 ) -> str:
 	amap_poi_id = poi.get("id")
 	existing = frappe.db.exists("CRM POI Record", amap_poi_id)
@@ -116,6 +115,7 @@ def upsert_poi_record(
 		"district": poi.get("adname") or poi.get("district") or "",
 		"sync_job": sync_job,
 		"job_owner": job_owner,
+		"agent_tenant_id": agent_tenant_id,
 		"raw_json": json.dumps(poi, ensure_ascii=False),
 	}
 
@@ -171,6 +171,7 @@ def create_or_update_lead(
 		"lead_owner": lead_owner,
 		"status": status,
 		"amap_poi_id": amap_poi_id,
+		"tripai_agent_tenant_id": getattr(sync_job, "agent_tenant_id", None),
 		"poi_address": poi.get("address") or "",
 		"poi_location": location,
 		"poi_type": poi.get("type") or "",

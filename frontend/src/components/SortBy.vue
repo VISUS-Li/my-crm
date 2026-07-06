@@ -125,7 +125,7 @@
           </div>
           <div
             v-else
-            class="mb-3 flex h-7 items-center px-3 text-sm text-ink-gray-5"
+            class="mb-3 flex h-7 items-center px-3 text-p-sm text-ink-gray-5"
           >
             {{ __('Empty - Choose a field to sort by') }}
           </div>

@@ -46,7 +46,7 @@
             >
               <div
                 v-if="section.name == 'contacts_section'"
-                class="flex h-16 items-center justify-center text-base text-ink-gray-5"
+                class="flex h-16 items-center justify-center text-p-base text-ink-gray-5"
               >
                 {{ __('No Contacts Added') }}
               </div>

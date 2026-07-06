@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 import frappe
@@ -12,6 +11,11 @@ from frappe.utils import now_datetime
 
 from crm.integrations.tripai.client import TripAIAPIError, exchange_launch_ticket
 from crm.integrations.tripai.settings import TripAIConfigError, get_tripai_settings
+from crm.integrations.tripai.user_contact import (
+	build_user_link_contact_fields,
+	normalize_tripai_user_id,
+	resolve_primary_contact,
+)
 
 CRM_ROLE_SYSTEM_MANAGER = "System Manager"
 CRM_ROLE_SALES_MANAGER = "Sales Manager"
@@ -37,22 +41,14 @@ def map_tripai_user_to_crm_role(tripai_user: dict[str, Any]) -> str:
 
 
 def normalize_tripai_email(tripai_user: dict[str, Any]) -> str:
-	contact = (tripai_user.get("email") or "").strip()
-	if contact and "@" in contact and not contact.endswith("@tripai.local"):
-		return contact.lower()
-
-	phone = (tripai_user.get("phone") or contact or "").strip()
-	digits = re.sub(r"\D", "", phone)
-	if digits:
-		return f"+{digits}@tripai.local"
-
-	user_id = tripai_user.get("id") or frappe.generate_hash(length=12)
-	return f"{user_id}@tripai.local"
+	return normalize_tripai_user_id(tripai_user)
 
 
 def ensure_crm_user(tripai_user: dict[str, Any], crm_role: str) -> str:
-	email = normalize_tripai_email(tripai_user)
-	display_name = (tripai_user.get("name") or email.split("@")[0]).strip() or email
+	email = normalize_tripai_user_id(tripai_user)
+	primary = resolve_primary_contact(tripai_user)
+	display_name = (tripai_user.get("name") or primary["display"] or email.split("@")[0]).strip() or email
+	phone = primary.get("tripai_phone")
 
 	if frappe.db.exists("User", email):
 		user = frappe.get_doc("User", email)
@@ -68,6 +64,11 @@ def ensure_crm_user(tripai_user: dict[str, Any], crm_role: str) -> str:
 			}
 		)
 		user.insert(ignore_permissions=True)
+
+	if phone:
+		user.mobile_no = phone
+	if display_name:
+		user.first_name = display_name[:140]
 
 	desired_roles = {crm_role}
 	if crm_role == CRM_ROLE_SYSTEM_MANAGER:
@@ -114,6 +115,7 @@ def upsert_user_link(tripai_user: dict[str, Any], crm_user: str, crm_role: str) 
 		"agent_tenant_level": agent_tenant.get("level"),
 		"last_login_at": now_datetime(),
 		"enabled": 1,
+		**build_user_link_contact_fields(tripai_user),
 	}
 
 	if existing:
@@ -157,7 +159,6 @@ def handle_launch_ticket(ticket: str, project_key: str | None = None) -> dict[st
 		"crm_role": crm_role,
 		"tripai_user_id": tripai_user["id"],
 		"user_link": link_name,
-		"runtime_session_token": exchanged.get("runtimeSessionToken"),
 	}
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-md border px-2 border-outline-gray-2 text-sm">
+  <div class="rounded-md border px-2 border-outline-gray-2 text-p-sm">
     <div
       class="grid p-2 px-4 items-center"
       style="grid-template-columns: 3fr 1fr"
@@ -33,11 +33,11 @@ const assignmentRuleErrors = inject('assignmentRuleErrors')
 
 const columns = [
   {
-    label: 'Days',
+    label: __('Days'),
     key: 'day',
   },
   {
-    label: 'Active',
+    label: __('Active'),
     key: 'active',
   },
 ]

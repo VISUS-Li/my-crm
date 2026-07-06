@@ -9,7 +9,7 @@
       <button
         :class="[
           active ? 'bg-surface-gray-3' : 'text-ink-gray-6',
-          'group w-full flex h-7 items-center justify-between rounded px-2 text-base hover:bg-surface-gray-2',
+          'group w-full flex h-7 items-center justify-between rounded px-2 text-p-base hover:bg-surface-gray-2',
         ]"
         @click.prevent="togglePopover()"
       >
@@ -27,7 +27,7 @@
     </template>
     <template #body>
       <div
-        class="flex w-fit mx-2 min-w-32 max-w-48 flex-col rounded-lg border border-outline-gray-2 bg-surface-base p-1.5 text-sm text-ink-gray-8 shadow-xl auto-fill-[100px]"
+        class="flex w-fit mx-2 min-w-32 max-w-48 flex-col rounded-lg border border-outline-gray-2 bg-surface-base p-1.5 text-p-sm text-ink-gray-8 shadow-xl auto-fill-[100px]"
       >
         <a
           v-for="app in apps.data"

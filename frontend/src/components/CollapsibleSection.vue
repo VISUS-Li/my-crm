@@ -7,7 +7,7 @@
         :class="headerClass"
       >
         <div
-          class="flex text-ink-gray-9 max-w-fit cursor-pointer items-center gap-2 text-base"
+          class="flex text-ink-gray-9 max-w-fit cursor-pointer items-center gap-2 text-p-base"
           :class="labelClass"
           @click="collapsible && toggle()"
         >

@@ -107,9 +107,9 @@ const routes = [
     props: true,
   },
   {
-    path: '/auth/callback',
-    name: 'AuthCallback',
-    component: () => import('@/pages/AuthCallback.vue'),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/pages/Login.vue'),
   },
   {
     path: '/welcome',
@@ -152,6 +152,14 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (isLoggedIn && to.name !== 'Not Permitted' && !isCrmUser()) {
+    try {
+      await users.reload()
+    } catch (error) {
+      console.error('Error reloading users after login', error)
+    }
+  }
+
+  if (isLoggedIn && to.name !== 'Not Permitted' && !isCrmUser()) {
     next({ name: 'Not Permitted' })
   } else if (to.name === 'Home' && isLoggedIn) {
     const { views, getDefaultView } = viewsStore()
@@ -175,10 +183,14 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next({ name: route_name, params: { viewType: type } })
     }
-  } else if (to.name === 'AuthCallback') {
+  } else if (to.name === 'Login' || to.name === 'Welcome') {
+    if (isLoggedIn && to.name === 'Login') {
+      next({ name: 'Home' })
+      return
+    }
     next()
   } else if (!isLoggedIn) {
-    window.location.href = '/login?redirect-to=/crm'
+    next({ name: 'Login', query: { redirect: to.fullPath } })
   } else if (to.matched.length === 0) {
     next({ name: 'Invalid Page' })
   } else if (['Deal', 'Lead'].includes(to.name) && !to.hash) {

@@ -79,7 +79,7 @@
                   </div>
                   <div
                     v-if="contact.doc.company_name"
-                    class="flex items-center gap-1.5 text-base text-ink-gray-8"
+                    class="flex items-center gap-1.5 text-p-base text-ink-gray-8"
                   >
                     {{ contact.doc.company_name }}
                   </div>
@@ -127,7 +127,7 @@
     >
       <template #tab-item="{ tab, selected }">
         <button
-          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
+          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-p-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
           :class="{ 'text-ink-gray-9': selected }"
         >
           <component :is="tab.icon" v-if="tab.icon" class="h-5" />
@@ -151,7 +151,7 @@
           :columns="columns"
           :options="{ selectable: false, showTooltip: false }"
         />
-        <EmptyState v-if="!rows.length" :icon="tab.icon" name="Deals" />
+        <EmptyState v-if="!rows.length" :icon="tab.icon" :name="__('Deals')" />
       </template>
     </Tabs>
   </div>
@@ -165,7 +165,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'Contact'"
     :docname="contact.doc.name"
-    name="Contacts"
+    :name="__('Contacts')"
   />
 </template>
 
@@ -294,7 +294,7 @@ function changeContactImage(file) {
 const tabIndex = ref(0)
 const tabs = [
   {
-    label: 'Deals',
+    label: __('Deals'),
     icon: DealsIcon,
     count: computed(() => deals.data?.length),
   },
@@ -340,7 +340,7 @@ const parsedSections = computed(() => {
               name: email.name,
               value: email.email_id,
               selected: email.email_id === contact.doc.email_id,
-              placeholder: 'john@doe.com',
+              placeholder: __('john@doe.com'),
               onClick: () => setAsPrimary('email', email.email_id),
               onSave: (option, isNew) =>
                 isNew

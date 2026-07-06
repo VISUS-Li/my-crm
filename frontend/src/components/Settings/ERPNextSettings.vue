@@ -8,7 +8,7 @@
         <h2 class="flex text-2xl-semibold leading-none h-5">
           {{ __('ERPNext Settings') }}
         </h2>
-        <Tooltip text="View documentation">
+        <Tooltip :text="__('View documentation')">
           <a href="https://docs.frappe.io/crm/erpnext" target="_blank">
             <lucide-circle-question-mark class="h-4 w-4 text-ink-gray-6" />
           </a>
@@ -65,7 +65,7 @@
               v-model="erpnextCRMSettingsResource.doc.erpnext_site_url"
               :label="__('Site URL')"
               type="text"
-              placeholder="https://erpnext.example.com"
+              :placeholder="__('https://erpnext.example.com')"
               required
               :description="
                 __(
@@ -79,7 +79,7 @@
                 v-model="erpnextCRMSettingsResource.doc.api_key"
                 :label="__('API Key')"
                 type="text"
-                placeholder="9g3f7693gho2ih23hiuhsad"
+                :placeholder="__('9g3f7693gho2ih23hiuhsad')"
                 required
                 autocomplete="off"
               />
@@ -87,7 +87,7 @@
                 v-model="erpnextCRMSettingsResource.doc.api_secret"
                 :label="__('API Secret')"
                 type="text"
-                placeholder="o2ih23hiuhsado2ih23hiuhsad"
+                :placeholder="__('o2ih23hiuhsado2ih23hiuhsad')"
                 required
                 autocomplete="off"
               />
@@ -126,7 +126,7 @@
           >
             <div class="flex items-center justify-between pb-3 px-2">
               <div class="flex flex-col">
-                <div class="text-p-base-medium text-ink-gray-7 truncate">
+                <div class="text-base-medium text-ink-gray-7 truncate">
                   {{ __('Company Name') }}
                 </div>
                 <div class="text-p-sm text-ink-gray-5 truncate">
@@ -187,7 +187,7 @@
               class="flex items-center justify-between py-3 px-2"
             >
               <div class="flex flex-col">
-                <div class="text-p-base-medium text-ink-gray-7 truncate">
+                <div class="text-base-medium text-ink-gray-7 truncate">
                   {{ __('Sync Products with ERPNext') }}
                 </div>
                 <div class="text-p-sm text-ink-gray-5 truncate">
@@ -209,7 +209,7 @@
             <div class="h-px border-t border-outline-elevation-2" />
             <div class="flex items-center justify-between py-3 px-2">
               <div class="flex flex-col">
-                <div class="text-p-base-medium text-ink-gray-7 truncate">
+                <div class="text-base-medium text-ink-gray-7 truncate">
                   {{ __('Auto Create Customer') }}
                 </div>
                 <div class="text-p-sm text-ink-gray-5 truncate">
@@ -237,7 +237,7 @@
             >
               <div class="flex items-center justify-between py-3 px-2 gap-4">
                 <div class="flex flex-col">
-                  <div class="text-p-base-medium text-ink-gray-7">
+                  <div class="text-base-medium text-ink-gray-7">
                     {{ __('Deal Status') }}
                   </div>
                   <div class="text-p-sm text-ink-gray-5">

@@ -1,6 +1,6 @@
 <template>
   <div :id="activity.name">
-    <div class="mb-1 flex items-center justify-stretch gap-2 py-1 text-base">
+    <div class="mb-1 flex items-center justify-stretch gap-2 py-1 text-p-base">
       <div class="inline-flex items-center flex-wrap gap-1 text-ink-gray-5">
         <UserAvatar class="mr-1" :user="activity.owner" size="md" />
         <span class="font-medium text-ink-gray-8">
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div
-      class="rounded bg-surface-gray-1 px-3 py-[7.5px] text-base leading-6 transition-all duration-300 ease-in-out"
+      class="rounded bg-surface-gray-1 px-3 py-[7.5px] text-p-base leading-6 transition-all duration-300 ease-in-out"
     >
       <template v-if="editing">
         <TextEditor

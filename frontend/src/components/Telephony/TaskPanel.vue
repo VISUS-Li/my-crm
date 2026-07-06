@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[294px] text-base">
+  <div class="h-[294px] text-p-base">
     <FormControl
       v-model="task.title"
       type="text"

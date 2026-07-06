@@ -180,7 +180,7 @@
             >
               <div
                 v-if="dealContacts?.loading && dealContacts?.data?.length == 0"
-                class="flex min-h-20 flex-1 items-center justify-center gap-3 text-base text-ink-gray-4"
+                class="flex min-h-20 flex-1 items-center justify-center gap-3 text-p-base text-ink-gray-4"
               >
                 <LoadingIndicator class="h-4 w-4" />
                 <span>{{ __('Loading...') }}</span>
@@ -194,7 +194,7 @@
                   <CollapsibleSection :opened="contact.opened">
                     <template #header="{ opened, toggle }">
                       <div
-                        class="flex cursor-pointer items-center justify-between gap-2 pr-1 text-base leading-5 text-ink-gray-7"
+                        class="flex cursor-pointer items-center justify-between gap-2 pr-1 text-p-base leading-5 text-ink-gray-7"
                       >
                         <div
                           class="flex h-7 items-center gap-2 truncate"
@@ -245,7 +245,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="flex flex-col gap-1.5 text-base">
+                    <div class="flex flex-col gap-1.5 text-p-base">
                       <div
                         v-if="contact.email"
                         class="flex items-center gap-3 pb-1.5 pl-1 pt-4 text-ink-gray-8"
@@ -262,7 +262,7 @@
                       </div>
                       <div
                         v-if="!contact.email && !contact.mobile_no"
-                        class="flex items-center justify-center py-4 text-sm text-ink-gray-4"
+                        class="flex items-center justify-center py-4 text-p-sm text-ink-gray-4"
                       >
                         {{ __('No Details Added') }}
                       </div>
@@ -276,7 +276,7 @@
               </div>
               <div
                 v-else
-                class="flex h-20 items-center justify-center text-base text-ink-gray-5"
+                class="flex h-20 items-center justify-center text-p-base text-ink-gray-5"
               >
                 {{ __('No Contacts Added') }}
               </div>
@@ -325,7 +325,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'CRM Deal'"
     :docname="dealId"
-    name="Deals"
+    :name="__('Deals')"
   />
   <LostReasonModal
     v-if="showLostReasonModal"

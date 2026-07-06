@@ -30,7 +30,7 @@
         <FormControl
           type="textarea"
           :label="__('Invite By Email')"
-          placeholder="user1@example.com, user2@example.com, ..."
+          :placeholder="__('user1@example.com, user2@example.com, ...')"
           :debounce="100"
           :disabled="inviteByEmail.loading"
           :description="
@@ -42,7 +42,7 @@
         />
         <div
           v-if="userExistMessage || inviteeExistMessage"
-          class="text-xs text-ink-red-6 mt-1.5"
+          class="text-p-xs text-ink-red-6 mt-1.5"
         >
           {{ userExistMessage || inviteeExistMessage }}
         </div>
@@ -66,7 +66,7 @@
               :key="user.name"
               class="flex items-center justify-between px-2 py-1 rounded-lg bg-surface-gray-2"
             >
-              <div class="text-base">
+              <div class="text-p-base">
                 <span class="text-ink-gray-8">
                   {{ user.email }}
                 </span>
@@ -148,12 +148,15 @@ const inviteeExistMessage = computed(() => {
 
 const description = computed(() => {
   return {
-    'System Manager':
+    'System Manager': __(
       'Can manage all aspects of the CRM, including user management, customizations and settings.',
-    'Sales Manager':
+    ),
+    'Sales Manager': __(
       'Can manage and invite new users, and create public & private views (reports).',
-    'Sales User':
+    ),
+    'Sales User': __(
       'Can work with leads and deals and create private views (reports).',
+    ),
   }[role.value]
 })
 

@@ -12,7 +12,7 @@
     <div class="flex-1 flex flex-col overflow-y-auto">
       <div class="flex items-center justify-between py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Update timestamp on new communication') }}
           </div>
           <div class="text-p-sm text-ink-gray-5 truncate">
@@ -34,7 +34,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex gap-4 items-center justify-between py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Mark lead/deal as replied on response') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -56,7 +56,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex gap-4 items-center justify-between py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Reopen lead/deal on new communication') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">

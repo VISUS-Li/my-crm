@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "enabled",
+  "require_license",
   "section_break_connection",
   "base_url",
   "project_key",
@@ -20,6 +21,13 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enable TripAI Integration"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:doc.enabled",
+   "fieldname": "require_license",
+   "fieldtype": "Check",
+   "label": "Require TripAI License for POI Sync"
   },
   {
    "fieldname": "section_break_connection",

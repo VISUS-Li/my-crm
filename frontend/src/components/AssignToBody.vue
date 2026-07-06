@@ -2,7 +2,7 @@
   <div
     class="flex flex-col gap-2 my-2 w-[470px] rounded-lg bg-surface-elevation-2 shadow-2xl ring-1 ring-black p-3 ring-opacity-5 focus:outline-none"
   >
-    <div class="text-base text-ink-gray-5">{{ __('Assign To') }}</div>
+    <div class="text-p-base text-ink-gray-5">{{ __('Assign To') }}</div>
     <Link
       class="form-control"
       value=""
@@ -27,7 +27,7 @@
             @click.stop
           >
             <div
-              class="flex items-center text-sm p-0.5 text-ink-gray-6 border border-outline-gray-1 bg-surface-elevation-2 rounded-full cursor-pointer"
+              class="flex items-center text-p-sm p-0.5 text-ink-gray-6 border border-outline-gray-1 bg-surface-elevation-2 rounded-full cursor-pointer"
               @click.stop
             >
               <UserAvatar :user="assignee.name" size="sm" />
@@ -61,7 +61,7 @@
     </Link>
     <div class="flex items-center justify-between gap-2">
       <div
-        class="text-base text-ink-gray-5 cursor-pointer select-none"
+        class="text-p-base text-ink-gray-5 cursor-pointer select-none"
         @click="assignToMe = !assignToMe"
       >
         {{ __('Assign To Me') }}

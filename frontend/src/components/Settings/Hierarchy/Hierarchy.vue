@@ -101,7 +101,7 @@
         </div>
         <EmptyState
           v-else-if="!visibleRoots.length"
-          name="Users in Hierarchy"
+          :name="__('Users in Hierarchy')"
           :title="
             search || roleFilter !== 'All'
               ? __('No matching users')
@@ -145,7 +145,7 @@
     <Teleport to="body">
       <div
         v-if="dragLabel"
-        class="fixed pointer-events-none px-2 py-1 rounded-md bg-gray-900 text-white text-xs shadow-lg"
+        class="fixed pointer-events-none px-2 py-1 rounded-md bg-gray-900 text-white text-p-xs shadow-lg"
         :style="{
           top: `${dragState.y + 25}px`,
           left: `${dragState.x - 25}px`,
@@ -189,7 +189,7 @@
               @click="showRemoveDialog = false"
             />
           </div>
-          <div class="text-ink-gray-5 text-base">
+          <div class="text-ink-gray-5 text-p-base">
             <template v-if="checkTargetChild">
               {{
                 __(

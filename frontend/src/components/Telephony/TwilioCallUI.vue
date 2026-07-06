@@ -23,14 +23,14 @@
           <div class="text-2xl-medium">
             {{ contact?.full_name ?? __('Unknown') }}
           </div>
-          <div class="text-sm text-ink-gray-5">{{ contact?.mobile_no }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ contact?.mobile_no }}</div>
         </div>
         <CountUpTimer ref="counterUp">
-          <div v-if="onCall" class="my-1 text-base">
+          <div v-if="onCall" class="my-1 text-p-base">
             {{ counterUp?.updatedTime }}
           </div>
         </CountUpTimer>
-        <div v-if="!onCall" class="my-1 text-base">
+        <div v-if="!onCall" class="my-1 text-p-base">
           {{
             callStatus == 'initiating'
               ? __('Initiating call...')
@@ -108,7 +108,7 @@
   </div>
   <div
     v-show="showSmallCallWindow"
-    class="ml-2 flex cursor-pointer select-none items-center justify-between gap-3 rounded-lg bg-surface-gray-10 px-2 py-[7px] text-base text-ink-gray-2"
+    class="ml-2 flex cursor-pointer select-none items-center justify-between gap-3 rounded-lg bg-surface-gray-10 px-2 py-[7px] text-p-base text-ink-gray-2"
     v-bind="$attrs"
     @click="toggleCallWindow"
   >
@@ -233,7 +233,7 @@ function openNoteModal() {
   showModal({
     name: note.value.name || null,
     doctype: 'CRM Call Log',
-    title: 'Call Log',
+    title: __('Call Log'),
     callbacks: {
       afterInsert: (n) => updateNote(n, true),
       afterUpdate: updateNote,

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div v-if="show" class="flex flex-col w-[352px] text-base h-full">
+  <div v-if="show" class="flex flex-col w-[352px] text-p-base h-full">
     <!-- Event Header -->
     <div
       class="flex items-center justify-between p-4.5 text-ink-gray-7 text-lg-medium"
@@ -146,7 +146,7 @@
             :tooltip="__('Owner: {0}', [_event.owner?.label])"
           >
             <template #default>
-              <div class="flex flex-col justify-start items-start text-sm">
+              <div class="flex flex-col justify-start items-start text-p-sm">
                 <div>{{ _event.owner?.label }}</div>
                 <div class="text-ink-gray-5">{{ __('Organizer') }}</div>
               </div>
@@ -190,7 +190,7 @@
             :label="att.email"
             variant="ghost"
             theme="gray"
-            class="rounded-full w-fit !text-sm"
+            class="rounded-full w-fit !text-p-sm"
             :tooltip="getTooltip(att)"
           >
             <template #prefix>
@@ -520,7 +520,7 @@
       v-else-if="_event.event_participants?.length"
       class="flex flex-col gap-2 px-4.5 py-3"
     >
-      <div class="text-sm text-ink-gray-6">
+      <div class="text-p-sm text-ink-gray-6">
         {{ __('Going?') }}
       </div>
       <TabButtons

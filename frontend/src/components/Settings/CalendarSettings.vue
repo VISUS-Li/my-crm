@@ -30,7 +30,7 @@
     <div class="flex flex-1 flex-col overflow-y-auto">
       <div class="flex items-center justify-between gap-8 py-3 px-2">
         <div class="flex flex-col">
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Default View') }}
           </div>
           <div class="text-p-sm text-ink-gray-5">
@@ -58,7 +58,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex flex-col gap-3 px-2 py-3">
         <div>
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('Event Notifications') }}
           </div>
           <div
@@ -154,7 +154,7 @@
       <div class="h-px border-t mx-2 border-outline-elevation-2" />
       <div class="flex flex-col gap-3 py-3 px-2">
         <div>
-          <div class="text-p-base-medium text-ink-gray-7 truncate">
+          <div class="text-base-medium text-ink-gray-7 truncate">
             {{ __('All Day Event Notifications') }}
           </div>
           <div

@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div class="html-control text-sm text-ink-gray-8" v-html="sanitizedHtml" />
+  <div class="html-control text-p-sm text-ink-gray-8" v-html="sanitizedHtml" />
 </template>
 
 <script setup>

@@ -12,7 +12,7 @@
     >
       <div
         :id="whatsapp.name"
-        class="group/message relative max-w-[90%] rounded-md bg-surface-gray-1 text-ink-gray-9 p-1.5 pl-2 text-base shadow-sm"
+        class="group/message relative max-w-[90%] rounded-md bg-surface-gray-1 text-ink-gray-9 p-1.5 pl-2 text-p-base shadow-sm"
       >
         <Badge
           v-if="whatsapp.status == 'failed'"
@@ -45,7 +45,7 @@
               {{ whatsapp.header }}
             </div>
             <div v-html="formatWhatsAppMessage(whatsapp.reply_message)" />
-            <div v-if="whatsapp.footer" class="text-xs text-ink-gray-5">
+            <div v-if="whatsapp.footer" class="text-p-xs text-ink-gray-5">
               {{ whatsapp.footer }}
             </div>
           </div>
@@ -82,7 +82,7 @@
               {{ whatsapp.header }}
             </div>
             <div v-html="formatWhatsAppMessage(whatsapp.template)" />
-            <div v-if="whatsapp.footer" class="text-xs text-ink-gray-5">
+            <div v-if="whatsapp.footer" class="text-p-xs text-ink-gray-5">
               {{ whatsapp.footer }}
             </div>
           </div>
@@ -114,7 +114,7 @@
               class="size-10 cursor-pointer rounded-md text-ink-gray-4"
               @click="() => openFileInAnotherTab(whatsapp.attach)"
             />
-            <div class="text-ink-gray-5">Document</div>
+            <div class="text-ink-gray-5">{{ __('Document') }}</div>
           </div>
           <div
             v-else-if="whatsapp.content_type == 'audio'"
@@ -256,7 +256,7 @@ const replyMode = ref(false)
 function messageOptions(message) {
   return [
     {
-      label: 'Reply',
+      label: __('Reply'),
       onClick: () => {
         replyMode.value = true
         reply.value = {

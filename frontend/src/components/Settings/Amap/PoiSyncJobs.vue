@@ -61,7 +61,7 @@
 
     <EmptyState
       v-else-if="!filteredJobs.length"
-      name="POI Sync Jobs"
+      :name="__('POI Sync Jobs')"
       :description="
         __(
           'Create a sync job to fetch POI data from Amap by city, district, and industry keywords.',
@@ -71,7 +71,7 @@
     />
 
     <div v-else class="flex flex-col overflow-hidden">
-      <div class="flex items-center py-2 px-4 text-sm text-ink-gray-5">
+      <div class="flex items-center py-2 px-4 text-p-sm text-ink-gray-5">
         <div class="w-3/12">{{ __('Job') }}</div>
         <div class="w-2/12">{{ __('Search') }}</div>
         <div class="w-2/12">{{ __('Region') }}</div>
@@ -87,7 +87,7 @@
           class="flex items-center justify-between p-3 cursor-pointer hover:bg-surface-sidebar rounded"
           @click="emit('updateStep', 'job-detail', { ...job })"
         >
-          <div class="w-3/12 truncate text-p-base-medium">{{ job.name }}</div>
+          <div class="w-3/12 truncate text-base-medium">{{ job.name }}</div>
           <div class="w-2/12 truncate">{{ job.keywords }}</div>
           <div class="w-2/12 truncate">
             {{ [job.city, job.district].filter(Boolean).join(' / ') }}
@@ -97,10 +97,10 @@
               {{ __(job.status) }}
             </Badge>
           </div>
-          <div class="w-2/12 text-sm text-ink-gray-6">
+          <div class="w-2/12 text-p-sm text-ink-gray-6">
             {{ __('{0} POI / {1} leads', [job.total_fetched || 0, job.leads_created || 0]) }}
           </div>
-          <div class="w-2/12 truncate text-sm">{{ job.job_owner }}</div>
+          <div class="w-2/12 truncate text-p-sm">{{ ownerLabel(job.job_owner) }}</div>
         </li>
       </ul>
     </div>
@@ -110,13 +110,18 @@
 <script setup>
 import EmptyState from '@/components/ListViews/EmptyState.vue'
 import { usersStore } from '@/stores/users'
+import { getUserContactDisplay } from '@/utils/userContact'
 import { Badge } from 'frappe-ui'
 import { computed, inject, reactive } from 'vue'
 import { STATUS_COLORS } from './amapConfig'
 
 const emit = defineEmits(['updateStep'])
 const jobs = inject('poiSyncJobs')
-const { isManager } = usersStore()
+const { isManager, getUser } = usersStore()
+
+function ownerLabel(owner) {
+  return getUserContactDisplay(getUser(owner))
+}
 
 const filters = reactive({
   status: '',

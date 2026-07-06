@@ -76,7 +76,7 @@
                   </div>
                   <div
                     v-if="organization.doc.website"
-                    class="flex items-center gap-1.5 text-base text-ink-gray-8"
+                    class="flex items-center gap-1.5 text-p-base text-ink-gray-8"
                   >
                     <WebsiteIcon class="size-4" />
                     <span>{{ website(organization.doc.website) }}</span>
@@ -124,7 +124,7 @@
     >
       <template #tab-item="{ tab, selected }">
         <button
-          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
+          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-p-base text-ink-gray-5 duration-300 ease-in-out hover:text-ink-gray-9"
           :class="{ 'text-ink-gray-9': selected }"
         >
           <component :is="tab.icon" v-if="tab.icon" class="h-5" />
@@ -173,7 +173,7 @@
     v-model="showDeleteLinkedDocModal"
     :doctype="'CRM Organization'"
     :docname="props.organizationId"
-    name="Organizations"
+    :name="__('Organizations')"
   />
 </template>
 
@@ -371,12 +371,12 @@ function getParsedSections(_sections) {
 const tabIndex = ref(0)
 const tabs = [
   {
-    label: 'Deals',
+    label: __('Deals'),
     icon: DealsIcon,
     count: computed(() => deals.data?.length),
   },
   {
-    label: 'Contacts',
+    label: __('Contacts'),
     icon: ContactsIcon,
     count: computed(() => contacts.data?.length),
   },

@@ -50,13 +50,13 @@
             !slaPolicyListResource.list.loading &&
             !slaPolicyListResource.list.data?.length
           "
-          title="No SLA Policies Found"
-          description="Add one to get started."
+          :title="__('No SLA Policies Found')"
+          :description="__('Add one to get started.')"
           :icon="ShieldCheck"
         />
         <div v-else class="-ml-2">
           <div
-            class="grid grid-cols-7 items-center gap-3 text-sm text-ink-gray-5 ml-2"
+            class="grid grid-cols-7 items-center gap-3 text-p-sm text-ink-gray-5 ml-2"
           >
             <div class="col-span-5">
               {{ __('Policy Name') }}
@@ -79,10 +79,10 @@
                 <div class="text-base-medium text-ink-gray-7 truncate">
                   {{ sla.name }}
                 </div>
-                <Badge v-if="sla.default" color="gray" size="sm">Default</Badge>
+                <Badge v-if="sla.default" color="gray" size="sm">{{ __('Default') }}</Badge>
               </div>
-              <div class="col-span-1 text-ink-gray-8 text-sm">
-                {{ sla.apply_on == 'CRM Lead' ? 'Lead' : 'Deal' }}
+              <div class="col-span-1 text-ink-gray-8 text-p-sm">
+                {{ sla.apply_on == 'CRM Lead' ? __('Lead') : __('Deal') }}
               </div>
               <div class="flex justify-between items-center w-full pr-2">
                 <div>

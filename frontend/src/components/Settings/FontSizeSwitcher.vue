@@ -16,7 +16,7 @@
         {{ __(option.label) }}
       </div>
       <div class="text-p-sm text-ink-gray-5 mt-0.5">
-        {{ option.description }}
+        {{ __(option.description) }}
       </div>
     </button>
   </div>

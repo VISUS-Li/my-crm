@@ -39,7 +39,7 @@
     <template #default>
       <div class="flex flex-col gap-4">
         <div class="flex items-center">
-          <div class="text-base text-ink-gray-7 w-3/12">
+          <div class="text-p-base text-ink-gray-7 w-3/12">
             {{ __('Title') }}
           </div>
           <div class="flex gap-1 w-9/12">
@@ -67,14 +67,14 @@
           </div>
         </div>
         <div class="flex items-center">
-          <div class="text-base text-ink-gray-7 w-3/12">
+          <div class="text-p-base text-ink-gray-7 w-3/12">
             {{ __('All Day') }}
           </div>
           <Switch v-model="_event.isFullDay" />
         </div>
         <div class="border-t border-outline-gray-1" />
         <div class="flex items-center">
-          <div class="text-base text-ink-gray-7 w-3/12">
+          <div class="text-p-base text-ink-gray-7 w-3/12">
             {{ __('Date & Time') }}
           </div>
           <div class="flex gap-2 w-9/12">
@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="flex items-start">
-          <div class="text-base text-ink-gray-7 mt-1.5 w-3/12">
+          <div class="text-p-base text-ink-gray-7 mt-1.5 w-3/12">
             {{ __('Attendees') }}
           </div>
           <div class="w-9/12">
@@ -130,7 +130,7 @@
           </div>
         </div>
         <div class="flex items-start">
-          <div class="text-base text-ink-gray-7 mt-1.5 w-3/12">
+          <div class="text-p-base text-ink-gray-7 mt-1.5 w-3/12">
             {{ __('Visibility') }}
           </div>
           <div class="w-9/12">
@@ -154,7 +154,7 @@
           </div>
         </div>
         <div class="flex items-start">
-          <div class="text-base text-ink-gray-7 mt-1.5 w-3/12">
+          <div class="text-p-base text-ink-gray-7 mt-1.5 w-3/12">
             {{ __('Location') }}
           </div>
           <div class="w-9/12">
@@ -168,7 +168,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="mt-2 text-base text-ink-gray-7 w-3/12">
+          <div class="mt-2 text-p-base text-ink-gray-7 w-3/12">
             {{ __('Description') }}
           </div>
           <div class="w-9/12">
@@ -183,7 +183,7 @@
         </div>
         <div class="border-t border-outline-gray-1" />
         <div class="flex">
-          <div class="mt-1.5 text-base text-ink-gray-7 w-3/12">
+          <div class="mt-1.5 text-p-base text-ink-gray-7 w-3/12">
             {{ __('Notifications') }}
           </div>
           <div class="w-9/12">

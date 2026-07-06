@@ -97,13 +97,13 @@
               'response_by',
             ].includes(titleField)
           "
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           <Tooltip :text="getRow(itemName, titleField).label">
             <div>{{ getRow(itemName, titleField).timeAgo }}</div>
           </Tooltip>
         </div>
-        <div v-else-if="titleField === 'sla_status'" class="truncate text-base">
+        <div v-else-if="titleField === 'sla_status'" class="truncate text-p-base">
           <Badge
             v-if="getRow(itemName, titleField).value"
             :variant="'subtle'"
@@ -114,7 +114,7 @@
         </div>
         <div
           v-else-if="getRow(itemName, titleField).label"
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           {{ getKanbanCellLabel(itemName, titleField) }}
         </div>
@@ -169,13 +169,13 @@
               'response_by',
             ].includes(fieldName)
           "
-          class="truncate text-base"
+          class="truncate text-p-base"
         >
           <Tooltip :text="getRow(itemName, fieldName).label">
             <div>{{ getRow(itemName, fieldName).timeAgo }}</div>
           </Tooltip>
         </div>
-        <div v-else-if="fieldName === 'sla_status'" class="truncate text-base">
+        <div v-else-if="fieldName === 'sla_status'" class="truncate text-p-base">
           <Badge
             v-if="getRow(itemName, fieldName).value"
             :variant="'subtle'"
@@ -193,7 +193,7 @@
             size="xs"
           />
         </div>
-        <div v-else class="truncate text-base">
+        <div v-else class="truncate text-p-base">
           {{ getKanbanCellLabel(itemName, fieldName) }}
         </div>
       </div>
@@ -257,7 +257,7 @@
   />
   <EmptyState
     v-else-if="leads.data && !rows.length"
-    name="Leads"
+    :name="__('Leads')"
     :icon="LeadsIcon"
   />
   <LeadModal
@@ -579,7 +579,7 @@ function actions(itemName) {
 function showNote(name) {
   showModal({
     doctype: 'FCRM Note',
-    title: 'Note',
+    title: __('Note'),
     defaults: {
       reference_doctype: 'CRM Lead',
       reference_docname: name,
@@ -594,7 +594,7 @@ function showNote(name) {
 function showTask(name) {
   showModal({
     doctype: 'CRM Task',
-    title: 'Task',
+    title: __('Task'),
     defaults: {
       reference_doctype: 'CRM Lead',
       reference_docname: name,

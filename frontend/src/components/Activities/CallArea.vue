@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-1 flex items-center justify-stretch gap-2 py-1 text-base">
+    <div class="mb-1 flex items-center justify-stretch gap-2 py-1 text-p-base">
       <div class="inline-flex items-center flex-wrap gap-1 text-ink-gray-5">
         <Avatar
           :image="call._caller.image"

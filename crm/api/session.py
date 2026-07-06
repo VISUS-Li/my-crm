@@ -1,6 +1,8 @@
 import frappe
 from frappe import _
 
+from crm.integrations.tripai.user_contact import build_session_contact_fields
+
 CRM_ALLOWED_ROLES = ["System Manager", "Sales Manager", "Sales User"]
 
 
@@ -22,6 +24,7 @@ def get_session_role_flags():
 USER_FIELDS = [
 	"name",
 	"email",
+	"mobile_no",
 	"enabled",
 	"user_image",
 	"first_name",
@@ -30,6 +33,28 @@ USER_FIELDS = [
 	"user_type",
 	"language",
 ]
+
+
+def _get_tripai_contact_map(user_names: list[str]) -> dict[str, dict]:
+	if not user_names:
+		return {}
+	rows = frappe.get_all(
+		"CRM TripAI User Link",
+		filters={"crm_user": ["in", user_names], "enabled": 1},
+		fields=[
+			"crm_user",
+			"contact_display",
+			"primary_contact_type",
+			"tripai_phone",
+			"tripai_email",
+			"secondary_contact",
+		],
+	)
+	return {row.crm_user: row for row in rows}
+
+
+def _apply_tripai_contact(user: dict, contact_map: dict[str, dict]) -> None:
+	user.update(build_session_contact_fields(contact_map.get(user.name), user.name))
 
 
 @frappe.whitelist()
@@ -98,6 +123,7 @@ def get_users(include_all: bool = False):
 	# Telephony agent table is tiny on any real site; full pluck is cheaper
 	# than serializing an IN list and gives identical results.
 	telephony_agents = set(frappe.get_all("CRM Telephony Agent", pluck="user"))
+	tripai_contacts = _get_tripai_contact_map([user.name for user in users])
 
 	role_priority = ("System Manager", "Sales Manager", "Sales User", "Guest")
 	crm_users = []
@@ -123,6 +149,7 @@ def get_users(include_all: bool = False):
 
 		user.is_telephony_agent = user.name in telephony_agents
 		user.language = user.language or system_language
+		_apply_tripai_contact(user, tripai_contacts)
 
 		if user.role in CRM_ALLOWED_ROLES:
 			crm_users.append(user)
@@ -150,11 +177,16 @@ def get_user_info(users: str | list):
 	if not users:
 		return []
 
-	return frappe.get_all(
+	user_names = list(users)[:200]
+	records = frappe.get_all(
 		"User",
-		filters={"name": ["in", list(users)[:200]]},
-		fields=["name", "email", "full_name", "user_image", "user_type"],
+		filters={"name": ["in", user_names]},
+		fields=["name", "email", "mobile_no", "full_name", "user_image", "user_type"],
 	)
+	tripai_contacts = _get_tripai_contact_map([row["name"] for row in records])
+	for row in records:
+		_apply_tripai_contact(row, tripai_contacts)
+	return records
 
 
 @frappe.whitelist()

@@ -39,7 +39,7 @@
           <template #header="{ opened, hide, toggle }">
             <div
               v-if="!hide"
-              class="flex items-center cursor-pointer gap-1.5 text-base text-ink-gray-5 transition-all duration-300 ease-in-out"
+              class="flex items-center cursor-pointer gap-1.5 text-p-base text-ink-gray-5 transition-all duration-300 ease-in-out"
               :class="
                 isSidebarCollapsed
                   ? 'h-0 overflow-hidden opacity-0'

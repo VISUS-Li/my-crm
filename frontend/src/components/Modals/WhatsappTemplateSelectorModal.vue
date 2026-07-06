@@ -46,14 +46,14 @@
             v-if="template.template"
             :content="template.template"
             :editable="false"
-            editor-class="!prose-sm max-w-none !text-sm text-ink-gray-5 focus:outline-none"
+            editor-class="!prose-sm max-w-none !text-p-sm text-ink-gray-5 focus:outline-none"
             class="flex-1 overflow-hidden"
           />
         </div>
       </div>
       <div v-else class="mt-2">
         <div class="flex h-56 flex-col items-center justify-center">
-          <div class="text-lg text-ink-gray-4">
+          <div class="text-p-lg text-ink-gray-4">
             {{ __('No Templates Found') }}
           </div>
           <Button

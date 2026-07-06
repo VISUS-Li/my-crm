@@ -10,14 +10,14 @@
     "
   >
     <template #default>
-      <div class="mb-1.5 block text-base text-ink-gray-5">
+      <div class="mb-1.5 block text-p-base text-ink-gray-5">
         {{ __('View Name') }}
       </div>
       <div class="flex gap-2">
         <IconPicker v-slot="{ togglePopover }" v-model="view.icon">
           <Button
             size="md"
-            class="flex size-8 text-3xl leading-none"
+            class="flex size-8 text-p-3xl leading-none"
             :label="view.icon"
             @click="togglePopover"
           />

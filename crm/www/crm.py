@@ -10,17 +10,20 @@ from frappe.utils.telemetry import capture
 
 no_cache = 1
 
+# SPA routes that Guest may load without CRM app roles (login, auth callback, welcome).
+_GUEST_SPA_SUFFIXES = ("/login", "/welcome")
+
+
+def _is_guest_allowed_spa_route(request_path: str) -> bool:
+	path = (request_path or "").rstrip("/").lower()
+	return any(path.endswith(suffix) or f"{suffix}/" in path for suffix in _GUEST_SPA_SUFFIXES)
+
 
 def get_context():
-	_ticket = frappe.form_dict.get("ticket")
 	_request_path = getattr(getattr(frappe.local, "request", None), "path", "") or ""
-	_is_tripai_callback = "/auth/callback" in _request_path
 
-	if _ticket:
-		return _handle_tripai_launch_callback(_ticket)
-
-	# Allow guest to load SPA for client-side ticket exchange
-	if _is_tripai_callback:
+	# Allow guest to load public SPA routes (login page, welcome).
+	if _is_guest_allowed_spa_route(_request_path):
 		frappe.db.commit()
 		context = frappe._dict()
 		context.boot = get_boot()
@@ -39,25 +42,7 @@ def get_context():
 	return context
 
 
-def _handle_tripai_launch_callback(ticket: str):
-	from crm.integrations.tripai.auth import (
-		get_redirect_path,
-		handle_launch_ticket,
-		is_tripai_enabled,
-	)
-
-	if not is_tripai_enabled():
-		frappe.throw(_("TripAI integration is not enabled"), frappe.PermissionError)
-
-	try:
-		handle_launch_ticket(ticket, frappe.form_dict.get("projectKey"))
-	except frappe.AuthenticationError:
-		frappe.throw(_("Invalid or expired launch ticket"), frappe.AuthenticationError)
-
-	redirect_path = get_redirect_path()
-	frappe.local.response["type"] = "redirect"
-	frappe.local.response["location"] = redirect_path
-	return frappe._dict()
+# TripAI launch_ticket auth is handled by website route tripai_auth_callback (hooks.py).
 
 
 @frappe.whitelist(methods=["POST"], allow_guest=True)

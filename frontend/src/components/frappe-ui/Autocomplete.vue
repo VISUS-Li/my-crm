@@ -20,7 +20,7 @@
             >
               <div
                 v-if="selectedValue"
-                class="flex text-base leading-5 items-center truncate"
+                class="flex text-p-base leading-5 items-center truncate"
               >
                 <slot name="prefix" />
                 <span class="truncate">
@@ -45,7 +45,7 @@
       <template #body="{ isOpen }">
         <div v-show="isOpen">
           <div
-            class="relative mt-1 rounded-lg bg-surface-elevation-2 text-base shadow-2xl max-w-[350px]"
+            class="relative mt-1 rounded-lg bg-surface-elevation-2 text-p-base shadow-2xl max-w-[350px]"
           >
             <div class="relative px-1.5 pt-1.5">
               <ComboboxInput
@@ -93,7 +93,7 @@
                 >
                   <li
                     :class="[
-                      'flex cursor-pointer items-center rounded px-2.5 py-1.5 text-base',
+                      'flex cursor-pointer items-center rounded px-2.5 py-1.5 text-p-base',
                       { 'bg-surface-gray-3': active },
                     ]"
                   >
@@ -114,7 +114,7 @@
               </div>
               <li
                 v-if="groups.length == 0"
-                class="my-1.5 rounded-md px-2.5 py-1.5 text-base text-ink-gray-5"
+                class="my-1.5 rounded-md px-2.5 py-1.5 text-p-base text-ink-gray-5"
               >
                 {{ __('No results found') }}
               </li>
@@ -269,10 +269,10 @@ const textColor = computed(() => {
 
 const inputClasses = computed(() => {
   let sizeClasses = {
-    sm: 'text-base rounded h-7',
-    md: 'text-base rounded h-8',
-    lg: 'text-lg rounded-md h-10',
-    xl: 'text-2xl rounded-md h-10',
+    sm: 'text-p-base rounded h-7',
+    md: 'text-p-base rounded h-8',
+    lg: 'text-p-lg rounded-md h-10',
+    xl: 'text-p-2xl rounded-md h-10',
   }[props.size]
 
   let paddingClasses = {

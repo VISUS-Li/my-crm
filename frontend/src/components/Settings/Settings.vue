@@ -67,6 +67,7 @@ import WhatsAppSettings from '@/components/Settings/WhatsAppSettings.vue'
 import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import LeadSyncSourcePage from '@/components/Settings/LeadSyncing/LeadSyncSourcePage.vue'
 import AmapPage from '@/components/Settings/Amap/AmapPage.vue'
+import TripAIPage from '@/components/Settings/TripAI/TripAIPage.vue'
 import DefaultsSettings from '@/components/Settings/DefaultsSettings.vue'
 import BrandSettings from '@/components/Settings/BrandSettings.vue'
 import CalendarSettings from '@/components/Settings/CalendarSettings.vue'
@@ -244,6 +245,12 @@ const tabs = computed(() => {
           label: __('Amap POI'),
           icon: 'map-pin',
           component: markRaw(AmapPage),
+        },
+        {
+          label: __('TripAI'),
+          icon: 'link',
+          component: markRaw(TripAIPage),
+          condition: () => isManager(),
         },
       ],
     },

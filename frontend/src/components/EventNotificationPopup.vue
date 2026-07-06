@@ -15,7 +15,7 @@
               <div>
                 <CalendarIcon class="size-4 text-cyan-500" />
               </div>
-              <div class="flex flex-col text-base">
+              <div class="flex flex-col text-p-base">
                 <div
                   class="font-medium text-ink-gray-8 mb-1 cursor-pointer"
                   @click="openEvent(alert)"

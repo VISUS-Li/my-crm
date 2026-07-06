@@ -57,7 +57,7 @@
         <template #default="{ label }">
           <div
             v-if="['modified', 'creation'].includes(column.key)"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {
@@ -73,7 +73,7 @@
               <div>{{ item.timeAgo }}</div>
             </Tooltip>
           </div>
-          <div v-else-if="column.key === 'status'" class="truncate text-base">
+          <div v-else-if="column.key === 'status'" class="truncate text-p-base">
             <Badge
               :variant="'subtle'"
               :theme="item.color"
@@ -128,12 +128,12 @@
                 })
             "
           />
-          <div v-else-if="column.key === 'duration'" class="truncate text-base">
+          <div v-else-if="column.key === 'duration'" class="truncate text-p-base">
             {{ label }}
           </div>
           <div
             v-else-if="label"
-            class="truncate text-base"
+            class="truncate text-p-base"
             @click="
               (event) =>
                 emit('applyFilter', {

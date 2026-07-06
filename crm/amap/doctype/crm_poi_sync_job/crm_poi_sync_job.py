@@ -12,6 +12,11 @@ class CRMPOISyncJob(Document):
 		if self.is_new() and (not self.job_owner or self.job_owner == "__user__"):
 			self.job_owner = frappe.session.user
 
+		if not self.agent_tenant_id:
+			from crm.permissions.agent_tenant import resolve_agent_tenant_id
+
+			self.agent_tenant_id = resolve_agent_tenant_id(self.job_owner)
+
 		if self.bbox:
 			parts = [p.strip() for p in self.bbox.split(",")]
 			if len(parts) != 4:
@@ -25,6 +30,8 @@ class CRMPOISyncJob(Document):
 		if self.status == "Completed":
 			self._reset_stats()
 
+		self._ensure_agent_tenant_id()
+		self._check_tripai_license_before_start()
 		self._check_tripai_credits_before_start()
 
 		self.db_set(
@@ -71,12 +78,32 @@ class CRMPOISyncJob(Document):
 	def is_cancelled(self) -> bool:
 		return bool(frappe.cache().get_value(f"poi_sync_cancel:{self.name}"))
 
+	def _ensure_agent_tenant_id(self) -> None:
+		if self.agent_tenant_id:
+			return
+		from crm.permissions.agent_tenant import resolve_agent_tenant_id
+
+		tenant_id = resolve_agent_tenant_id(self.job_owner)
+		if tenant_id:
+			self.db_set("agent_tenant_id", tenant_id)
+
+	def _check_tripai_license_before_start(self) -> None:
+		try:
+			from crm.integrations.tripai.license import LicenseNotEntitledError, ensure_user_licensed
+		except ImportError:
+			return
+
+		try:
+			ensure_user_licensed(self.job_owner)
+		except LicenseNotEntitledError:
+			raise
+
 	def _check_tripai_credits_before_start(self) -> None:
 		try:
 			from crm.integrations.tripai.billing import (
 				InsufficientCreditsError,
 				check_credits_for_sync,
-				resolve_tripai_user_id,
+				resolve_billing_tripai_user_id,
 				should_bill_for_sync,
 			)
 		except ImportError:
@@ -86,7 +113,7 @@ class CRMPOISyncJob(Document):
 		if not should_bill_for_sync(settings):
 			return
 
-		tripai_user_id = resolve_tripai_user_id(self.job_owner)
+		tripai_user_id = resolve_billing_tripai_user_id(self.job_owner)
 		if not tripai_user_id:
 			frappe.throw(
 				_("TripAI account is not linked. Please log in via the TripAI platform first."),

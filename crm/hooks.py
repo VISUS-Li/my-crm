@@ -73,6 +73,12 @@ website_route_rules = [
 	{"from_route": "/crm/<path:app_path>", "to_route": "crm"},
 ]
 
+# Frappe desk /login only knows local User passwords — send CRM users to TripAI login page.
+website_redirects = [
+	{"source": r"/login$", "target": "/crm/login"},
+	{"source": r"/login\?.*", "target": "/crm/login"},
+]
+
 # Generators
 # ----------
 

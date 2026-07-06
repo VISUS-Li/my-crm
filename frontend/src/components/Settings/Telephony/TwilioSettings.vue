@@ -44,14 +44,14 @@
               v-model="twilio.doc.account_sid"
               :label="__('Account SID')"
               type="text"
-              placeholder="ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+              :placeholder="__('ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')"
               required
               autocomplete="off"
             />
             <Password
               v-model="twilio.doc.auth_token"
               :label="__('Auth Token')"
-              placeholder="************"
+              :placeholder="__('************')"
               required
             />
           </div>
@@ -64,7 +64,7 @@
             class="flex items-center justify-between gap-8"
           >
             <div class="flex flex-col">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ __('Twilio App Name') }}
               </div>
               <div class="text-p-sm text-ink-gray-5">
@@ -89,7 +89,7 @@
           </div>
           <div class="flex items-center justify-between">
             <div class="flex flex-col">
-              <div class="text-p-base-medium text-ink-gray-7 truncate">
+              <div class="text-base-medium text-ink-gray-7 truncate">
                 {{ __('Record Calls') }}
               </div>
               <div class="text-p-sm text-ink-gray-5 truncate">

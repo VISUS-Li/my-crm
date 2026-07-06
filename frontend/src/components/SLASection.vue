@@ -3,9 +3,9 @@
     <div
       v-for="s in slaSection"
       :key="s.label"
-      class="flex items-center gap-2 text-base leading-5"
+      class="flex items-center gap-2 text-p-base leading-5"
     >
-      <div class="sm:w-[106px] w-36 text-sm text-ink-gray-5">
+      <div class="sm:w-[106px] w-36 text-p-sm text-ink-gray-5">
         {{ __(s.label) }}
       </div>
       <div class="grid min-h-[28px] items-center">
@@ -100,11 +100,11 @@ let slaSection = computed(() => {
         color: color,
       },
       {
-        label: 'Status',
+        label: __('Status'),
         value: data.value.communication_status,
         type: 'Select',
         options: communicationStatuses.data?.map((status) => ({
-          label: status.name,
+          label: __(status.name),
           value: status.name,
           onClick: () => {
             capture('sla_status_change')

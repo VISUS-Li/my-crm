@@ -16,7 +16,7 @@
         </p>
       </div>
 
-      <label class="block text-xs text-ink-gray-5 mb-1.5">
+      <label class="block text-p-xs text-ink-gray-5 mb-1.5">
         {{ __('Users') }}
       </label>
 

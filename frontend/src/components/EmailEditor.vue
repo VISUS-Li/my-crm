@@ -22,7 +22,7 @@
           v-if="from.length"
           class="sm:mx-10 mx-4 flex items-center gap-2 border-t pt-2.5 h-10"
         >
-          <span class="text-xs text-ink-gray-4">{{ __('FROM') }}:</span>
+          <span class="text-p-xs text-ink-gray-4">{{ __('FROM') }}:</span>
           <FormControl
             v-model="fromEmail"
             type="select"
@@ -36,7 +36,7 @@
           class="sm:mx-10 mx-4 flex items-center gap-2"
           :class="from.length ? '' : 'border-t pt-2.5'"
         >
-          <span class="text-xs text-ink-gray-4 mr-2">{{ __('TO') }}:</span>
+          <span class="text-p-xs text-ink-gray-4 mr-2">{{ __('TO') }}:</span>
           <EmailMultiSelect
             v-model="toEmails"
             class="flex-1"
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div v-if="cc" class="sm:mx-10 mx-4 flex items-center gap-2">
-          <span class="text-xs text-ink-gray-4">{{ __('CC') }}:</span>
+          <span class="text-p-xs text-ink-gray-4">{{ __('CC') }}:</span>
           <EmailMultiSelect
             ref="ccInput"
             v-model="ccEmails"
@@ -85,7 +85,7 @@
           />
         </div>
         <div v-if="bcc" class="sm:mx-10 mx-4 flex items-center gap-2">
-          <span class="text-xs text-ink-gray-4">{{ __('BCC') }}:</span>
+          <span class="text-p-xs text-ink-gray-4">{{ __('BCC') }}:</span>
           <EmailMultiSelect
             ref="bccInput"
             v-model="bccEmails"
@@ -99,10 +99,10 @@
           />
         </div>
         <div class="sm:mx-10 mx-4 flex items-center gap-2 pb-2.5">
-          <span class="text-xs text-ink-gray-4">{{ __('SUBJECT') }}:</span>
+          <span class="text-p-xs text-ink-gray-4">{{ __('SUBJECT') }}:</span>
           <input
             v-model="subject"
-            class="flex-1 border-none text-ink-gray-9 text-base bg-surface-base hover:bg-surface-base focus:border-none focus:!shadow-none focus-visible:!ring-0"
+            class="flex-1 border-none text-ink-gray-9 text-p-base bg-surface-base hover:bg-surface-base focus:border-none focus:!shadow-none focus-visible:!ring-0"
           />
         </div>
       </div>

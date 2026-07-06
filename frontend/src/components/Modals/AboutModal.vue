@@ -22,13 +22,13 @@
               v-if="link.icon"
               class="size-4 mr-2 text-ink-gray-7"
             />
-            <span class="text-base text-ink-gray-8">
+            <span class="text-p-base text-ink-gray-8">
               {{ link.label }}
             </span>
           </a>
         </div>
         <hr class="border-t my-3 mx-2" />
-        <p class="text-sm text-ink-gray-6 px-2 mt-2">
+        <p class="text-p-sm text-ink-gray-6 px-2 mt-2">
           © Frappe Technologies Pvt. Ltd. and contributors
         </p>
       </div>

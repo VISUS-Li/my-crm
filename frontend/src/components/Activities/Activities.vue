@@ -203,7 +203,7 @@
             :id="activity.name"
             class="mb-4 flex flex-col gap-2 py-1.5"
           >
-            <div class="flex items-center justify-stretch gap-2 text-base">
+            <div class="flex items-center justify-stretch gap-2 text-p-base">
               <div
                 class="inline-flex items-center flex-wrap gap-1.5 text-ink-gray-8 font-medium"
               >
@@ -240,7 +240,7 @@
             <CallArea :activity="activity" />
           </div>
           <div v-else class="mb-4 flex flex-col gap-2 py-1.5">
-            <div class="flex items-center justify-stretch gap-2 text-base">
+            <div class="flex items-center justify-stretch gap-2 text-p-base">
               <div
                 v-if="activity.other_versions"
                 class="inline-flex flex-wrap gap-1.5 text-ink-gray-8 font-medium"
@@ -320,7 +320,7 @@
                   ...activity.other_versions,
                 ])"
                 :key="a.creation"
-                class="flex items-start justify-stretch gap-2 py-1.5 text-base"
+                class="flex items-start justify-stretch gap-2 py-1.5 text-p-base"
               >
                 <div class="inline-flex flex-wrap gap-1 text-ink-gray-5">
                   <span

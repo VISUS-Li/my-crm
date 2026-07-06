@@ -15,7 +15,7 @@
       <div class="flex item-center space-x-4 w-3/12 justify-end">
         <div class="flex items-center space-x-2">
           <Switch v-model="syncSource.enabled" size="sm" />
-          <span class="text-sm text-ink-gray-7">{{ __('Enabled') }}</span>
+          <span class="text-p-sm text-ink-gray-7">{{ __('Enabled') }}</span>
         </div>
 
         <Button
@@ -111,14 +111,14 @@
             <Link
               v-if="!isLocal"
               v-model="syncSource.facebook_page"
-              label="Facebook Page"
+              :label="__('Facebook Page')"
               doctype="Facebook Page"
             />
 
             <Link
               v-if="!isLocal && syncSource.facebook_page"
               v-model="syncSource.facebook_lead_form"
-              label="Lead Form"
+              :label="__('Lead Form')"
               doctype="Facebook Lead Form"
               :filters="{
                 page: syncSource.facebook_page,

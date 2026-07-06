@@ -103,3 +103,42 @@ def delegated_credits_consume(
 			"metadata": metadata or {},
 		},
 	)
+
+
+def fetch_delegated_entitlement(user_id: str) -> dict[str, Any]:
+	settings = get_tripai_settings()
+	tool_key = settings["tool_key"]
+	return _request(
+		"POST",
+		f"/api/platform/tools/{tool_key}/entitlement/delegated",
+		json={
+			"projectKey": settings["project_key"],
+			"tool": tool_key,
+			"userId": user_id,
+		},
+	)
+
+
+def activate_delegated_license(
+	user_id: str,
+	license_key: str,
+	device_id: str,
+	*,
+	device_label: str | None = None,
+) -> dict[str, Any]:
+	settings = get_tripai_settings()
+	tool_key = settings["tool_key"]
+	payload: dict[str, Any] = {
+		"projectKey": settings["project_key"],
+		"tool": tool_key,
+		"userId": user_id,
+		"licenseKey": license_key,
+		"deviceId": device_id,
+	}
+	if device_label:
+		payload["deviceLabel"] = device_label
+	return _request(
+		"POST",
+		f"/api/platform/tools/{tool_key}/license/activate/delegated",
+		json=payload,
+	)

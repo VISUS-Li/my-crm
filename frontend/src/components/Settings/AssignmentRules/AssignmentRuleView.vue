@@ -29,7 +29,7 @@
           @click="assignmentRuleData.disabled = !assignmentRuleData.disabled"
         >
           <Switch size="sm" :model-value="!assignmentRuleData.disabled" />
-          <span class="text-sm text-ink-gray-7">{{ __('Enabled') }}</span>
+          <span class="text-p-sm text-ink-gray-7">{{ __('Enabled') }}</span>
         </div>
         <Button
           :disabled="Boolean(!isDirty && step.data)"
@@ -65,7 +65,7 @@
           <Popover>
             <template #target="{ togglePopover }">
               <div
-                class="flex items-center justify-between text-base rounded h-7 py-1.5 pl-2 pr-2 border border-outline-gray-2 bg-surface-gray-2 placeholder-ink-gray-4 hover:border-outline-elevation-2 hover:bg-surface-gray-3 focus:bg-surface-base focus:border-outline-gray-4 focus:shadow-sm focus:ring-0 focus-visible:ring-2 focus-visible:ring-outline-gray-3 text-ink-gray-8 transition-colors w-full dark:[color-scheme:dark] cursor-default"
+                class="flex items-center justify-between text-p-base rounded h-7 py-1.5 pl-2 pr-2 border border-outline-gray-2 bg-surface-gray-2 placeholder-ink-gray-4 hover:border-outline-elevation-2 hover:bg-surface-gray-3 focus:bg-surface-base focus:border-outline-gray-4 focus:shadow-sm focus:ring-0 focus-visible:ring-2 focus-visible:ring-outline-gray-3 text-ink-gray-8 transition-colors w-full dark:[color-scheme:dark] cursor-default"
                 @click="togglePopover()"
               >
                 <div>
@@ -85,7 +85,7 @@
                 <div
                   v-for="option in priorityOptions"
                   :key="option.value"
-                  class="p-2 cursor-pointer hover:bg-surface-gray-1 text-base flex items-center justify-between rounded"
+                  class="p-2 cursor-pointer hover:bg-surface-gray-1 text-p-base flex items-center justify-between rounded"
                   @click="
                     () => {
                       assignmentRuleData.priority = option.value
@@ -127,11 +127,11 @@
             v-model="assignmentRuleData.documentType"
             :options="[
               {
-                label: 'Lead',
+                label: __('Lead'),
                 value: 'CRM Lead',
               },
               {
-                label: 'Deal',
+                label: __('Deal'),
                 value: 'CRM Deal',
               },
             ]"
@@ -162,7 +162,7 @@
               <Popover trigger="hover" :hoverDelay="0.25" placement="top-end">
                 <template #target>
                   <div
-                    class="text-sm text-ink-gray-6 flex gap-1 cursor-default text-nowrap items-center"
+                    class="text-p-sm text-ink-gray-6 flex gap-1 cursor-default text-nowrap items-center"
                   >
                     <span>{{ __('Old Condition') }}</span>
                     <span class="lucide-info size-4" aria-hidden="true" />
@@ -170,7 +170,7 @@
                 </template>
                 <template #body-main>
                   <div
-                    class="text-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
+                    class="text-p-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
                   >
                     <code>{{ assignmentRuleData.assignCondition }}</code>
                   </div>
@@ -182,7 +182,7 @@
         <div class="mt-5">
           <div
             v-if="!useNewUI && assignmentRuleData.assignCondition"
-            class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-sm mb-2 border border-outline-gray-2 rounded-md p-3 py-4"
+            class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-p-sm mb-2 border border-outline-gray-2 rounded-md p-3 py-4"
           >
             <span class="text-p-sm">
               {{ __('Conditions for this rule were created from') }}
@@ -246,7 +246,7 @@
               <Popover trigger="hover" :hoverDelay="0.25" placement="top-end">
                 <template #target>
                   <div
-                    class="text-sm text-ink-gray-6 flex gap-1 cursor-default text-nowrap items-center"
+                    class="text-p-sm text-ink-gray-6 flex gap-1 cursor-default text-nowrap items-center"
                   >
                     <span> {{ __('Old Condition') }} </span>
                     <span class="lucide-info size-4" aria-hidden="true" />
@@ -254,7 +254,7 @@
                 </template>
                 <template #body-main>
                   <div
-                    class="text-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
+                    class="text-p-sm text-ink-gray-6 p-2 bg-white rounded-md max-w-96 text-wrap whitespace-pre-wrap leading-5"
                   >
                     <code>{{ assignmentRuleData.unassignCondition }}</code>
                   </div>
@@ -266,7 +266,7 @@
         <div class="mt-5">
           <div
             v-if="!useNewUI && assignmentRuleData.unassignCondition"
-            class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-sm mb-2 border border-outline-gray-2 rounded-md p-3 py-4"
+            class="flex flex-col gap-3 items-center text-center text-ink-gray-7 text-p-sm mb-2 border border-outline-gray-2 rounded-md p-3 py-4"
           >
             <span class="text-p-sm">
               {{ __('Conditions for this rule were created from') }}

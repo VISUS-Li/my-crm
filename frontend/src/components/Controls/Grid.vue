@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col flex-1 text-base">
-    <div v-if="label" class="mb-1.5 text-sm text-ink-gray-5">
+  <div class="flex flex-col flex-1 text-p-base">
+    <div v-if="label" class="mb-1.5 text-p-sm text-ink-gray-5">
       {{ __(label) }}
     </div>
 
@@ -93,7 +93,7 @@
                 />
               </div>
               <div
-                class="flex h-9.5 items-center justify-center bg-surface-base border-r border-outline-elevation-2 py-2 px-1 text-sm text-ink-gray-8 w-12"
+                class="flex h-9.5 items-center justify-center bg-surface-base border-r border-outline-elevation-2 py-2 px-1 text-p-sm text-ink-gray-8 w-12"
               >
                 {{ index + 1 }}
               </div>
@@ -142,7 +142,7 @@
                         v-else-if="
                           ['Link', 'Dynamic Link'].includes(field.fieldtype)
                         "
-                        class="text-sm text-ink-gray-8"
+                        class="text-p-sm text-ink-gray-8"
                         :value="row[field.fieldname]"
                         :doctype="
                           field.fieldtype == 'Link'
@@ -205,7 +205,7 @@
                         :value="row[field.fieldname]"
                         variant="outline"
                         :format="getFormat('', '', false, true, false)"
-                        input-class="border-none text-sm text-ink-gray-8"
+                        input-class="border-none text-p-sm text-ink-gray-8"
                         @change="(v) => fieldChange(v, field, row)"
                       />
                       <DatePicker
@@ -213,7 +213,7 @@
                         :value="row[field.fieldname]"
                         variant="outline"
                         :format="getFormat('', '', true, false, false)"
-                        input-class="border-none text-sm text-ink-gray-8"
+                        input-class="border-none text-p-sm text-ink-gray-8"
                         @change="(v) => fieldChange(v, field, row)"
                       />
                       <DateTimePicker
@@ -221,7 +221,7 @@
                         :value="row[field.fieldname]"
                         variant="outline"
                         :format="getFormat('', '', true, true, false)"
-                        input-class="border-none text-sm text-ink-gray-8"
+                        input-class="border-none text-p-sm text-ink-gray-8"
                         @change="(v) => fieldChange(v, field, row)"
                       />
                       <FormControl
@@ -239,7 +239,7 @@
                       <FormControl
                         v-else-if="field.fieldtype === 'Select'"
                         v-model="row[field.fieldname]"
-                        class="text-sm text-ink-gray-8"
+                        class="text-p-sm text-ink-gray-8"
                         type="select"
                         variant="outline"
                         :options="field.options"
@@ -399,7 +399,7 @@
                       <FormControl
                         v-else
                         v-model="row[field.fieldname]"
-                        class="text-sm text-ink-gray-8"
+                        class="text-p-sm text-ink-gray-8"
                         type="text"
                         variant="outline"
                         :options="field.options"
@@ -435,7 +435,7 @@
 
       <div
         v-else
-        class="flex flex-col items-center rounded p-5 text-sm text-ink-gray-5"
+        class="flex flex-col items-center rounded p-5 text-p-sm text-ink-gray-5"
       >
         {{ __('No Data') }}
       </div>

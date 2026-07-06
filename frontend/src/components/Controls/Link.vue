@@ -32,7 +32,7 @@
             <div class="flex-1 font-semibold truncate text-ink-gray-7">
               {{ optionLabel(option) }}
             </div>
-            <div class="flex-1 text-sm truncate text-ink-gray-5">
+            <div class="flex-1 text-p-sm truncate text-ink-gray-5">
               {{ option.description }}
             </div>
           </div>
@@ -198,8 +198,8 @@ function clearValue(close) {
 const labelClasses = computed(() => {
   return [
     {
-      sm: 'text-xs',
-      md: 'text-base',
+      sm: 'text-p-xs',
+      md: 'text-p-base',
     }[attrs.size || 'sm'],
     'text-ink-gray-5',
   ]

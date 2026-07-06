@@ -36,7 +36,7 @@
       <div class="flex items-center gap-2 truncate">
         <UserAvatar :user="note.owner" size="xs" />
         <div
-          class="truncate text-sm text-ink-gray-8"
+          class="truncate text-p-sm text-ink-gray-8"
           :title="getUser(note.owner).full_name"
         >
           {{ getUser(note.owner).full_name }}
@@ -44,7 +44,7 @@
       </div>
       <TimelineTimestamp
         :date="note.modified"
-        class-name="truncate text-sm text-ink-gray-7"
+        class-name="truncate text-p-sm text-ink-gray-7"
       />
     </div>
   </div>

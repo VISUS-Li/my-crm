@@ -75,7 +75,7 @@
   >
     <template #cell="{ item, column }">
       <Badge v-if="column.key === 'type'">{{ item }}</Badge>
-      <span v-else class="text-base">{{ item }}</span>
+      <span v-else class="text-p-base">{{ item }}</span>
     </template>
   </ListView>
 </template>

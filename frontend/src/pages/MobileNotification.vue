@@ -20,7 +20,7 @@
   <div class="flex flex-col overflow-hidden text-ink-gray-9">
     <div
       v-if="notifications.data?.length"
-      class="divide-y divide-outline-gray-1 overflow-y-auto text-base"
+      class="divide-y divide-outline-gray-1 overflow-y-auto text-p-base"
     >
       <RouterLink
         v-for="n in notifications.data"
@@ -53,7 +53,7 @@
               {{ n.reference_name }}
             </span>
           </div>
-          <div class="text-sm text-ink-gray-5">
+          <div class="text-p-sm text-ink-gray-5">
             {{ __(timeAgo(n.creation)) }}
           </div>
         </div>

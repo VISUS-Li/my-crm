@@ -39,7 +39,7 @@
             >
               <div v-if="isMobileView" class="flex flex-col gap-2">
                 <div class="-mb-2 flex w-full items-center justify-between">
-                  <div class="text-base text-ink-gray-5">
+                  <div class="text-p-base text-ink-gray-5">
                     {{ i == 0 ? __('Where') : __('And') }}
                   </div>
                   <Button
@@ -79,7 +79,7 @@
               </div>
               <div v-else class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2">
-                  <div class="w-13 pl-2 text-end text-base text-ink-gray-5">
+                  <div class="w-13 pl-2 text-end text-p-base text-ink-gray-5">
                     {{ i == 0 ? __('Where') : __('And') }}
                   </div>
                   <div id="fieldname" class="!min-w-[140px]">
@@ -121,7 +121,7 @@
           </template>
           <div
             v-else
-            class="mb-3 flex h-7 items-center px-3 text-sm text-ink-gray-5"
+            class="mb-3 flex h-7 items-center px-3 text-p-sm text-ink-gray-5"
           >
             {{ __('Empty - Choose a field to filter by') }}
           </div>

@@ -3,6 +3,7 @@ import { createResource } from 'frappe-ui'
 import { sessionStore } from './session'
 import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { contactDisplayFromCrmUser, getUserContactDisplay } from '@/utils/userContact'
 
 export const usersStore = defineStore('crm-users', () => {
   const session = sessionStore()
@@ -112,14 +113,16 @@ export const usersStore = defineStore('crm-users', () => {
       email = session.user
     }
     if (!usersByName[email]) {
+      const contactDisplay = contactDisplayFromCrmUser(email)
       usersByName[email] = {
         name: email,
         email: email,
-        full_name: email.split('@')[0],
-        first_name: email.split('@')[0],
+        full_name: contactDisplay,
+        first_name: contactDisplay,
         last_name: '',
         user_image: null,
         role: null,
+        contact_display: contactDisplay,
       }
       // Try to upgrade the stub via a batched fetch unless the full list
       // has already arrived.
@@ -163,12 +166,17 @@ export const usersStore = defineStore('crm-users', () => {
     return users.data.crmUsers?.find((u) => u.name === user)
   }
 
+  function getUserContact(email) {
+    return getUserContactDisplay(getUser(email))
+  }
+
   return {
     users,
     usersFull,
     allUsers: computed(() => usersFull.data?.allUsers || users.data?.allUsers),
     crmUsers: computed(() => users.data?.crmUsers),
     getUser,
+    getUserContact,
     isAdmin,
     isManager,
     isSalesUser,

@@ -32,14 +32,14 @@
           >
             <div
               v-if="hasOrganizationSections"
-              class="flex items-center gap-3 text-sm text-ink-gray-5"
+              class="flex items-center gap-3 text-p-sm text-ink-gray-5"
             >
               <div>{{ __('Choose Existing Organization') }}</div>
               <Switch v-model="chooseExistingOrganization" />
             </div>
             <div
               v-if="hasContactSections"
-              class="flex items-center gap-3 text-sm text-ink-gray-5"
+              class="flex items-center gap-3 text-p-sm text-ink-gray-5"
             >
               <div>{{ __('Choose Existing Contact') }}</div>
               <Switch v-model="chooseExistingContact" />
