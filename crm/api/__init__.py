@@ -6,16 +6,12 @@ from frappe.translate import get_all_translations
 from frappe.utils import cstr, split_emails, validate_email_address
 
 from crm.utils import is_frappe_version
+from crm.utils.i18n import get_session_language
 
 
 @frappe.whitelist(allow_guest=True)
 def get_translations():
-	if frappe.session.user != "Guest":
-		language = frappe.db.get_value("User", frappe.session.user, "language")
-	else:
-		language = frappe.db.get_single_value("System Settings", "language")
-
-	return get_all_translations(language)
+	return get_all_translations(get_session_language())
 
 
 @frappe.whitelist()

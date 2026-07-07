@@ -37,7 +37,7 @@ def get_tripai_settings() -> dict[str, str]:
 	tool_key = os.environ.get("TRIPAI_TOOL_KEY", "").strip() or _conf_value("tripai_tool_key", "my-crm")
 	runtime_token = os.environ.get("TRIPAI_RUNTIME_TOKEN", "")
 	default_redirect_path = "/crm"
-	require_license = True
+	require_license = False
 
 	if frappe.db.exists("DocType", "CRM TripAI Settings"):
 		doc = frappe.get_single("CRM TripAI Settings")
@@ -49,7 +49,7 @@ def get_tripai_settings() -> dict[str, str]:
 		if stored_token:
 			runtime_token = stored_token
 		default_redirect_path = doc.default_redirect_path or default_redirect_path
-		require_license = bool(getattr(doc, "require_license", 1))
+		require_license = bool(getattr(doc, "require_license", 0))
 
 	if not base_url:
 		raise TripAIConfigError("TripAI base URL is not configured")

@@ -6,6 +6,15 @@ import frappe
 from frappe import _
 
 
+def get_session_language() -> str:
+	"""Language for the current session (Guest uses System Settings)."""
+	if frappe.session.user and frappe.session.user != "Guest":
+		language = frappe.db.get_value("User", frappe.session.user, "language")
+	else:
+		language = frappe.db.get_single_value("System Settings", "language")
+	return language or "zh"
+
+
 def get_doctype_label(reference_doctype: str | None) -> str:
 	"""Return a translated display label for a CRM DocType name."""
 	if not reference_doctype:

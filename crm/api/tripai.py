@@ -7,7 +7,7 @@ from frappe import _
 
 from crm.integrations.tripai.auth import handle_launch_ticket, is_tripai_enabled
 from crm.integrations.tripai.license import activate_license_key as activate_tripai_license
-from crm.integrations.tripai.license import get_user_entitlement
+from crm.integrations.tripai.license import get_user_entitlement, is_license_check_enabled
 from crm.integrations.tripai.outbound import apply_ai_outbound_callback, request_ai_outbound_call
 from crm.integrations.tripai.relay import TripAIRelayAuthError, handle_direct_login
 from crm.integrations.tripai.settings import TripAIConfigError, get_tripai_settings
@@ -108,7 +108,13 @@ def get_integration_status():
 		"configured": bool(settings["base_url"] and settings["runtime_token"]),
 		"tool_key": settings["tool_key"],
 		"project_key": settings["project_key"],
-		"require_license": bool(settings.get("require_license", True)),
+		"require_license": is_license_check_enabled(),
+		"require_license_setting": bool(settings.get("require_license", False)),
+		"phone_sales_mode": bool(
+			frappe.db.get_single_value("FCRM Settings", "enable_phone_sales_mode")
+			if frappe.db.exists("DocType", "FCRM Settings")
+			else False
+		),
 		"recharge_url": f"{settings['base_url']}/zh/dashboard",
 		"shop_url": f"{settings['base_url']}/zh/dashboard",
 	}

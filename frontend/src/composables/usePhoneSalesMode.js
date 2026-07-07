@@ -32,7 +32,6 @@ export function usePhoneSalesMode() {
     'WhatsApp',
     'ERPNext',
     'Lead Syncing',
-    'TripAI',
     'Amap POI',
   ]
 

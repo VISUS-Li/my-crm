@@ -55,11 +55,7 @@ def start_sync_job(job_name: str):
 			from crm.integrations.tripai.settings import get_tripai_settings
 
 			if isinstance(exc, LicenseNotEntitledError):
-				settings = get_tripai_settings()
-				message = _("{0} Visit {1} to purchase or activate a license.").format(
-					str(exc),
-					f"{settings['base_url']}/zh/dashboard",
-				)
+				message = str(exc)
 				mark_start_failed(message)
 				frappe.throw(
 					message,

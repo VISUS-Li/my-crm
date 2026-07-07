@@ -41,6 +41,7 @@ scripts/tripai/
 
 # Local Python tests (run on Frappe bench locally, not committed)
 crm/**/test_*.py
+crm/conftest.py
 crm/amap/conftest.py
 crm/amap/**/*_test.py
 crm/tests/

@@ -13,7 +13,7 @@
           v-model="loginId"
           type="text"
           :label="__('Phone or Email')"
-          :placeholder="__('15002326234 or name@example.com')"
+          :placeholder="__('e.g. 13800138000 or name@example.com')"
           autocomplete="username"
           required
         />

@@ -34,7 +34,7 @@
           <div>
             <div class="text-base-medium">{{ __('Enable TripAI Integration') }}</div>
             <div class="text-p-sm text-ink-gray-5">
-              {{ __('Required for TripAI login, licenses, and POI sync billing') }}
+              {{ __('Required for TripAI login and POI sync billing') }}
             </div>
           </div>
           <Switch v-model="settings.doc.enabled" size="sm" />
@@ -77,9 +77,18 @@
           :placeholder="__('********')"
         />
 
-        <div class="flex items-center gap-2">
-          <Switch v-model="settings.doc.require_license" size="sm" />
-          <span class="text-p-sm">{{ __('Require TripAI License for POI Sync') }}</span>
+        <div class="rounded-lg border p-4 space-y-2">
+          <div class="flex items-center gap-2">
+            <Switch v-model="settings.doc.require_license" size="sm" />
+            <span class="text-p-sm">{{ __('Require TripAI License for POI Sync') }}</span>
+          </div>
+          <p class="text-p-sm text-ink-gray-5">
+            {{
+              __(
+                'When off, POI sync only checks TripAI credits (recommended for web SaaS). Turn on for agent license-key distribution.',
+              )
+            }}
+          </p>
         </div>
       </div>
       <div v-else class="flex items-center justify-center mt-[35%]">

@@ -3,6 +3,7 @@ import { createResource, call } from 'frappe-ui'
 import router from '@/router'
 import { ref, computed } from 'vue'
 import { usersStore } from '@/stores/users'
+import { loadTranslations } from '@/utils/loadTranslations'
 
 export const sessionStore = defineStore('crm-session', () => {
   function sessionUser() {
@@ -44,7 +45,7 @@ export const sessionStore = defineStore('crm-session', () => {
     }
     // Guest-time users fetch fails; refresh CRM user list after TripAI login.
     const { users } = usersStore()
-    await users.reload()
+    await Promise.all([users.reload(), loadTranslations()])
     return result
   }
 

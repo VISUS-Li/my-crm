@@ -8851,6 +8851,12 @@ msgstr "CRM 登录由服务端转发到 TripAI 认证。请填写 CRM 后端能�
 msgid "Required for TripAI login, licenses, and POI sync billing"
 msgstr "TripAI 登录、许可证与 POI 同步计费均依赖此集成"
 
+msgid "Required for TripAI login and POI sync billing"
+msgstr "TripAI 登录与 POI 同步积分计费均依赖此集成"
+
+msgid "When off, POI sync only checks TripAI credits (recommended for web SaaS). Turn on for agent license-key distribution."
+msgstr "关闭后 POI 同步仅校验 TripAI 积分（Web SaaS 推荐）。开启后适用于代理发卡、设备授权场景。"
+
 msgid "TripAI Base URL"
 msgstr "TripAI 基础地址"
 
@@ -9378,6 +9384,9 @@ msgstr "手机号或邮箱"
 
 msgid "15002326234 or name@example.com"
 msgstr "15002326234 或 name@example.com"
+
+msgid "e.g. 13800138000 or name@example.com"
+msgstr "例如 13800138000 或 name@example.com"
 
 msgid "Sign in"
 msgstr "登录"
@@ -10185,6 +10194,9 @@ msgstr "POI 同步需要有效的 TripAI 许可证"
 
 msgid "Active TripAI license required for POI sync. Activate a license key or purchase one at {0}"
 msgstr "POI 同步需要有效的 TripAI 许可证。请激活许可证密钥或在 {0} 购买"
+
+msgid "Active TripAI license required for POI sync. Activate a license key on this sync job page, or purchase one at {0}"
+msgstr "POI 同步需要有效的 TripAI 许可证。请在本同步任务页激活卡密，或在 {0} 购买"
 
 msgid "TripAI dashboard"
 msgstr "TripAI 控制台"

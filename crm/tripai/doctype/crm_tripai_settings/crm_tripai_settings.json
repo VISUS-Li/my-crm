@@ -23,8 +23,9 @@
    "label": "Enable TripAI Integration"
   },
   {
-   "default": "1",
+   "default": "0",
    "depends_on": "eval:doc.enabled",
+   "description": "When off, POI sync only checks TripAI credits (recommended for web SaaS). Turn on for agent license-key distribution.",
    "fieldname": "require_license",
    "fieldtype": "Check",
    "label": "Require TripAI License for POI Sync"

@@ -37,3 +37,4 @@ crm.patches.v1_0.add_tripai_agent_tenant_fields
 crm.patches.v1_0.add_phone_sales_mode_assets
 crm.patches.v1_0.update_amap_form_script_i18n
 crm.patches.v1_0.fix_amap_view_columns
+crm.patches.v1_0.disable_license_for_phone_sales

@@ -274,7 +274,11 @@
         }}
       </div>
 
-      <Dialog v-model="licenseDialogOpen" :options="{ title: __('Activate TripAI License'), size: 'sm' }">
+      <Dialog
+        v-if="licenseRequired"
+        v-model="licenseDialogOpen"
+        :options="{ title: __('Activate TripAI License'), size: 'sm' }"
+      >
         <template #body-content>
           <div class="space-y-3 p-1">
             <p class="text-p-sm text-ink-gray-6">
@@ -502,7 +506,7 @@ async function startJob() {
           onClick: openTripAIRecharge,
         },
       })
-    } else if (isLicenseError(message)) {
+    } else if (licenseRequired.value && isLicenseError(message)) {
       licenseEntitled.value = false
       toast.error(message, {
         action: {

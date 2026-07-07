@@ -23,14 +23,24 @@ class LicenseNotEntitledError(Exception):
 		super().__init__(self.message)
 
 
+def _is_phone_sales_mode() -> bool:
+	if not frappe.db.exists("DocType", "FCRM Settings"):
+		return False
+	return bool(frappe.db.get_single_value("FCRM Settings", "enable_phone_sales_mode"))
+
+
 def is_license_check_enabled() -> bool:
+	"""Whether POI sync must verify a TripAI tool license before billing."""
+	if _is_phone_sales_mode():
+		return False
+
 	try:
 		settings = get_tripai_settings()
 	except TripAIConfigError:
 		return False
 	if not settings["enabled"] or not settings["runtime_token"]:
 		return False
-	return bool(settings.get("require_license", True))
+	return bool(settings.get("require_license", False))
 
 
 def should_skip_license_check(crm_user: str | None = None) -> bool:
@@ -55,6 +65,14 @@ def should_skip_license_check(crm_user: str | None = None) -> bool:
 
 
 def get_user_entitlement(crm_user: str | None = None) -> dict[str, Any]:
+	if not is_license_check_enabled():
+		return {
+			"entitled": True,
+			"required": False,
+			"skipped": True,
+			"reason": "disabled",
+		}
+
 	crm_user = crm_user or frappe.session.user
 	tripai_user_id = resolve_billing_tripai_user_id(crm_user)
 	if not tripai_user_id:
@@ -79,7 +97,7 @@ def get_user_entitlement(crm_user: str | None = None) -> dict[str, Any]:
 		frappe.log_error(title="TripAI entitlement check failed", message=str(exc))
 		return {
 			"entitled": False,
-			"required": True,
+			"required": is_license_check_enabled(),
 			"skipped": False,
 			"reason": "api_error",
 			"error": str(exc),
@@ -87,7 +105,7 @@ def get_user_entitlement(crm_user: str | None = None) -> dict[str, Any]:
 
 	return {
 		"entitled": bool(payload.get("entitled")),
-		"required": True,
+		"required": is_license_check_enabled(),
 		"skipped": False,
 		"summary": payload.get("summary"),
 		"keys": payload.get("keys"),
@@ -109,9 +127,9 @@ def ensure_user_licensed(crm_user: str | None = None) -> None:
 		shop_url = ""
 
 	raise LicenseNotEntitledError(
-		_("Active TripAI license required for POI sync. Activate a license key or purchase one at {0}").format(
-			shop_url or _("TripAI dashboard")
-		)
+		_(
+			"Active TripAI license required for POI sync. Activate a license key on this sync job page, or purchase one at {0}"
+		).format(shop_url or _("TripAI dashboard"))
 	)
 
 

@@ -4,9 +4,11 @@
 import frappe
 from frappe import _
 from frappe.integrations.frappe_providers.frappecloud_billing import is_fc_site
-from frappe.translate import get_messages_for_boot, get_translated_doctypes
+from frappe.translate import get_all_translations, get_translated_doctypes
 from frappe.utils import cint, get_system_timezone
 from frappe.utils.telemetry import capture
+
+from crm.utils.i18n import get_session_language
 
 no_cache = 1
 
@@ -69,7 +71,7 @@ def get_boot():
 			"show_sales_hierarchy_banner": frappe.db.count("CRM Lead") > 0,
 			"phone_sales_mode": _get_phone_sales_mode(),
 			"translated_doctypes": get_translated_doctypes(),
-			"translated_messages": get_messages_for_boot(),
+			"translated_messages": get_all_translations(get_session_language()),
 			"timezone": {
 				"system": get_system_timezone(),
 				"user": frappe.db.get_value("User", frappe.session.user, "time_zone")

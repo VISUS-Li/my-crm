@@ -8,6 +8,7 @@ import router from './router'
 import translationPlugin from './translation'
 import App from './App.vue'
 import { initializeFontScale } from '@/composables/useFontScale'
+import { loadTranslations } from '@/utils/loadTranslations'
 
 import {
   FrappeUI,
@@ -58,23 +59,27 @@ initializeFontScale()
 
 app.config.globalProperties.$dialog = createDialog
 
-let socket
-if (import.meta.env.DEV) {
-  frappeRequest({ url: '/api/method/crm.www.crm.get_context_for_dev' }).then(
-    (values) => {
-      for (let key in values) {
-        window[key] = values[key]
-      }
-      socket = initSocket()
-      app.config.globalProperties.$socket = socket
-      app.mount('#app')
-    },
-  )
-} else {
-  socket = initSocket()
+async function bootstrap() {
+  setConfig('translatedMessages', window.translated_messages || {})
+
+  if (import.meta.env.DEV) {
+    const values = await frappeRequest({
+      url: '/api/method/crm.www.crm.get_context_for_dev',
+    })
+    for (let key in values) {
+      window[key] = values[key]
+    }
+    setConfig('translatedMessages', window.translated_messages || {})
+  }
+
+  await loadTranslations()
+
+  const socket = initSocket()
   app.config.globalProperties.$socket = socket
   app.mount('#app')
 }
+
+bootstrap()
 
 if (import.meta.env.DEV) {
   window.$dialog = createDialog
