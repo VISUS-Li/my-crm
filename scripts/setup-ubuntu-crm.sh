@@ -10,7 +10,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CRM_SRC="${CRM_SRC:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 BENCH_DIR="${BENCH_DIR:-$HOME/frappe-bench}"
-DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-crm123456}"
+DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-123456}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}"
 SITE_NAME="${SITE_NAME:-crm.localhost}"
 WEB_PORT="${WEB_PORT:-8010}"

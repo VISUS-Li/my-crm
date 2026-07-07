@@ -70,6 +70,18 @@ export function formatDuration(totalSeconds, longForm = false) {
   return parts.join(' ')
 }
 
+function getUserLanguage() {
+  return window.sysdefaults?.language || 'en'
+}
+
+function getDefaultDateTimeFormat() {
+  const lang = getUserLanguage()
+  if (lang === 'zh' || lang.startsWith('zh-')) {
+    return 'YYYY年M月D日 HH:mm'
+  }
+  return 'ddd, MMM D, YYYY h:mm a'
+}
+
 export function getFormat(
   date,
   format,
@@ -84,7 +96,7 @@ export function getFormat(
       .replace('yyyy', 'YYYY')
       .replace('dd', 'DD') || 'YYYY-MM-DD'
   let timeFormat = window.sysdefaults.time_format || 'HH:mm:ss'
-  format = format || 'ddd, MMM D, YYYY h:mm a'
+  format = format || getDefaultDateTimeFormat()
 
   if (onlyDate) format = dateFormat
   if (onlyTime) format = timeFormat
@@ -884,3 +896,5 @@ export function sanitizeText(text = '') {
   if (typeof text !== 'string') return text
   return text.replace(/\p{Cf}/gu, '')
 }
+
+export { formatDocumentId, formatReferenceName } from './formatDocumentId'

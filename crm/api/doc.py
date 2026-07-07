@@ -12,6 +12,7 @@ from pypika import Criterion
 
 from crm.api.views import get_views
 from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
+from crm.fcrm.doctype.crm_view_settings.crm_view_settings import normalize_list_columns
 from crm.utils import is_frappe_version
 
 COUNT_NAME = (
@@ -336,6 +337,8 @@ def get_data(
 		elif not custom_view or (is_default and hasattr(_list, "default_list_data")):
 			rows = default_rows
 			columns = _list.default_list_data().get("columns")
+
+		columns = normalize_list_columns(columns, doctype)
 
 		# check if rows has all keys from columns if not add them
 		for column in columns:

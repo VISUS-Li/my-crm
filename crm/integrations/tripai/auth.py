@@ -16,6 +16,7 @@ from crm.integrations.tripai.user_contact import (
 	normalize_tripai_user_id,
 	resolve_primary_contact,
 )
+from crm.setup.defaults import get_new_user_locale_defaults
 
 CRM_ROLE_SYSTEM_MANAGER = "System Manager"
 CRM_ROLE_SALES_MANAGER = "Sales Manager"
@@ -61,6 +62,7 @@ def ensure_crm_user(tripai_user: dict[str, Any], crm_role: str) -> str:
 				"send_welcome_email": 0,
 				"user_type": "System User",
 				"enabled": 1,
+				**get_new_user_locale_defaults(),
 			}
 		)
 		user.insert(ignore_permissions=True)

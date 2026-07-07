@@ -1,11 +1,11 @@
 app_name = "crm"
-app_title = "Trip CRM"
+app_title = "TripAI CRM"
 app_publisher = "Frappe Technologies Pvt. Ltd."
-app_description = "Kick-ass Open Source CRM"
+app_description = "TripAI CRM — open-source sales CRM"
 app_email = "shariq@frappe.io"
 app_license = "AGPLv3"
 app_icon_url = "/assets/crm/images/logo.svg"
-app_icon_title = "CRM"
+app_icon_title = "TripAI CRM"
 app_icon_route = "/crm"
 
 # Apps
@@ -16,7 +16,7 @@ add_to_apps_screen = [
 	{
 		"name": "crm",
 		"logo": "/assets/crm/images/logo.svg",
-		"title": "CRM",
+		"title": "TripAI CRM",
 		"route": "/crm",
 		"has_permission": "crm.api.check_app_permission",
 	}
@@ -311,7 +311,10 @@ ignore_links_on_delete = ["Failed Lead Sync Log"]
 # "crm.auth.validate"
 # ]
 
-on_login = "crm.api.onboarding.complete_setup_for_fc_site"
+on_login = [
+	"crm.api.onboarding.complete_setup_for_fc_site",
+	"crm.utils.i18n.apply_user_locale_defaults",
+]
 
 after_migrate = [
 	"crm.fcrm.doctype.fcrm_settings.fcrm_settings.after_migrate",

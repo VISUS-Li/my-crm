@@ -44,7 +44,8 @@ let pinia = createPinia()
 let app = createApp(App)
 
 setConfig('resourceFetcher', frappeRequest)
-app.use(FrappeUI)
+// CRM owns socket setup in ./socket.js — disable frappe-ui default (port 9000).
+app.use(FrappeUI, { socketio: false })
 app.use(pinia)
 app.use(router)
 app.use(translationPlugin)

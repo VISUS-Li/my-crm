@@ -4,6 +4,10 @@ import {
   renderFieldLayoutDialog,
 } from '@/utils/renderFieldLayoutDialog'
 
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 describe('renderFieldLayoutDialog', () => {
   beforeEach(() => {
     fieldLayoutDialogs.value = []
@@ -44,14 +48,12 @@ describe('renderFieldLayoutDialog', () => {
   })
 
   it('removes dialog entry after resolve (with delay)', async () => {
-    vi.useFakeTimers()
     const promise = renderFieldLayoutDialog({ title: 'Test' })
     expect(fieldLayoutDialogs.value).toHaveLength(1)
     fieldLayoutDialogs.value[0].props.onResolve({ done: true })
     expect(fieldLayoutDialogs.value).toHaveLength(1)
-    vi.advanceTimersByTime(300)
+    await wait(350)
     expect(fieldLayoutDialogs.value).toHaveLength(0)
-    vi.useRealTimers()
     await promise
   })
 
@@ -132,7 +134,7 @@ describe('renderFieldLayoutDialog', () => {
   // ── onSubmit / onCancel passthrough ──
 
   it('passes onSubmit function through to dialog props', () => {
-    const handler = vi.fn()
+    function handler() {}
     renderFieldLayoutDialog({
       title: 'Test',
       fields: [{ fieldname: 'x', fieldtype: 'Data', label: 'X' }],
@@ -142,7 +144,7 @@ describe('renderFieldLayoutDialog', () => {
   })
 
   it('passes onCancel function through to dialog props', () => {
-    const handler = vi.fn()
+    function handler() {}
     renderFieldLayoutDialog({
       title: 'Test',
       fields: [{ fieldname: 'x', fieldtype: 'Data', label: 'X' }],
@@ -152,23 +154,21 @@ describe('renderFieldLayoutDialog', () => {
   })
 
   it('promise resolves with null when onCancel is provided and dialog is cancelled', async () => {
-    const cancelHandler = vi.fn()
+    function cancelHandler() {}
     const promise = renderFieldLayoutDialog({
       title: 'Test',
       onCancel: cancelHandler,
     })
-    // Simulate cancel — onResolve called with null
     fieldLayoutDialogs.value[0].props.onResolve(null)
     expect(await promise).toBeNull()
   })
 
   it('promise still resolves with data even when onSubmit is provided', async () => {
-    const submitHandler = vi.fn()
+    function submitHandler() {}
     const promise = renderFieldLayoutDialog({
       title: 'Test',
       onSubmit: submitHandler,
     })
-    // Simulate submit — onResolve called with data
     fieldLayoutDialogs.value[0].props.onResolve({ foo: 'bar' })
     expect(await promise).toEqual({ foo: 'bar' })
   })
@@ -240,13 +240,12 @@ describe('renderFieldLayoutDialog', () => {
   // ── onResolve is separate from user options ──
 
   it('onResolve does not collide with user onSubmit', async () => {
-    const submitFn = vi.fn()
+    function submitFn() {}
     const promise = renderFieldLayoutDialog({
       title: 'Test',
       onSubmit: submitFn,
     })
     const entry = fieldLayoutDialogs.value[0]
-    // onResolve is our internal hook, onSubmit is the user's
     expect(entry.props.onResolve).toBeTypeOf('function')
     expect(entry.props.onSubmit).toBe(submitFn)
     entry.props.onResolve({ data: 1 })

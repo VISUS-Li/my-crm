@@ -9,6 +9,8 @@ CHINESE_DEFAULTS = {
 	"country": "China",
 	"time_zone": "Asia/Shanghai",
 	"currency": "CNY",
+	"date_format": "yyyy-mm-dd",
+	"time_format": "HH:mm:ss",
 }
 
 
@@ -24,3 +26,31 @@ def apply_chinese_defaults() -> None:
 
 	frappe.db.set_value("User", "Administrator", "language", CHINESE_DEFAULTS["language"])
 	frappe.db.set_value("User", "Administrator", "time_zone", CHINESE_DEFAULTS["time_zone"])
+
+	# Existing users without a language should follow the system default.
+	frappe.db.sql(
+		"""
+		UPDATE `tabUser`
+		SET language = %s
+		WHERE IFNULL(language, '') = ''
+		  AND name NOT IN ('Guest', 'Administrator')
+		""",
+		CHINESE_DEFAULTS["language"],
+	)
+	frappe.db.sql(
+		"""
+		UPDATE `tabUser`
+		SET time_zone = %s
+		WHERE IFNULL(time_zone, '') = ''
+		  AND name NOT IN ('Guest', 'Administrator')
+		""",
+		CHINESE_DEFAULTS["time_zone"],
+	)
+
+
+def get_new_user_locale_defaults() -> dict[str, str]:
+	"""Locale fields applied when provisioning CRM users."""
+	return {
+		"language": CHINESE_DEFAULTS["language"],
+		"time_zone": CHINESE_DEFAULTS["time_zone"],
+	}

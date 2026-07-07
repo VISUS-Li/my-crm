@@ -5,7 +5,7 @@ export NVM_DIR="$HOME/.nvm"
 source "$NVM_DIR/nvm.sh"
 nvm use 20 2>/dev/null || nvm install 20
 
-DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-crm123456}"
+DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-123456}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}"
 SITE_NAME="${SITE_NAME:-crm.localhost}"
 
@@ -59,6 +59,11 @@ bench set-config -g socketio_port 9010
 bench use "${SITE_NAME}"
 bench --site "${SITE_NAME}" clear-cache
 
+# Socket.IO auth requires hostname === site name; ensure crm.localhost resolves locally.
+if ! grep -qE '[[:space:]]crm\.localhost' /etc/hosts 2>/dev/null; then
+  echo "127.0.0.1 crm.localhost" | sudo tee -a /etc/hosts >/dev/null || true
+fi
+
 sed -i '/watch/d' Procfile
 sed -i 's/--port 8000/--port 8010/g' Procfile
 
@@ -81,5 +86,7 @@ tail -40 ~/crm-bench.log
 
 SERVER_IP=$(hostname -I | awk '{print $1}')
 echo ""
-echo "CRM URL: http://${SERVER_IP}:8010/crm"
+echo "CRM URL (recommended): http://crm.localhost:8010/crm"
+echo "Add to Windows hosts:  ${SERVER_IP} crm.localhost"
+echo "Fallback (no realtime):  http://${SERVER_IP}:8010/crm"
 echo "Login: Administrator / ${ADMIN_PASSWORD}"

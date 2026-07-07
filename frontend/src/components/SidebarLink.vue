@@ -73,14 +73,17 @@ function handleClick() {
 
 let isActive = computed(() => {
   if (typeof props.to === 'object' && props.to) {
-    if (props.to.query?.view && route.query.view) {
+    if (props.to.query?.view) {
       return route.query.view === props.to.query.view
     }
-    return route.name === props.to.name
+    if (route.name === props.to.name) {
+      return !route.query.view
+    }
+    return false
   }
-  if (route.query.view) {
-    return route.query.view == props.to?.query?.view
+  if (route.name === props.to) {
+    return !route.query.view
   }
-  return route.name === props.to
+  return false
 })
 </script>

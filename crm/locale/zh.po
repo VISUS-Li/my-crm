@@ -1706,7 +1706,7 @@ msgstr "确认{0}"
 
 #: frontend/src/components/Settings/ERPNextSettings.vue:274
 msgid "Connect ERPNext to Frappe CRM"
-msgstr "将 ERPNext 连接到 Frappe CRM"
+msgstr "将 ERPNext 连接到 TripAI CRM"
 
 #: frontend/src/pages/Welcome.vue:35
 msgid "Connect your Email"
@@ -3536,11 +3536,11 @@ msgstr "表单脚本更新成功"
 #. Name of a Workspace
 #: crm/fcrm/workspace/frappe_crm/frappe_crm.json
 msgid "Frappe CRM"
-msgstr "Trip CRM"
+msgstr "TripAI CRM"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:638
 msgid "Frappe CRM mobile"
-msgstr "Trip CRM 移动版"
+msgstr "TripAI CRM 移动版"
 
 #: frontend/src/components/Settings/emailConfig.js:81
 msgid "Frappe Mail Site"
@@ -7936,7 +7936,7 @@ msgstr "是否显示"
 
 #: frontend/src/components/SalesHierarchyBanner.vue:20
 msgid "We are changing how permissions work in Frappe CRM"
-msgstr "我们正在更改 Frappe CRM 的权限机制"
+msgstr "我们正在更改 TripAI CRM 的权限机制"
 
 #: frontend/src/components/Layouts/AppSidebar.vue:593
 msgid "Web Form"
@@ -8121,7 +8121,7 @@ msgstr "您的电话客服未设置Exotel号码"
 
 #: frontend/src/pages/NotPermitted.vue:12
 msgid "You do not have enough permissions to access Frappe CRM. Please contact your administrator if you believe this is an error."
-msgstr "您没有足够的权限访问 Frappe CRM。如认为有误，请联系管理员。"
+msgstr "您没有足够的权限访问 TripAI CRM。如认为有误，请联系管理员。"
 
 #: crm/integrations/exotel/handler.py:92
 msgid "You do not have mobile number set in your Telephony Agent"
@@ -8129,7 +8129,7 @@ msgstr "您的电话客服未设置手机号码"
 
 #: crm/www/crm.py:18
 msgid "You do not have permission to access Frappe CRM"
-msgstr "您无权访问 Frappe CRM"
+msgstr "您无权访问 TripAI CRM"
 
 #: frontend/src/data/document.js:45
 msgid "You do not have permission to access this document"
@@ -9368,7 +9368,7 @@ msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
 
 msgid "Sign in to CRM"
-msgstr "登录 CRM"
+msgstr "登录 TripAI CRM"
 
 msgid "Use your TripAI phone number or email"
 msgstr "使用 TripAI 手机号或邮箱登录"
@@ -9824,16 +9824,16 @@ msgid "10rem"
 msgstr "10rem"
 
 msgid "Trip CRM"
-msgstr "Trip CRM"
+msgstr "TripAI CRM"
 
 msgid "Trip CRM mobile"
-msgstr "Trip CRM 移动版"
+msgstr "TripAI CRM 移动版"
 
 msgid "Trip CRM Deal"
-msgstr "Trip CRM 商机"
+msgstr "TripAI CRM 商机"
 
 msgid "Could not create the Trip CRM custom fields on {0} automatically. If it is running the latest ERPNext, enable <b>Trip CRM Data Synchronization</b> in its CRM Settings, Otherwise check the Error Log."
-msgstr "无法在 {0} 上自动创建 Trip CRM 自定义字段。若 ERPNext 为最新版本，请在其 CRM 设置中启用 <b>Trip CRM 数据同步</b>，否则请查看错误日志。"
+msgstr "无法在 {0} 上自动创建 TripAI CRM 自定义字段。若 ERPNext 为最新版本，请在其 CRM 设置中启用 <b>TripAI CRM 数据同步</b>，否则请查看错误日志。"
 
 msgid "All Views"
 msgstr "全部视图"
@@ -9986,19 +9986,19 @@ msgid "Lost Notes are required when Lost Reason is \"Other\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
 
 msgid "Connect ERPNext to Trip CRM"
-msgstr "将 ERPNext 连接到 Trip CRM"
+msgstr "将 ERPNext 连接到 TripAI CRM"
 
 msgid "Lost Notes are required when Lost Reason is \\\"Other\\\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
 
 msgid "We are changing how permissions work in Trip CRM"
-msgstr "我们正在更改 Trip CRM 的权限机制"
+msgstr "我们正在更改 TripAI CRM 的权限机制"
 
 msgid "You do not have enough permissions to access Trip CRM. Please contact your administrator if you believe this is an error."
-msgstr "您没有足够的权限访问 Trip CRM。如认为有误，请联系管理员。"
+msgstr "您没有足够的权限访问 TripAI CRM。如认为有误，请联系管理员。"
 
 msgid "You do not have permission to access Trip CRM"
-msgstr "您无权访问 Trip CRM"
+msgstr "您无权访问 TripAI CRM"
 
 msgid "Lost Notes are required when Lost Reason is \"Other\""
 msgstr "丢单原因为「其他」时必须填写丢单备注"
@@ -10257,3 +10257,360 @@ msgstr "邮箱 {0} 的用户已被邀请"
 
 msgid "{0} has been granted {1} access"
 msgstr "已为 {0} 授予 {1} 访问权限"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Select an industry keyword or enter your own"
+msgstr "选择行业关键词，或自行输入"
+
+msgid "Custom Keyword"
+msgstr "自定义关键词"
+
+msgid "Or type your own keyword, e.g. milk tea shop"
+msgstr "或输入自定义关键词，例如：奶茶店"
+
+msgid "POI Type (optional)"
+msgstr "POI 类型（可选）"
+
+msgid "All types (no filter)"
+msgstr "全部类型（不筛选）"
+
+msgid "Select province"
+msgstr "选择省份"
+
+msgid "Select city"
+msgstr "选择城市"
+
+msgid "Select district (optional)"
+msgstr "选择区县（可选）"
+
+msgid "All districts"
+msgstr "全部区县"
+
+msgid "Please select a keyword and city"
+msgstr "请选择关键词和城市"
+
+msgid "Synced Merchants"
+msgstr "已同步商家"
+
+msgid "{0} records"
+msgstr "{0} 条记录"
+
+msgid "No POI records yet. Results appear here as sync progresses."
+msgstr "暂无 POI 记录。同步进行中会在此显示结果。"
+
+msgid "Load more"
+msgstr "加载更多"
+
+msgid "Leads with phone numbers are in Pending Calls. Open Leads and switch to the Amap pending view."
+msgstr "有电话的线索在「待拨打」中。打开线索列表并切换到高德待拨打视图。"
+
+msgid "If this stays queued for more than a minute, ensure the Frappe background worker is running (bench start or worker-long)."
+msgstr "若排队超过一分钟仍未开始，请确认 Frappe 后台 worker 已运行（bench start 或 worker-long）。"
+
+msgid "Processing..."
+msgstr "处理中…"
+
+msgid "Food & Beverage"
+msgstr "餐饮美食"
+
+msgid "Beauty & Wellness"
+msgstr "美容养生"
+
+msgid "Retail & Shopping"
+msgstr "零售购物"
+
+msgid "Education & Training"
+msgstr "教育培训"
+
+msgid "Healthcare"
+msgstr "医疗健康"
+
+msgid "Fitness & Leisure"
+msgstr "运动休闲"
+
+msgid "Auto & Services"
+msgstr "汽车与服务"
+
+msgid "Real Estate & Office"
+msgstr "房产办公"
+
+msgid "Shopping"
+msgstr "购物"
+
+msgid "Life Services"
+msgstr "生活服务"
+
+msgid "Sports & Leisure"
+msgstr "体育休闲"
+
+msgid "Accommodation"
+msgstr "住宿"
+
+msgid "Scenic Spots"
+msgstr "风景名胜"
+
+msgid "Business & Residential"
+msgstr "商务住宅"
+
+msgid "Government"
+msgstr "政府机构"
+
+msgid "Education & Culture"
+msgstr "科教文化"
+
+msgid "Finance & Insurance"
+msgstr "金融保险"
+
+msgid "Companies"
+msgstr "公司企业"
+
+msgid "Public Facilities"
+msgstr "公共设施"
+
+msgid "Restaurant (detail)"
+msgstr "中餐厅"
+
+msgid "Fast Food"
+msgstr "快餐厅"
+
+msgid "Coffee & Tea"
+msgstr "咖啡厅"
+
+msgid "Beauty Salon"
+msgstr "美容院"
+
+msgid "Hair Salon"
+msgstr "美发店"
+
+msgid "Fitness Center"
+msgstr "健身中心"
+
+msgid "Supermarket"
+msgstr "超市"
+
+msgid "Convenience Store"
+msgstr "便利店"
+
+msgid "Pharmacy"
+msgstr "药房"
+
+msgid "Clinic"
+msgstr "诊所"
+
+msgid "Hotel"
+msgstr "宾馆酒店"
+
+msgid "Training School"
+msgstr "培训学校"
+
+msgid "Kindergarten"
+msgstr "幼儿园"
+
+msgid "Auto Repair"
+msgstr "汽车维修"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "No API keys configured. Add keys here."
+msgstr "未配置 API 密钥。请在此添加密钥。"
+
+msgid "Enable Amap POI sync in settings first"
+msgstr "请先在设置中启用高德 POI 同步"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Use a Web Service API key and whitelist your server IP on the Amap console."
+msgstr "请使用 Web 服务 API Key，并在高德控制台将服务器 IP 加入白名单。"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Please select at least one keyword and a city"
+msgstr "请至少选择一个关键词并选择城市"
+
+msgid "Industry Keywords"
+msgstr "行业关键词"
+
+msgid "Pick one or more industry keywords. Select a whole category or specific subcategories."
+msgstr "选择一个或多个行业关键词。可整类选择，也可选具体细分类目。"
+
+msgid "Add keywords"
+msgstr "添加关键词"
+
+msgid "Filter by Amap POI type codes. Leave empty for no type filter."
+msgstr "按高德 POI 类型代码筛选。留空表示不限制类型。"
+
+msgid "Add POI types"
+msgstr "添加 POI 类型"
+
+msgid "Add selection"
+msgstr "添加选项"
+
+msgid "Subcategories"
+msgstr "细分类目"
+
+msgid "Select all subcategories"
+msgstr "全选细分类目"
+
+msgid "Clear subcategories"
+msgstr "清除细分类目"
+
+msgid "All {0}"
+msgstr "全部{0}"
+
+msgid "Auto Services"
+msgstr "汽车服务"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Getting started"
+msgstr "快速入门"
+
+msgid "Admin only"
+msgstr "仅管理员"
+
+msgid "Setup guide"
+msgstr "配置指南"
+
+msgid "Confirm POI sync is ready"
+msgstr "确认 POI 同步已就绪"
+
+msgid "Fetch Merchants must be enabled by your administrator first. If you cannot create jobs yet, contact your admin — you do not need to configure API keys yourself."
+msgstr "「获取商家」须由管理员先开启。若暂时无法创建任务，请联系管理员——您无需自行配置 API Key。"
+
+msgid "Once enabled, you can create sync jobs and new merchant leads will appear automatically."
+msgstr "开启后即可创建同步任务，新商家线索会自动导入。"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Fetch Merchants must be enabled by your administrator first. If you cannot create jobs yet, contact your admin — setup is handled on the admin side."
+msgstr "「获取商家」须由管理员先开启。若暂时无法创建任务，请联系管理员——相关配置由管理员完成。"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Select lead source"
+msgstr "选择线索来源"
+
+msgid "Select user"
+msgstr "选择用户"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Select product"
+msgstr "选择产品"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Mark Contacted"
+msgstr "标记已联系"
+
+msgid "Mark Interested"
+msgstr "标记有意向"
+
+msgid "Mark Invalid"
+msgstr "标记无效"
+
+msgid "Record Follow-up"
+msgstr "记录跟进"
+
+msgid "Follow-up note"
+msgstr "跟进备注"
+
+msgid "Select {0}..."
+msgstr "选择{0}…"
+
+msgid "{0} #{1}"
+msgstr "{0} #{1}"
+
+msgid "{0}: {1}"
+msgstr "{0}：{1}"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Sign in to TripAI CRM"
+msgstr "登录 TripAI CRM"
+
+msgid "TripAI CRM"
+msgstr "TripAI CRM"
+
+msgid "TripAI CRM mobile"
+msgstr "TripAI CRM 移动版"
+
+msgid "TripAI CRM Deal"
+msgstr "TripAI CRM 商机"
+
+msgid "Could not create the TripAI CRM custom fields on {0} automatically. If it is running the latest ERPNext, enable <b>TripAI CRM Data Synchronization</b> in its CRM Settings, Otherwise check the Error Log."
+msgstr "无法在 {0} 上自动创建 TripAI CRM 自定义字段。若 ERPNext 为最新版本，请在其 CRM 设置中启用 <b>TripAI CRM 数据同步</b>，否则请查看错误日志。"
+
+msgid "Connect ERPNext to TripAI CRM"
+msgstr "将 ERPNext 连接到 TripAI CRM"
+
+msgid "We are changing how permissions work in TripAI CRM"
+msgstr "我们正在更改 TripAI CRM 的权限机制"
+
+msgid "You do not have enough permissions to access TripAI CRM. Please contact your administrator if you believe this is an error."
+msgstr "您没有足够的权限访问 TripAI CRM。如认为有误，请联系管理员。"
+
+msgid "You do not have permission to access TripAI CRM"
+msgstr "您无权访问 TripAI CRM"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"

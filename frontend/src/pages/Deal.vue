@@ -57,12 +57,14 @@
       </template>
     </Tabs>
     <Resizer side="right" class="flex flex-col justify-between border-l">
-      <div
-        class="flex h-[45px] cursor-copy items-center border-b px-5 py-2.5 text-lg-medium text-ink-gray-9"
-        @click="copyToClipboard(dealId)"
-      >
-        {{ __(dealId) }}
-      </div>
+      <Tooltip :text="formatDocumentId(dealId, 'Deal').full">
+        <div
+          class="flex h-[45px] cursor-copy items-center border-b px-5 py-2.5 text-lg-medium text-ink-gray-9"
+          @click="copyToClipboard(dealId)"
+        >
+          {{ formatDocumentId(dealId, 'Deal').display }}
+        </div>
+      </Tooltip>
       <div class="flex items-center justify-start gap-5 border-b p-5">
         <Tooltip :text="__('Organization Logo')">
           <div class="group relative size-12">
@@ -372,6 +374,7 @@ import {
   setupCustomizations,
   copyToClipboard,
   isTranslatable,
+  formatDocumentId,
 } from '@/utils'
 import { getView } from '@/utils/view'
 import { getSettings } from '@/stores/settings'

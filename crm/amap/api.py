@@ -15,14 +15,10 @@ def test_connection(api_key: str = ""):
 
 	settings = frappe.get_single("CRM Amap Settings")
 
-	if settings.use_mock_api and not (api_key and api_key.strip()):
-		return {"success": True, "message": _("Mock API mode enabled")}
-
 	if api_key and api_key.strip():
 		client = AmapClient(
 			api_keys=[api_key.strip()],
 			request_interval=settings.request_interval or 0.35,
-			use_mock=False,
 		)
 		return client.test_connection()
 
@@ -87,6 +83,10 @@ def get_job_progress(job_name: str):
 	return {
 		"name": job.name,
 		"status": job.status,
+		"keywords": job.keywords,
+		"city": job.city,
+		"district": job.district,
+		"job_owner": job.job_owner,
 		"total_fetched": job.total_fetched,
 		"with_phone_count": job.with_phone_count,
 		"leads_created": job.leads_created,
@@ -101,8 +101,8 @@ def get_job_progress(job_name: str):
 @frappe.whitelist()
 def preview_search(keywords: str, city: str, types: str = "", limit: int = 10):
 	settings = frappe.get_single("CRM Amap Settings")
-	if not settings.enabled and not settings.use_mock_api:
-		frappe.throw(_("Enable Amap POI sync or mock mode in settings first"))
+	if not settings.enabled:
+		frappe.throw(_("Enable Amap POI sync in settings first"))
 
 	client = build_client_from_settings(settings)
 	result = client.search_text(
@@ -118,6 +118,59 @@ def preview_search(keywords: str, city: str, types: str = "", limit: int = 10):
 	return {
 		"count": result.count,
 		"pois": result.data,
+	}
+
+
+@frappe.whitelist()
+def get_districts(keywords: str = "", adcode: str = "", subdistrict: int = 1):
+	"""Return province/city/district options for the region picker."""
+	settings = frappe.get_single("CRM Amap Settings")
+	if not settings.enabled:
+		frappe.throw(_("Enable Amap POI sync in settings first"))
+
+	client = build_client_from_settings(settings)
+	return client.search_districts(
+		keywords=keywords or "",
+		adcode=adcode or "",
+		subdistrict=int(subdistrict or 1),
+	)
+
+
+@frappe.whitelist()
+def list_job_poi_records(job_name: str, page: int = 1, page_length: int = 20):
+	job = frappe.get_doc("CRM POI Sync Job", job_name)
+	frappe.has_permission("CRM POI Sync Job", "read", job, throw=True)
+
+	page = max(int(page or 1), 1)
+	page_length = min(max(int(page_length or 20), 1), 100)
+	start = (page - 1) * page_length
+
+	records = frappe.get_all(
+		"CRM POI Record",
+		filters={"sync_job": job_name},
+		fields=[
+			"name",
+			"name1",
+			"tel",
+			"tel_normalized",
+			"has_valid_phone",
+			"address",
+			"city",
+			"district",
+			"poi_type",
+			"lead",
+		],
+		order_by="modified desc",
+		start=start,
+		limit=page_length,
+	)
+	total = frappe.db.count("CRM POI Record", {"sync_job": job_name})
+
+	return {
+		"records": records,
+		"total": total,
+		"page": page,
+		"page_length": page_length,
 	}
 
 

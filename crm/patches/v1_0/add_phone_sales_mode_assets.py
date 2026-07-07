@@ -2,6 +2,8 @@ import json
 
 import frappe
 
+from crm.fcrm.doctype.crm_view_settings.crm_view_settings import normalize_list_columns
+
 
 def execute():
 	_ensure_phone_sales_mode_setting()
@@ -50,17 +52,15 @@ def _ensure_phone_sales_views():
 				]
 			),
 			"order_by": "modified desc",
-			"columns": json.dumps(
-				[
-					"lead_name",
-					"mobile_no",
-					"organization",
-					"recommended_product",
-					"district",
-					"status",
-					"lead_owner",
-				]
-			),
+			"fieldnames": [
+				"lead_name",
+				"mobile_no",
+				"organization",
+				"recommended_product",
+				"district",
+				"status",
+				"lead_owner",
+			],
 		},
 		{
 			"label": "高德-有意向",
@@ -76,16 +76,14 @@ def _ensure_phone_sales_views():
 				]
 			),
 			"order_by": "modified desc",
-			"columns": json.dumps(
-				[
-					"lead_name",
-					"mobile_no",
-					"organization",
-					"recommended_product",
-					"status",
-					"lead_owner",
-				]
-			),
+			"fieldnames": [
+				"lead_name",
+				"mobile_no",
+				"organization",
+				"recommended_product",
+				"status",
+				"lead_owner",
+			],
 		},
 		{
 			"label": "高德-今日已联系",
@@ -101,20 +99,20 @@ def _ensure_phone_sales_views():
 				]
 			),
 			"order_by": "modified desc",
-			"columns": json.dumps(
-				[
-					"lead_name",
-					"mobile_no",
-					"organization",
-					"recommended_product",
-					"district",
-					"lead_owner",
-				]
-			),
+			"fieldnames": [
+				"lead_name",
+				"mobile_no",
+				"organization",
+				"recommended_product",
+				"district",
+				"lead_owner",
+			],
 		},
 	]
 
 	for view in views:
+		fieldnames = view.pop("fieldnames")
+		view["columns"] = json.dumps(normalize_list_columns(fieldnames, view["dt"]))
 		existing = frappe.db.exists(
 			"CRM View Settings", {"label": view["label"], "dt": view["dt"]}
 		)

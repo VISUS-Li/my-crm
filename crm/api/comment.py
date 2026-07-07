@@ -7,6 +7,7 @@ from frappe.desk.form.utils import add_comment as frappe_add_comment
 from frappe.utils import get_fullname
 
 from crm.fcrm.doctype.crm_notification.crm_notification import notify_user
+from crm.utils.i18n import get_doctype_label
 
 
 def on_update(self, method):
@@ -25,12 +26,10 @@ def notify_mentions(doc):
 	reference_doc = frappe.get_doc(doc.reference_doctype, doc.reference_name)
 	for mention in mentions:
 		owner = frappe.get_cached_value("User", doc.owner, "full_name")
-		doctype = doc.reference_doctype
-		if doctype.startswith("CRM "):
-			doctype = doctype[4:].lower()
+		doctype = get_doctype_label(doc.reference_doctype)
 		name = (
 			reference_doc.lead_name
-			if doctype == "lead"
+			if doc.reference_doctype == "CRM Lead"
 			else reference_doc.organization or reference_doc.lead_name
 		)
 		notification_text = f"""

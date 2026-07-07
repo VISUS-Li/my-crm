@@ -51,10 +51,6 @@ def should_skip_license_check(crm_user: str | None = None) -> bool:
 		if link and link.get("tripai_role") == "admin":
 			return True
 
-	amap_settings = frappe.get_single("CRM Amap Settings")
-	if bool(getattr(amap_settings, "use_mock_api", False)):
-		return True
-
 	return False
 
 

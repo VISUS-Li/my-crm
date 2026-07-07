@@ -29,67 +29,48 @@
       <div class="col-span-2 text-p-base-medium text-ink-gray-7">
         {{ __('Search Criteria') }}
       </div>
-      <FormControl
+
+      <PresetMultiPicker
         v-model="syncJob.keywords"
-        type="text"
+        :groups="keywordPickerGroups"
         required
-        :label="__('Keywords')"
-        :placeholder="__('e.g. milk tea, beauty, restaurant')"
-      />
-      <FormControl
-        v-model="syncJob.types"
-        type="text"
-        :label="__('POI Types')"
-        :placeholder="__('Optional type codes, separated by |')"
+        class="col-span-2"
+        :label="__('Industry Keywords')"
+        :description="
+          __(
+            'Pick one or more industry keywords. Select a whole category or specific subcategories.',
+          )
+        "
+        :placeholder="__('Add keywords')"
+        allow-custom
+        :custom-label="__('Custom Keyword')"
+        :custom-placeholder="__('Or type your own keyword, e.g. milk tea shop')"
       />
 
       <div class="col-span-2 text-p-base-medium text-ink-gray-7">
         {{ __('Region') }}
       </div>
-      <FormControl
-        v-model="syncJob.province"
-        type="text"
-        :label="__('Province')"
-      />
-      <FormControl
-        v-model="syncJob.city"
-        type="text"
-        required
-        :label="__('City')"
-      />
-      <FormControl
-        v-model="syncJob.district"
-        type="text"
-        :label="__('District')"
-      />
-      <FormControl
-        v-model="syncJob.adcode"
-        type="text"
-        :label="__('Adcode')"
-        :placeholder="__('Optional district code for precise area')"
-      />
-      <FormControl
-        v-model="syncJob.bbox"
-        type="text"
-        class="col-span-2"
-        :label="__('Bounding Box')"
-        :placeholder="__('min_lng,min_lat,max_lng,max_lat')"
+      <ChinaRegionPicker
+        v-model:province="syncJob.province"
+        v-model:city="syncJob.city"
+        v-model:district="syncJob.district"
+        v-model:adcode="syncJob.adcode"
       />
 
       <div class="col-span-2 text-p-base-medium text-ink-gray-7">
         {{ __('Import Settings') }}
       </div>
-      <FormControl
+      <Link
         v-model="syncJob.lead_source"
-        type="link"
         doctype="CRM Lead Source"
         :label="__('Lead Source')"
+        :placeholder="__('Select lead source')"
       />
-      <FormControl
+      <Link
         v-model="syncJob.assign_to"
-        type="link"
         doctype="User"
         :label="__('Assign Leads To')"
+        :placeholder="__('Select user')"
       />
       <div class="col-span-2 flex items-center gap-2 pb-2">
         <Switch v-model="syncJob.import_only_with_phone" size="sm" />
@@ -118,7 +99,11 @@
 <script setup>
 import { Switch, toast, call } from 'frappe-ui'
 import { computed, inject, ref } from 'vue'
+import Link from '@/components/Controls/Link.vue'
+import ChinaRegionPicker from './ChinaRegionPicker.vue'
+import PresetMultiPicker from './PresetMultiPicker.vue'
 import { POI_SYNC_JOB_DOCTYPE } from './amapConfig'
+import { buildKeywordPickerGroups } from '@/config/poiSyncOptions'
 
 const props = defineProps({
   jobData: {
@@ -135,6 +120,7 @@ const previewing = ref(false)
 const saving = ref(false)
 
 const isLocal = computed(() => !props.jobData?.name)
+const keywordPickerGroups = buildKeywordPickerGroups()
 
 const defaultJob = () => ({
   doctype: POI_SYNC_JOB_DOCTYPE,
@@ -155,8 +141,8 @@ const defaultJob = () => ({
 const syncJob = ref(props.jobData?.name ? { ...defaultJob(), ...props.jobData } : defaultJob())
 
 async function saveJob() {
-  if (!syncJob.value.keywords || !syncJob.value.city) {
-    toast.error(__('Keywords and city are required'))
+  if (!syncJob.value.keywords?.trim() || !syncJob.value.city) {
+    toast.error(__('Please select at least one keyword and a city'))
     return
   }
 

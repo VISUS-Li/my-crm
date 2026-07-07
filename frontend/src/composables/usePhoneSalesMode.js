@@ -33,6 +33,7 @@ export function usePhoneSalesMode() {
     'ERPNext',
     'Lead Syncing',
     'TripAI',
+    'Amap POI',
   ]
 
   function isSidebarRouteHidden(routeName) {

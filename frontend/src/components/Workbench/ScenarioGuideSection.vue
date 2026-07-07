@@ -84,7 +84,7 @@ defineProps({
 })
 
 const router = useRouter()
-const guides = getGuideList()
+const guides = getGuideList({ audience: 'user' })
 
 const iconMap = {
   utensils: LucideUtensils,

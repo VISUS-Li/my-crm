@@ -2,6 +2,8 @@ import json
 
 import frappe
 
+from crm.fcrm.doctype.crm_view_settings.crm_view_settings import normalize_list_columns
+
 
 def execute():
 	_create_default_settings()
@@ -14,7 +16,7 @@ def _create_default_settings():
 		frappe.db.set_value(
 			"CRM Amap Settings",
 			"CRM Amap Settings",
-			{"enabled": 1, "use_mock_api": 1},
+			{"enabled": 1},
 		)
 		return
 
@@ -22,7 +24,6 @@ def _create_default_settings():
 		{
 			"doctype": "CRM Amap Settings",
 			"enabled": 1,
-			"use_mock_api": 1,
 			"request_interval": 0.35,
 			"poi_threshold": 180,
 			"max_recursion_depth": 20,
@@ -37,29 +38,29 @@ def _create_form_script():
   onLoad() {
     if (!this.doc.amap_poi_id) return
 
-    this.addButton('标记已联系', () => {
+    this.addButton('Mark Contacted', () => {
       this.doc.status = '已联系'
       this.save()
     })
 
-    this.addButton('标记有意向', () => {
+    this.addButton('Mark Interested', () => {
       this.doc.status = '有意向'
       this.save()
     })
 
-    this.addButton('标记无效', () => {
+    this.addButton('Mark Invalid', () => {
       this.doc.status = '无效'
       this.save()
     })
 
-    this.addButton('记录跟进', async () => {
+    this.addButton('Record Follow-up', async () => {
       await this.formDialog({
-        title: '跟进备注',
+        title: 'Follow-up note',
         fields: [
-          { fieldname: 'note', fieldtype: 'Small Text', label: '备注', reqd: 1 },
+          { fieldname: 'note', fieldtype: 'Small Text', label: 'Note', reqd: 1 },
         ],
         primaryAction: {
-          label: '保存',
+          label: 'Save',
           action: async (values) => {
             await this.addComment(values.note)
           },
@@ -102,17 +103,15 @@ def _create_view_settings():
 				]
 			),
 			"order_by": "modified desc",
-			"columns": json.dumps(
-				[
-					"lead_name",
-					"mobile_no",
-					"organization",
-					"status",
-					"source",
-					"district",
-					"lead_owner",
-				]
-			),
+			"fieldnames": [
+				"lead_name",
+				"mobile_no",
+				"organization",
+				"status",
+				"source",
+				"district",
+				"lead_owner",
+			],
 		},
 		{
 			"label": "高德-新线索",
@@ -127,21 +126,21 @@ def _create_view_settings():
 				]
 			),
 			"order_by": "modified desc",
-			"columns": json.dumps(
-				[
-					"lead_name",
-					"mobile_no",
-					"organization",
-					"status",
-					"poi_type",
-					"district",
-					"lead_owner",
-				]
-			),
+			"fieldnames": [
+				"lead_name",
+				"mobile_no",
+				"organization",
+				"status",
+				"poi_type",
+				"district",
+				"lead_owner",
+			],
 		},
 	]
 
 	for view in views:
+		fieldnames = view.pop("fieldnames")
+		view["columns"] = json.dumps(normalize_list_columns(fieldnames, view["dt"]))
 		if frappe.db.exists("CRM View Settings", {"label": view["label"], "dt": view["dt"]}):
 			continue
 		frappe.get_doc(

@@ -1,4 +1,4 @@
-"""Amap Web API client with mock mode and key rotation."""
+"""Amap Web API client with key rotation."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ import frappe
 from frappe import _
 
 from crm.amap.poi.errors import format_amap_error
-from crm.amap.poi.mock_data import generate_mock_pois
 
 AMAP_TEXT_URL = "https://restapi.amap.com/v3/place/text"
 AMAP_POLYGON_URL = "https://restapi.amap.com/v3/place/polygon"
@@ -39,21 +38,16 @@ class AmapClient:
 		self,
 		api_keys: list[str] | None = None,
 		request_interval: float = 0.35,
-		use_mock: bool = False,
 		on_api_call=None,
 	):
 		self.api_keys = api_keys or []
 		self.request_interval = max(request_interval, MIN_REQUEST_INTERVAL)
-		self.use_mock = use_mock or not self.api_keys
 		self.on_api_call = on_api_call
 		self._current_key_index = 0
 		self._last_request_time = 0.0
 		self._key_last_request: dict[str, float] = {key: 0.0 for key in self.api_keys}
 
 	def test_connection(self) -> dict[str, Any]:
-		if self.use_mock:
-			return {"success": True, "message": _("Mock API mode enabled")}
-
 		api_key = self._get_current_key()
 		if not api_key:
 			return {"success": False, "message": _("No API keys configured. Please add and save one first.")}
@@ -83,16 +77,6 @@ class AmapClient:
 		limit: int = 10,
 		page: int = 1,
 	) -> APIResult:
-		if self.use_mock:
-			data, count = generate_mock_pois(
-				keywords=keywords,
-				city=city,
-				types=types,
-				limit=limit,
-				page=page,
-			)
-			return APIResult(success=True, data=data, count=count)
-
 		params = {
 			"keywords": keywords,
 			"city": city,
@@ -112,19 +96,6 @@ class AmapClient:
 		page_size: int = 25,
 		page_num: int = 1,
 	) -> APIResult:
-		if self.use_mock:
-			city = keywords or "杭州"
-			data, count = generate_mock_pois(
-				keywords=keywords,
-				city=city,
-				types=types,
-				limit=page_size,
-				page=page_num,
-			)
-			if page_num > 1 and page_num > (count // page_size) + 1:
-				data = []
-			return APIResult(success=True, data=data, count=count)
-
 		params = {
 			"polygon": polygon,
 			"offset": min(page_size, 25),
@@ -137,10 +108,58 @@ class AmapClient:
 			params["types"] = types
 		return self._search(AMAP_POLYGON_URL, params)
 
-	def get_district_bbox(self, adcode: str) -> tuple[float, float, float, float] | None:
-		if self.use_mock:
-			return (120.0, 30.0, 120.2, 30.2)
+	def search_districts(
+		self,
+		keywords: str = "",
+		adcode: str = "",
+		subdistrict: int = 1,
+	) -> list[dict[str, Any]]:
+		"""Return child districts for cascaded region picker."""
+		api_key = self._get_current_key()
+		if not api_key:
+			return []
 
+		params: dict[str, Any] = {
+			"key": api_key,
+			"subdistrict": subdistrict,
+			"extensions": "base",
+		}
+		if adcode:
+			params["keywords"] = adcode
+		elif keywords:
+			params["keywords"] = keywords
+		else:
+			params["keywords"] = "中国"
+
+		data, error = self._make_request(AMAP_DISTRICT_URL, params, api_key)
+		if error or not data or data.get("status") != "1":
+			return []
+
+		districts = data.get("districts") or []
+		if not districts:
+			return []
+
+		def _normalize(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+			return [
+				{
+					"name": item.get("name") or "",
+					"adcode": item.get("adcode") or "",
+					"level": item.get("level") or "",
+					"center": item.get("center") or "",
+				}
+				for item in items
+				if item.get("name")
+			]
+
+		# Text search — return matched nodes (e.g. resolve adcode from city name).
+		if keywords and not adcode:
+			return _normalize(districts)
+
+		# Hierarchy drill-down — provinces under China, cities under province, etc.
+		root = districts[0]
+		return _normalize(root.get("districts") or [])
+
+	def get_district_bbox(self, adcode: str) -> tuple[float, float, float, float] | None:
 		api_key = self._get_current_key()
 		if not api_key:
 			return None
@@ -228,7 +247,7 @@ class AmapClient:
 				self._wait_for_interval(key)
 				response = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
 				response.raise_for_status()
-				if not self.use_mock and self.on_api_call:
+				if self.on_api_call:
 					self.on_api_call()
 				return response.json(), None
 			except requests.exceptions.Timeout:
@@ -256,12 +275,11 @@ def build_client_from_settings(settings=None, tripai_user_id: str | None = None,
 		settings = frappe.get_single("CRM Amap Settings")
 
 	api_keys = []
-	use_mock = bool(settings.use_mock_api)
 	on_api_call = None
 
 	from crm.integrations.tripai.billing import should_bill_for_sync
 
-	billing = should_bill_for_sync(settings) if not use_mock else False
+	billing = should_bill_for_sync(settings)
 
 	if billing:
 		from crm.integrations.tripai.billing import (
@@ -278,7 +296,7 @@ def build_client_from_settings(settings=None, tripai_user_id: str | None = None,
 				consume_api_call(tripai_user_id, job_name)
 
 			on_api_call = _bill_api_call
-	elif not use_mock:
+	else:
 		try:
 			from crm.integrations.tripai.billing import get_runtime_amap_keys, should_bill_for_sync
 
@@ -298,10 +316,8 @@ def build_client_from_settings(settings=None, tripai_user_id: str | None = None,
 
 		raise RuntimeConfigError(_("Amap API keys are not available from TripAI"))
 
-	use_mock = use_mock or not api_keys
 	return AmapClient(
 		api_keys=api_keys,
 		request_interval=settings.request_interval or 0.35,
-		use_mock=use_mock,
 		on_api_call=on_api_call,
 	)

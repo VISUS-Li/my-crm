@@ -17,7 +17,7 @@
       </button>
     </div>
     <div class="text-ink-gray-7 text-p-sm">
-      {{ __('We are changing how permissions work in Trip CRM') }}
+      {{ __('We are changing how permissions work in TripAI CRM') }}
     </div>
     <Button :label="__('Learn more')" @click="openBlog">
       <template #suffix>

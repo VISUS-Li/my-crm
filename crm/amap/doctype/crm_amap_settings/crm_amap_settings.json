@@ -5,7 +5,6 @@
  "engine": "InnoDB",
  "field_order": [
   "enabled",
-  "use_mock_api",
   "section_break_keys",
   "api_keys",
   "section_break_sync",
@@ -23,13 +22,6 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enable Amap POI Sync"
-  },
-  {
-   "default": "0",
-   "description": "Use simulated POI data instead of calling Amap API (for testing)",
-   "fieldname": "use_mock_api",
-   "fieldtype": "Check",
-   "label": "Use Mock API"
   },
   {
    "fieldname": "section_break_keys",

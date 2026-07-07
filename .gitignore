@@ -31,13 +31,27 @@ AGENTS.md
 scripts/deploy.config.json
 scripts/__pycache__/
 
-# Local Amap verification / E2E scripts (depend on deploy.config.json)
+# Local verification / E2E scripts (depend on deploy.config.json)
 scripts/test_amap_flow.py
 scripts/verify_amap_http.py
 scripts/verify_amap_server.py
+scripts/e2e_workflow_test.py
+scripts/configure_tripai.py
+scripts/tripai/
 
-# Local Amap unit tests (run locally, not committed)
-crm/amap/**/test_*.py
+# Local Python tests (run on Frappe bench locally, not committed)
+crm/**/test_*.py
+crm/tests/
+crm/integrations/erpnext/test_utils.py
+crm/permissions/test_*.py
+
+# Local TripAI acceptance / debug helpers (not unit tests)
+crm/integrations/tripai/*_acceptance.py
+crm/integrations/tripai/debug_*.py
+crm/integrations/tripai/verify_remote.py
+crm/integrations/tripai/configure_remote.py
+crm/integrations/tripai/test_data.py
+crm/integrations/tripai/backfill_contacts.py
 
 # Local feature planning notes (project docs live in .pi/)
 docs/amap-poi-sales-dev-plan.md
@@ -52,21 +66,6 @@ frontend/.yarn/
 scripts/list_empty_po.py
 scripts/batch_i18n_empty_state.py
 scripts/find_missing_i18n.py
-
-# Local TripAI verification / remote bench scripts (depend on deploy.config.json)
-scripts/tripai/
-
-# Local TripAI unit tests & acceptance runners (run locally, not committed)
-crm/integrations/tripai/test_*.py
-crm/integrations/tripai/*_acceptance.py
-crm/integrations/tripai/debug_*.py
-crm/integrations/tripai/verify_remote.py
-crm/integrations/tripai/configure_remote.py
-crm/integrations/tripai/test_data.py
-crm/integrations/tripai/backfill_contacts.py
-
-# Local permissions unit tests (run locally, not committed)
-crm/permissions/test_agent_tenant.py
 
 # Local TripAI feature planning & tool registration notes (project docs live in .pi/)
 docs/tripai-integration-plan.md

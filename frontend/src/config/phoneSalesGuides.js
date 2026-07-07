@@ -12,9 +12,9 @@ export const PHONE_SALES_GUIDES = [
       'Get restaurant POI data for a city or district from Amap, import merchants with phone numbers, and start calling.',
     steps: [
       {
-        title: 'Configure the Amap API (first time only)',
-        body: 'Open Settings → Integrations → Amap POI. Add your Amap Web Service API key and turn on POI sync. Set a default product (e.g. AI Live Assistant) so new leads know what to pitch.',
-        tip: 'Use mock mode only for testing. Turn it off before real outreach.',
+        title: 'Confirm POI sync is ready',
+        body: 'Fetch Merchants must be enabled by your administrator first. If you cannot create jobs yet, contact your admin — setup is handled on the admin side.',
+        tip: 'Once enabled, you can create sync jobs and new merchant leads will appear automatically.',
       },
       {
         title: 'Create a sync job',
@@ -27,6 +27,7 @@ export const PHONE_SALES_GUIDES = [
       {
         title: 'Set industry keywords',
         body: 'In Keywords, enter terms merchants use on Amap, e.g. 餐饮, 餐厅, 饭店, 火锅. Separate multiple keywords with commas.',
+        keywords: ['餐饮', '餐厅', '饭店', '火锅'],
         tip: 'Keywords match merchant names and categories on Amap. Try 餐饮 first; add 快餐 or 奶茶 if you need a sub-segment.',
       },
       {
@@ -54,6 +55,7 @@ export const PHONE_SALES_GUIDES = [
   {
     id: 'amap-first-setup',
     icon: 'settings',
+    audience: 'admin',
     title: 'First-time Amap API setup',
     summary: 'Connect your Amap developer account so the system can fetch merchant POI data.',
     steps: [
@@ -181,6 +183,10 @@ export function getGuideById(id) {
   return PHONE_SALES_GUIDES.find((guide) => guide.id === id) || null
 }
 
-export function getGuideList() {
-  return PHONE_SALES_GUIDES
+export function getGuideList(options = {}) {
+  const { audience } = options
+  if (!audience) return PHONE_SALES_GUIDES
+  return PHONE_SALES_GUIDES.filter(
+    (guide) => (guide.audience || 'user') === audience,
+  )
 }

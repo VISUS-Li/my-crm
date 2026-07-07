@@ -40,10 +40,6 @@ def is_billing_enabled() -> bool:
 
 
 def should_bill_for_sync(settings=None) -> bool:
-	if settings is None:
-		settings = frappe.get_single("CRM Amap Settings")
-	if bool(getattr(settings, "use_mock_api", False)):
-		return False
 	return is_billing_enabled()
 
 

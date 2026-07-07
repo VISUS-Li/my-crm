@@ -11,12 +11,12 @@ from crm.amap.poi.importer import POIImporter, promote_poi_to_lead
 from crm.amap.poi.quadtree import BoundingBox, QuadTreeSplitter, bbox_from_string
 
 
-def run_poi_sync(job_name: str) -> None:
-	frappe.cache().delete_value(f"poi_sync_cancel:{job_name}")
-	job = frappe.get_doc("CRM POI Sync Job", job_name)
+def run_poi_sync(sync_job_name: str) -> None:
+	frappe.cache().delete_value(f"poi_sync_cancel:{sync_job_name}")
+	job = frappe.get_doc("CRM POI Sync Job", sync_job_name)
 	settings = frappe.get_single("CRM Amap Settings")
 
-	if not settings.enabled and not settings.use_mock_api:
+	if not settings.enabled:
 		job.db_set(
 			{
 				"status": "Failed",
@@ -62,8 +62,10 @@ def run_poi_sync(job_name: str) -> None:
 	frappe.db.commit()
 
 	try:
-		client = build_client_from_settings(settings, tripai_user_id=tripai_user_id, job_name=job_name)
+		client = build_client_from_settings(settings, tripai_user_id=tripai_user_id, job_name=sync_job_name)
 		importer = POIImporter(job, settings, tripai_user_id=tripai_user_id)
+
+		_ensure_job_adcode(job, client)
 
 		if job.bbox or job.adcode:
 			splitter = QuadTreeSplitter(
@@ -115,8 +117,9 @@ def run_poi_sync(job_name: str) -> None:
 				"progress_message": _("Sync completed successfully"),
 			}
 		)
+		frappe.db.commit()
 	except Exception as exc:
-		frappe.log_error(title=f"POI Sync Job failed: {job_name}", message=frappe.get_traceback())
+		frappe.log_error(title=f"POI Sync Job failed: {sync_job_name}", message=frappe.get_traceback())
 		error_log = str(exc)
 		try:
 			from crm.integrations.tripai.billing import InsufficientCreditsError
@@ -135,6 +138,36 @@ def run_poi_sync(job_name: str) -> None:
 				"progress_message": _("Sync failed"),
 			}
 		)
+
+
+def _ensure_job_adcode(job, client) -> None:
+	"""Resolve adcode when user picked a district in the region picker but adcode is empty.
+
+	City-only jobs intentionally skip adcode so sync uses lightweight text search
+	instead of quadtree over an entire municipality.
+	"""
+	if job.adcode or job.bbox:
+		return
+
+	if not job.district:
+		return
+
+	query_parts = [job.district, job.city, job.province]
+	query = next((part for part in query_parts if part), None)
+	if not query:
+		return
+
+	districts = client.search_districts(keywords=query, subdistrict=0)
+	if not districts:
+		return
+
+	match = districts[0]
+	adcode = match.get("adcode")
+	if not adcode:
+		return
+
+	job.db_set("adcode", adcode)
+	frappe.db.commit()
 
 
 def _resolve_bounds(job, client) -> BoundingBox | None:

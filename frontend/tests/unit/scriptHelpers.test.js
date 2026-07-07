@@ -104,12 +104,16 @@ describe('createDocProxy', () => {
   // ─── trigger() ────────────────────────────────────────────────
 
   it('trigger calls method on instance', () => {
+    const calls = []
     const instance = {
-      _myMethod: vi.fn().mockReturnValue('result'),
+      _myMethod(arg) {
+        calls.push(arg)
+        return 'result'
+      },
     }
     const proxy = createDocProxy({ name: 'test' }, instance)
     const result = proxy.trigger('_myMethod', 'arg1')
-    expect(instance._myMethod).toHaveBeenCalledWith('arg1')
+    expect(calls).toEqual(['arg1'])
     expect(result).toBe('result')
   })
 

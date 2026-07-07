@@ -62,12 +62,14 @@
       </template>
     </Tabs>
     <Resizer class="flex flex-col justify-between border-l" side="right">
-      <div
-        class="flex h-[45px] cursor-copy items-center border-b px-5 py-2.5 text-lg-medium text-ink-gray-9"
-        @click="copyToClipboard(leadId)"
-      >
-        {{ __(leadId) }}
-      </div>
+      <Tooltip :text="formatDocumentId(leadId, 'Lead').full">
+        <div
+          class="flex h-[45px] cursor-copy items-center border-b px-5 py-2.5 text-lg-medium text-ink-gray-9"
+          @click="copyToClipboard(leadId)"
+        >
+          {{ formatDocumentId(leadId, 'Lead').display }}
+        </div>
+      </Tooltip>
       <FileUploader
         :validateFile="validateIsImageFile"
         @success="(file) => updateField('image', file.file_url)"
@@ -271,6 +273,7 @@ import {
   copyToClipboard,
   validateIsImageFile,
   isTranslatable,
+  formatDocumentId,
 } from '@/utils'
 import { getView } from '@/utils/view'
 import { getSettings } from '@/stores/settings'
@@ -295,6 +298,7 @@ import {
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
+import { useActiveTabManager } from '@/composables/useActiveTabManager'
 
 const { brand } = getSettings()
 const { $dialog, $socket, makeCall } = globalStore()

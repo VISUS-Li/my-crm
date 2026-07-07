@@ -133,9 +133,9 @@
             <Button
               class="mt-4"
               variant="outline"
-              :label="__('View setup guide')"
+              :label="__('Getting started')"
               icon-left="book-open"
-              @click="openPhoneSalesGuide('amap-first-setup')"
+              @click="openPhoneSalesGuide('restaurant-region-outreach')"
             />
           </div>
           <div v-else class="divide-y">

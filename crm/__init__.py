@@ -1,2 +1,2 @@
 __version__ = "2.0.0-dev"
-__title__ = "Trip CRM"
+__title__ = "TripAI CRM"

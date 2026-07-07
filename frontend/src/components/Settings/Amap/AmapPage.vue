@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 p-6">
+  <div class="flex min-h-0 flex-1 flex-col overflow-hidden p-6">
     <AmapSettings
       v-if="step === 'settings'"
       @updateStep="updateStep"

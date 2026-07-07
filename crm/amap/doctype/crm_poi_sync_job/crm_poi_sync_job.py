@@ -46,8 +46,9 @@ class CRMPOISyncJob(Document):
 			"crm.amap.tasks.run_poi_sync",
 			queue="long",
 			timeout=7200,
-			job_name=self.name,
+			job_name=f"poi_sync_{self.name}",
 			enqueue_after_commit=True,
+			sync_job_name=self.name,
 		)
 
 		return {"status": "Queued"}
@@ -126,6 +127,7 @@ class CRMPOISyncJob(Document):
 
 	def update_progress(self, message: str):
 		self.db_set("progress_message", message[:500])
+		frappe.db.commit()
 
 	def update_stats(
 		self,
@@ -145,3 +147,4 @@ class CRMPOISyncJob(Document):
 			data["leads_skipped"] = leads_skipped
 		if data:
 			self.db_set(data)
+			frappe.db.commit()

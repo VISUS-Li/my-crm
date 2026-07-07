@@ -121,8 +121,9 @@ cd ~/frappe-bench && nohup bench start > ~/crm-bench.log 2>&1 &
 
 | 项 | 值 |
 |----|-----|
-| 登录 | http://10.0.161.126:8010/login |
-| CRM | http://10.0.161.126:8010/crm |
+| 登录 | http://crm.localhost:8010/login（推荐；见下方 hosts） |
+| CRM | http://crm.localhost:8010/crm |
+| 备用（IP，实时通知/WebSocket 不可用） | http://10.0.161.126:8010/crm |
 | 账号 | `Administrator` / `admin` |
 | Web 端口 | **8010**（8000 被 casdoor 占用） |
 | Socket.IO | **9010** |
@@ -150,5 +151,20 @@ cd ~/frappe-bench && nohup bench start > ~/crm-bench.log 2>&1 &
 | `/crm` 白屏、JS/CSS 404 | 运行 `ln -sfn ~/frappe-bench/apps/crm/crm/public ~/frappe-bench/sites/assets/crm`；`deploy-remote.sh` 已自动处理 |
 | `/crm` 返回 Not Permitted | 先访问 `/login` 登录 |
 | 选中文仍大量英文（Leads、Calls 等） | 确认已 `--deploy`（含 `bench build --app crm`）；检查用户 Language=中文；硬刷新浏览器 |
+| Socket.IO CORS / 连到 9000 / WebSocket 失败 | 见下方「Socket.IO」；用 `crm.localhost` 访问，勿用裸 IP |
+
+### Socket.IO（实时通知、活动流）
+
+Frappe 要求 **浏览器地址栏主机名 = 站点名**（本环境为 `crm.localhost`），否则 Socket.IO 命名空间校验失败。Web 在 **8010**，Socket.IO 在 **9010**（9000 被 ClickHouse 占用）。
+
+**Windows 开发机** 在 `C:\Windows\System32\drivers\etc\hosts` 增加：
+
+```
+10.0.161.126 crm.localhost
+```
+
+然后用 **http://crm.localhost:8010/crm** 打开（不要用 `http://10.0.161.126:8010`）。
+
+若仍报错：硬刷新（Ctrl+Shift+R）；确认 `~/frappe-bench/sites/common_site_config.json` 中 `socketio_port` 为 `9010`；`pgrep -af socketio` 应有 node 进程监听 9010。
 
 日志：`~/crm-bench.log`（Ubuntu）。

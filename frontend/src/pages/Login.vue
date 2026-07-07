@@ -2,7 +2,7 @@
   <div class="flex min-h-screen items-center justify-center bg-surface-gray-1 px-4 text-p-base">
     <div class="w-full max-w-sm rounded-xl border bg-surface-white p-6 shadow-sm">
       <div class="mb-6 text-center">
-        <h1 class="text-xl-semibold text-ink-gray-9">{{ __('Sign in to CRM') }}</h1>
+        <h1 class="text-xl-semibold text-ink-gray-9">{{ __('Sign in to TripAI CRM') }}</h1>
         <p class="mt-1 text-p-sm text-ink-gray-6">
           {{ __('Use your TripAI phone number or email') }}
         </p>

@@ -5,6 +5,8 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
+from crm.setup.defaults import get_new_user_locale_defaults
+
 
 class CRMInvitation(Document):
 	# begin: auto-generated types
@@ -39,7 +41,7 @@ class CRMInvitation(Document):
 		if frappe.local.dev_server:
 			print(f"Invite link for {self.email}: {invite_link}")  # nosemgrep
 
-		title = _("Trip CRM")
+		title = _("TripAI CRM")
 		template = "crm_invitation"
 
 		frappe.sendmail(
@@ -98,6 +100,7 @@ class CRMInvitation(Document):
 				email=self.email,
 				send_welcome_email=0,
 				first_name=first_name,
+				**get_new_user_locale_defaults(),
 			).insert(ignore_permissions=True)
 		else:
 			user = frappe.get_doc("User", self.email)

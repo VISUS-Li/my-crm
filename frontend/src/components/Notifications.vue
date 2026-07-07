@@ -64,7 +64,7 @@
                   {{ __('mentioned you in {0}', [n.reference_doctype]) }}
                 </span>
                 <span class="font-medium text-ink-gray-9">
-                  {{ n.reference_name }}
+                  {{ formatReferenceName(n.reference_name, n.reference_doctype) }}
                 </span>
               </div>
               <div class="text-p-sm text-ink-gray-5">
@@ -102,7 +102,7 @@ import {
 } from '@/stores/notifications'
 import { useEventNotificationAlert } from '@/data/notifications'
 import { globalStore } from '@/stores/global'
-import { timeAgo, sanitizeHTML } from '@/utils'
+import { timeAgo, sanitizeHTML, formatReferenceName } from '@/utils'
 import { onClickOutside } from '@vueuse/core'
 import { useTelemetry } from 'frappe-ui/frappe'
 import { TabButtons } from 'frappe-ui'

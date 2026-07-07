@@ -3,13 +3,17 @@
     <template #title>
       <div class="flex gap-2 items-center">
         <h2 class="text-2xl-semibold">{{ __('Amap Settings') }}</h2>
-        <Badge v-if="settings.doc?.use_mock_api" theme="orange" size="sm">
-          {{ __('Mock Mode') }}
-        </Badge>
       </div>
     </template>
     <template #header-actions>
       <div class="flex gap-2">
+        <Button
+          v-if="isAdmin()"
+          variant="outline"
+          :label="__('Setup guide')"
+          icon-left="book-open"
+          @click="openPhoneSalesGuide('amap-first-setup')"
+        />
         <Button
           variant="outline"
           :label="__('Back to Jobs')"
@@ -33,8 +37,8 @@
     </template>
     <template #content>
       <div v-if="settings.doc" class="space-y-6">
-        <div class="grid grid-cols-2 gap-4">
-          <div class="flex items-center justify-between rounded-lg border p-4">
+        <div class="rounded-lg border p-4">
+          <div class="flex items-center justify-between">
             <div>
               <div class="text-base-medium">{{ __('Enable Amap POI Sync') }}</div>
               <div class="text-p-sm text-ink-gray-5">
@@ -42,15 +46,6 @@
               </div>
             </div>
             <Switch v-model="settings.doc.enabled" size="sm" />
-          </div>
-          <div class="flex items-center justify-between rounded-lg border p-4">
-            <div>
-              <div class="text-base-medium">{{ __('Use Mock API') }}</div>
-              <div class="text-p-sm text-ink-gray-5">
-                {{ __('Test the full flow without Amap API keys') }}
-              </div>
-            </div>
-            <Switch v-model="settings.doc.use_mock_api" size="sm" />
           </div>
         </div>
 
@@ -73,17 +68,17 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <FormControl
+          <Link
             v-model="settings.doc.default_lead_owner"
-            type="link"
             doctype="User"
             :label="__('Default Lead Owner')"
+            :placeholder="__('Select user')"
           />
-          <FormControl
+          <Link
             v-model="settings.doc.default_product"
-            type="link"
             doctype="CRM Product"
             :label="__('Default Product')"
+            :placeholder="__('Select product')"
           />
         </div>
 
@@ -107,7 +102,7 @@
             v-if="!settings.doc.api_keys?.length"
             class="rounded-lg border border-dashed p-6 text-p-sm text-ink-gray-5"
           >
-            {{ __('No API keys configured. Enable mock mode or add keys here.') }}
+            {{ __('No API keys configured. Add keys here.') }}
           </div>
           <div class="rounded-lg border border-blue-100 bg-blue-50 p-4 text-p-sm text-blue-900">
             {{
@@ -148,14 +143,18 @@
 </template>
 
 <script setup>
+import Link from '@/components/Controls/Link.vue'
 import SettingsLayoutBase from '@/components/Layouts/SettingsLayoutBase.vue'
 import { useDocument } from '@/data/document'
-import { Badge, Switch, toast, call } from 'frappe-ui'
+import { openPhoneSalesGuide } from '@/composables/usePhoneSalesGuide'
+import { usersStore } from '@/stores/users'
+import { Switch, toast, call } from 'frappe-ui'
 import { computed, ref } from 'vue'
 import { AMAP_SETTINGS_DOCTYPE } from './amapConfig'
 
 const emit = defineEmits(['updateStep'])
 
+const { isAdmin } = usersStore()
 const testing = ref(false)
 
 const { document: settings } = useDocument(
@@ -180,23 +179,6 @@ async function saveSettings() {
 }
 
 async function testConnection() {
-  if (settings.doc.use_mock_api) {
-    testing.value = true
-    try {
-      const result = await call('crm.amap.api.test_connection')
-      if (result?.success) {
-        toast.success(__(result.message) || __('Connection successful'))
-      } else {
-        toast.error(__(result.message) || __('Connection failed'))
-      }
-    } catch (error) {
-      toast.error(error.messages?.[0] || __('Connection failed'))
-    } finally {
-      testing.value = false
-    }
-    return
-  }
-
   const apiKeyFromForm =
     settings.doc.api_keys?.map((row) => row.api_key).find(Boolean) || ''
   const hasSavedKeyRows = (settings.doc.api_keys?.length || 0) > 0
@@ -217,8 +199,8 @@ async function testConnection() {
     )
     if (result?.success) {
       toast.success(__(result.message) || __('Connection successful'))
-      } else {
-        toast.error(__(result.message) || __('Connection failed'))
+    } else {
+      toast.error(__(result.message) || __('Connection failed'))
     }
   } catch (error) {
     toast.error(error.messages?.[0] || __('Connection failed'))

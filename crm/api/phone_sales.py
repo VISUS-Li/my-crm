@@ -77,8 +77,5 @@ def get_workbench_stats():
 		"new_leads": new_leads,
 		"invalid": invalid,
 		"recent_jobs": recent_jobs,
-		"has_amap_enabled": bool(
-			frappe.db.get_single_value("CRM Amap Settings", "enabled")
-			or frappe.db.get_single_value("CRM Amap Settings", "use_mock_api")
-		),
+		"has_amap_enabled": bool(frappe.db.get_single_value("CRM Amap Settings", "enabled")),
 	}

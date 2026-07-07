@@ -11,7 +11,7 @@ import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 
-/** Standard Trip CRM sidebar links. */
+/** Standard TripAI CRM sidebar links. */
 export const standardSidebarLinks = [
   { label: 'Dashboard', icon: LucideLayoutDashboard, to: 'Dashboard' },
   { label: 'Leads', icon: LeadsIcon, to: 'Leads' },

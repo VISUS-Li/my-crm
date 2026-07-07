@@ -327,6 +327,7 @@ import { usersStore } from '@/stores/users'
 import { getMeta } from '@/stores/meta'
 import { isEmoji } from '@/utils'
 import { translateLabel, translateSelectOptions } from '@/utils/translateField'
+import { normalizeViewFilters } from '@/utils/viewFilters'
 import {
   Tooltip,
   createResource,
@@ -462,7 +463,9 @@ function getParams() {
   let _view = getView(route.query.view, route.params.viewType, props.doctype)
   const view_name = _view?.name || ''
   const view_type = _view?.type || route.params.viewType || 'list'
-  const filters = (_view?.filters && JSON.parse(_view.filters)) || {}
+  const filters = normalizeViewFilters(
+    (_view?.filters && JSON.parse(_view.filters)) || {},
+  )
   const order_by = _view?.order_by || 'modified desc'
   const group_by_field = _view?.group_by_field || 'owner'
   const columns = _view?.columns || ''
@@ -791,7 +794,10 @@ const quickFilterList = computed(() => {
     const nextFilter = {
       ...filter,
       label: translateLabel(filter.label),
-      options: translateSelectOptions(filter.options),
+      options:
+        filter.fieldtype === 'Select'
+          ? translateSelectOptions(filter.options)
+          : filter.options,
       value: filter.fieldtype == 'Check' ? false : '',
     }
 

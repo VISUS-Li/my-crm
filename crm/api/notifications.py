@@ -1,6 +1,8 @@
 import frappe
 from frappe.query_builder import Order
 
+from crm.utils.i18n import get_doctype_label
+
 
 @frappe.whitelist()
 def get_notifications():
@@ -29,7 +31,7 @@ def get_notifications():
 				"notification_text": notification.notification_text,
 				"notification_type_doctype": notification.notification_type_doctype,
 				"notification_type_doc": notification.notification_type_doc,
-				"reference_doctype": ("deal" if notification.reference_doctype == "CRM Deal" else "lead"),
+				"reference_doctype": get_doctype_label(notification.reference_doctype),
 				"reference_name": notification.reference_name,
 				"route_name": ("Deal" if notification.reference_doctype == "CRM Deal" else "Lead"),
 			}

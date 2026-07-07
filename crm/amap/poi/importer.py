@@ -56,6 +56,7 @@ class POIImporter:
 
 		if self.import_only_with_phone and not valid_phone:
 			self.stats["leads_skipped"] += 1
+			self._maybe_flush_stats()
 			return
 
 		lead_name = create_or_update_lead(
@@ -75,8 +76,20 @@ class POIImporter:
 		else:
 			self.stats["leads_skipped"] += 1
 
+		self._maybe_flush_stats()
+
+	def _maybe_flush_stats(self) -> None:
+		if self.stats["total_fetched"] % 10 != 0:
+			return
+		self.sync_job.update_stats(
+			total_fetched=self.stats["total_fetched"],
+			with_phone_count=self.stats["with_phone_count"],
+			leads_created=self.stats["leads_created"],
+			leads_skipped=self.stats["leads_skipped"],
+		)
+
 	def _bill_poi_import(self) -> None:
-		if self.settings.use_mock_api or not self.tripai_user_id:
+		if not self.tripai_user_id:
 			return
 		from crm.integrations.tripai.billing import consume_poi_import, should_bill_for_sync
 

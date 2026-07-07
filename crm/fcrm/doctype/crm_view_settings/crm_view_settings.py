@@ -166,6 +166,52 @@ def remove_duplicates(l):
 	return list(dict.fromkeys(l))
 
 
+_STANDARD_LIST_COLUMNS = {
+	"name": {"label": "Name", "type": "Data", "key": "name", "width": "16rem"},
+	"modified": {"label": "Last Modified", "type": "Datetime", "key": "modified", "width": "8rem"},
+	"_assign": {"label": "Assigned To", "type": "Text", "key": "_assign", "width": "10rem"},
+}
+
+
+def normalize_list_columns(columns, doctype):
+	if not columns:
+		return columns
+
+	meta = frappe.get_meta(doctype)
+	normalized = []
+
+	for column in columns:
+		if isinstance(column, dict) and column.get("key"):
+			normalized.append(column)
+			continue
+
+		fieldname = column if isinstance(column, str) else column.get("key") or column.get("fieldname")
+		if not fieldname:
+			continue
+
+		if fieldname in _STANDARD_LIST_COLUMNS:
+			normalized.append(dict(_STANDARD_LIST_COLUMNS[fieldname]))
+			continue
+
+		field_meta = meta.get_field(fieldname)
+		if field_meta:
+			col = {
+				"label": field_meta.label,
+				"type": field_meta.fieldtype,
+				"key": fieldname,
+				"width": "10rem",
+			}
+			if field_meta.fieldtype == "Link" and field_meta.options:
+				col["options"] = field_meta.options
+			normalized.append(col)
+		else:
+			normalized.append(
+				{"label": fieldname, "type": "Data", "key": fieldname, "width": "10rem"}
+			)
+
+	return normalized
+
+
 def sync_default_rows(doctype, type="list"):
 	list = get_controller(doctype)
 	rows = []

@@ -221,6 +221,11 @@ export function getScript(doctype, view = 'Form') {
       instance.doc = createDocProxy(getDoc, instance)
     }
 
+    if (document.save?.submit) {
+      const submit = document.save.submit.bind(document.save)
+      instance.save = (...args) => submit(...args)
+    }
+
     return instance
   }
 
@@ -424,6 +429,32 @@ export function getScript(doctype, view = 'Form') {
         // Return a clone merged with any overrides
         const overrides = ctx?.fieldPropertyOverrides?.[fieldname] || {}
         return { ...raw, ...overrides }
+      }
+    }
+
+    if (typeof FormClass.prototype.addButton !== 'function') {
+      FormClass.prototype.addButton = function (label, onClick) {
+        const actions = this.actions
+        if (!Array.isArray(actions)) {
+          this.actions = [{ label, onClick }]
+          return
+        }
+        actions.push({ label, onClick })
+      }
+    }
+
+    if (typeof FormClass.prototype.addComment !== 'function') {
+      FormClass.prototype.addComment = async function (content, attachments) {
+        const doc = this.doc
+        if (!doc?.doctype || !doc?.name) {
+          throw new Error(__('Cannot add comment: document not loaded'))
+        }
+        return this.call('crm.api.comment.add_comment', {
+          reference_doctype: doc.doctype,
+          reference_name: doc.name,
+          content,
+          attachments,
+        })
       }
     }
   }
