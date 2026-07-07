@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="visible"
     class="guide-banner mb-4 flex items-start gap-3.5 rounded-xl border border-outline-brand bg-gradient-to-r from-surface-brand-1 to-white px-4 py-3.5 shadow-sm"
   >
     <div
@@ -22,19 +23,33 @@
         @click="openPhoneSalesGuide(guideId)"
       />
     </div>
+    <button
+      v-if="dismissKey"
+      type="button"
+      class="shrink-0 rounded p-1 text-ink-gray-5 hover:bg-surface-gray-2 hover:text-ink-gray-7"
+      :aria-label="__('Dismiss')"
+      @click="dismiss"
+    >
+      <LucideX class="size-4" />
+    </button>
   </div>
 </template>
 
 <script setup>
 import LucideSparkles from '~icons/lucide/sparkles'
+import LucideX from '~icons/lucide/x'
 import { openPhoneSalesGuide } from '@/composables/usePhoneSalesGuide'
+import { useDismissibleTip } from '@/composables/useDismissibleTip'
 import { Button } from 'frappe-ui'
 
-defineProps({
+const props = defineProps({
   title: { type: String, required: true },
   description: { type: String, required: true },
   guideId: { type: String, default: '' },
+  dismissKey: { type: String, default: '' },
 })
+
+const { visible, dismiss } = useDismissibleTip(props.dismissKey)
 </script>
 
 <style scoped>

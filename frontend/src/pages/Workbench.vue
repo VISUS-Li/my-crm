@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col overflow-hidden">
+  <div class="flex h-full min-h-0 flex-col overflow-hidden">
     <LayoutHeader>
       <template #left-header>
         <div class="text-2xl-semibold text-ink-gray-9">{{ __('Workbench') }}</div>

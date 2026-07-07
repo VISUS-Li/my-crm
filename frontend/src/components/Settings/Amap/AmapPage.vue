@@ -1,21 +1,25 @@
 <template>
-  <div class="flex min-h-0 flex-1 flex-col overflow-hidden p-6">
+  <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
     <AmapSettings
       v-if="step === 'settings'"
+      class="min-h-0 flex-1 overflow-y-auto"
       @updateStep="updateStep"
     />
     <PoiSyncJobForm
       v-else-if="step === 'new-job'"
+      class="min-h-0 flex-1 overflow-y-auto"
       :jobData="job"
       @updateStep="updateStep"
     />
     <PoiSyncJobPage
       v-else-if="step === 'job-detail'"
+      class="min-h-0 flex-1 overflow-y-auto"
       :jobName="job?.name"
       @updateStep="updateStep"
     />
     <PoiSyncJobs
       v-else
+      class="min-h-0 flex-1 overflow-y-auto"
       @updateStep="updateStep"
     />
   </div>

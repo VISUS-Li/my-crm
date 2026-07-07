@@ -189,6 +189,7 @@
         v-model="doc"
         @updateField="updateField"
       />
+      <LeadPhotosSection ref="leadPhotosSection" :lead-id="leadId" />
       <div
         v-if="sections.data"
         class="flex flex-1 flex-col justify-between overflow-hidden"
@@ -221,6 +222,7 @@
     @after="
       () => {
         activities?.all_activities?.reload()
+        leadPhotosSection?.reload?.()
         changeTabTo('attachments')
       }
     "
@@ -265,6 +267,7 @@ import AssignTo from '@/components/AssignTo.vue'
 import FilesUploader from '@/components/FilesUploader/FilesUploader.vue'
 import SidePanelLayout from '@/components/SidePanelLayout.vue'
 import SLASection from '@/components/SLASection.vue'
+import LeadPhotosSection from '@/components/Leads/LeadPhotosSection.vue'
 import CustomActions from '@/components/CustomActions.vue'
 import ConvertToDealModal from '@/components/Modals/ConvertToDealModal.vue'
 import {
@@ -319,6 +322,7 @@ const errorMessage = ref('')
 const showDeleteLinkedDocModal = ref(false)
 const showConvertToDealModal = ref(false)
 const showFilesUploader = ref(false)
+const leadPhotosSection = ref(null)
 
 const {
   triggerOnChange,

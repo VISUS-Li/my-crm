@@ -358,6 +358,11 @@ def get_data(
 		if group_by_field and group_by_field not in rows:
 			rows.append(group_by_field)
 
+		if "poi_address" in rows:
+			for extra_field in ("amap_poi_id", "poi_location", "district", "organization", "lead_name"):
+				if extra_field not in rows:
+					rows.append(extra_field)
+
 		data = (
 			frappe.get_list(
 				doctype,

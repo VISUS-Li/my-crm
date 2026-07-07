@@ -20,9 +20,9 @@ export const confirmLoginToFrappeCloud = () => {
   const { $dialog } = globalStore()
 
   $dialog({
-    title: __('Login to Frappe Cloud?'),
+    title: __('Login to TripAI Cloud?'),
     message: __(
-      'Are you sure you want to login to your Frappe Cloud dashboard?',
+      'Are you sure you want to login to your TripAI Cloud dashboard?',
     ),
     actions: [
       {

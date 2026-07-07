@@ -29,7 +29,7 @@
         </div>
         <hr class="border-t my-3 mx-2" />
         <p class="text-p-sm text-ink-gray-6 px-2 mt-2">
-          © Frappe Technologies Pvt. Ltd. and contributors
+          © TripAI and contributors
         </p>
       </div>
     </template>

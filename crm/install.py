@@ -197,7 +197,7 @@ def add_default_fields_layout(force=False):
 	sidebar_fields_layouts = {
 		"CRM Lead-Side Panel": {
 			"doctype": "CRM Lead",
-			"layout": '[{"label": "Details", "name": "details_section", "opened": true, "columns": [{"name": "column_kl92", "fields": ["organization", "website", "territory", "industry", "job_title", "source", "lead_owner"]}]}, {"label": "Person", "name": "person_section", "opened": true, "columns": [{"name": "column_XmW2", "fields": ["salutation", "first_name", "last_name", "email", "mobile_no"]}]}]',
+			"layout": '[{"label": "Details", "name": "details_section", "opened": true, "columns": [{"name": "column_kl92", "fields": ["organization", "website", "territory", "industry", "job_title", "source", "lead_owner"]}]}, {"label": "Person", "name": "person_section", "opened": true, "columns": [{"name": "column_XmW2", "fields": ["salutation", "first_name", "last_name", "email", "mobile_no"]}]}, {"label": "Location", "name": "location_section", "opened": true, "columns": [{"name": "column_loc", "fields": ["poi_address", "district"]}]}]',
 		},
 		"CRM Deal-Side Panel": {
 			"doctype": "CRM Deal",
@@ -216,7 +216,7 @@ def add_default_fields_layout(force=False):
 	data_fields_layouts = {
 		"CRM Lead-Data Fields": {
 			"doctype": "CRM Lead",
-			"layout": '[{"label": "Details", "name": "details_section", "opened": true, "columns": [{"name": "column_ZgLG", "fields": ["organization", "industry", "lead_owner"]}, {"name": "column_TbYq", "fields": ["website", "job_title"]}, {"name": "column_OKSX", "fields": ["territory", "source"]}]}, {"label": "Person", "name": "person_section", "opened": true, "columns": [{"name": "column_6c5g", "fields": ["salutation", "email"]}, {"name": "column_1n7Q", "fields": ["first_name", "mobile_no"]}, {"name": "column_cT6C", "fields": ["last_name"]}]}]',
+			"layout": '[{"label": "Details", "name": "details_section", "opened": true, "columns": [{"name": "column_ZgLG", "fields": ["organization", "industry", "lead_owner", "poi_address"]}, {"name": "column_TbYq", "fields": ["website", "job_title", "district"]}, {"name": "column_OKSX", "fields": ["territory", "source"]}]}, {"label": "Person", "name": "person_section", "opened": true, "columns": [{"name": "column_6c5g", "fields": ["salutation", "email"]}, {"name": "column_1n7Q", "fields": ["first_name", "mobile_no"]}, {"name": "column_cT6C", "fields": ["last_name"]}]}]',
 		},
 		"CRM Deal-Data Fields": {
 			"doctype": "CRM Deal",

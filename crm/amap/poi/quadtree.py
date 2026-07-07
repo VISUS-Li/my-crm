@@ -16,6 +16,12 @@ MIN_GRID_SPAN = 0.005
 MAX_DEPTH = 20
 
 
+class AmapSearchError(Exception):
+	def __init__(self, message: str, code: str = ""):
+		super().__init__(message)
+		self.code = code
+
+
 @dataclass
 class BoundingBox:
 	min_lng: float
@@ -77,7 +83,9 @@ class QuadTreeSplitter:
 			page_size=25,
 			page_num=1,
 		)
-		if not result.success or not result.data:
+		if not result.success:
+			raise AmapSearchError(result.error_message or _("Amap polygon search failed"), result.info or "")
+		if not result.data:
 			return [], False, 0
 
 		reported_count = result.count or len(result.data)
@@ -97,7 +105,9 @@ class QuadTreeSplitter:
 				page_size=25,
 				page_num=page,
 			)
-			if not result.success or not result.data:
+			if not result.success:
+				raise AmapSearchError(result.error_message or _("Amap polygon search failed"), result.info or "")
+			if not result.data:
 				break
 
 			all_pois.extend(result.data)
@@ -127,7 +137,9 @@ class QuadTreeSplitter:
 				page_size=25,
 				page_num=page,
 			)
-			if not result.success or not result.data:
+			if not result.success:
+				raise AmapSearchError(result.error_message or _("Amap polygon search failed"), result.info or "")
+			if not result.data:
 				break
 
 			all_pois.extend(result.data)

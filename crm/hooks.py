@@ -1,6 +1,6 @@
 app_name = "crm"
 app_title = "TripAI CRM"
-app_publisher = "Frappe Technologies Pvt. Ltd."
+app_publisher = "TripAI"
 app_description = "TripAI CRM — open-source sales CRM"
 app_email = "shariq@frappe.io"
 app_license = "AGPLv3"
@@ -340,16 +340,8 @@ standard_dropdown_items = [
 	},
 	{
 		"name1": "login_to_fc",
-		"label": "Login to Frappe Cloud",
+		"label": "Login to TripAI Cloud",
 		"type": "Route",
-		"route": "#",
-		"is_standard": 1,
-	},
-	{
-		"name1": "about",
-		"label": "About",
-		"type": "Route",
-		"icon": "info",
 		"route": "#",
 		"is_standard": 1,
 	},

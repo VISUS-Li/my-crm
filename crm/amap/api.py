@@ -41,10 +41,10 @@ def start_sync_job(job_name: str):
 						"status": "Failed",
 						"completed_at": now_datetime(),
 						"error_log": message,
-						"progress_message": _("Sync failed"),
+						"progress_message": "同步失败",
 					}
 				)
-				log_sync_event(job.name, "job_start_failed", _("Sync failed"), {"error": message})
+				log_sync_event(job.name, "job_start_failed", "同步失败", {"error": message})
 				frappe.db.commit()
 			except Exception:
 				pass

@@ -8,8 +8,13 @@ from frappe.utils import now_datetime
 
 from crm.amap.poi.client import build_client_from_settings
 from crm.amap.poi.importer import POIImporter, promote_poi_to_lead
-from crm.amap.poi.quadtree import BoundingBox, QuadTreeSplitter, bbox_from_string
+from crm.amap.poi.quadtree import AmapSearchError, BoundingBox, QuadTreeSplitter, bbox_from_string
 from crm.amap.trace import finish_sync_segment, log_sync_event, start_sync_segment
+
+
+SYNC_FAILED = "同步失败"
+SYNC_STARTING = "正在启动同步"
+SYNC_COMPLETED = "同步成功完成"
 
 
 def run_poi_sync(sync_job_name: str) -> None:
@@ -47,7 +52,7 @@ def run_poi_sync(sync_job_name: str) -> None:
 				"status": "Failed",
 				"completed_at": now_datetime(),
 				"error_log": error_log,
-				"progress_message": _("Sync failed"),
+				"progress_message": SYNC_FAILED,
 			}
 		)
 		return
@@ -56,12 +61,12 @@ def run_poi_sync(sync_job_name: str) -> None:
 		{
 			"status": "Running",
 			"started_at": now_datetime(),
-			"progress_message": _("Starting sync"),
+			"progress_message": SYNC_STARTING,
 			"daily_usage": 0,
 		}
 	)
 	frappe.db.commit()
-	log_sync_event(sync_job_name, "job_started", _("Starting sync"), {"keywords": job.keywords, "city": job.city})
+	log_sync_event(sync_job_name, "job_started", SYNC_STARTING, {"keywords": job.keywords, "city": job.city})
 
 	try:
 		client = build_client_from_settings(settings, tripai_user_id=tripai_user_id, job_name=sync_job_name)
@@ -90,31 +95,48 @@ def run_poi_sync(sync_job_name: str) -> None:
 				job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
 				return
 
-			job.update_progress(_("Fetching POI data with quadtree..."))
+			job.update_progress("正在使用四叉树获取 POI 数据...")
 			pois = []
 			for keyword in split_keywords(job.keywords):
 				if job.is_cancelled():
 					break
-				job.update_progress(_("Fetching POI data for keyword: {0}").format(keyword))
+				job.update_progress("正在获取关键词「{0}」的 POI 数据".format(keyword))
 				segment = start_sync_segment(job, keyword=keyword, bbox=bounds.to_polygon())
-				keyword_pois = splitter.quadtree_split(
+				try:
+					keyword_pois = splitter.quadtree_split(
 						bounds,
 						keywords=keyword,
 						types=job.types or "",
 						on_log=on_log,
 					)
+				except AmapSearchError as exc:
+					finish_sync_segment(
+						segment,
+						status="Failed",
+						error_code=exc.code,
+						error_message=str(exc),
+					)
+					log_sync_event(
+						sync_job_name,
+						"segment_failed",
+						_("POI sync segment failed"),
+						{"keyword": keyword, "error": str(exc), "code": exc.code},
+						segment=segment,
+					)
+					raise
 				pois.extend(keyword_pois)
 				finish_sync_segment(segment, fetched_count=len(keyword_pois))
 		else:
-			job.update_progress(_("Fetching POI data via city text search..."))
+			job.update_progress("正在通过城市文本搜索获取 POI 数据...")
 			pois = _fetch_pois_by_text(client, job)
 
 		if job.is_cancelled():
 			job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
 			return
 
-		job.update_progress(_("Importing {0} POI records...").format(len(pois)))
-		log_sync_event(sync_job_name, "import_started", _("Importing {0} POI records...").format(len(pois)))
+		import_message = "正在导入 {0} 条 POI 记录...".format(len(pois))
+		job.update_progress(import_message)
+		log_sync_event(sync_job_name, "import_started", import_message)
 		importer.process_pois(pois)
 
 		job.db_set(
@@ -125,14 +147,14 @@ def run_poi_sync(sync_job_name: str) -> None:
 				"with_phone_count": importer.stats["with_phone_count"],
 				"leads_created": importer.stats["leads_created"],
 				"leads_skipped": importer.stats["leads_skipped"],
-				"progress_message": _("Sync completed successfully"),
+				"progress_message": SYNC_COMPLETED,
 			}
 		)
 		frappe.db.commit()
 		log_sync_event(
 			sync_job_name,
 			"job_completed",
-			_("Sync completed successfully"),
+			SYNC_COMPLETED,
 			{
 				"total_fetched": importer.stats["total_fetched"],
 				"with_phone_count": importer.stats["with_phone_count"],
@@ -157,10 +179,10 @@ def run_poi_sync(sync_job_name: str) -> None:
 				"status": "Failed",
 				"completed_at": now_datetime(),
 				"error_log": error_log,
-				"progress_message": _("Sync failed"),
+				"progress_message": SYNC_FAILED,
 			}
 		)
-		log_sync_event(sync_job_name, "job_failed", _("Sync failed"), {"error": error_log})
+		log_sync_event(sync_job_name, "job_failed", SYNC_FAILED, {"error": error_log})
 
 
 def _ensure_job_adcode(job, client) -> None:

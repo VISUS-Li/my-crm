@@ -216,6 +216,8 @@ def create_or_update_lead(
 	lead_source = sync_job.lead_source or "高德地图"
 	organization = poi.get("name") or amap_poi_id
 	location = _format_geolocation(poi.get("location"))
+	photo_rows = parse_photo_rows(poi.get("photos"))
+	primary_photo = photo_rows[0]["url"] if photo_rows else ""
 
 	status = "新线索"
 	if valid_phone and frappe.db.exists("CRM Lead Status", "待拨打"):
@@ -245,6 +247,8 @@ def create_or_update_lead(
 
 	if settings.default_product:
 		lead_data["recommended_product"] = settings.default_product
+	if primary_photo:
+		lead_data["image"] = primary_photo
 
 	doc = frappe.get_doc(lead_data)
 	doc.insert(ignore_permissions=True)
@@ -258,20 +262,25 @@ def update_existing_lead_from_poi(
 	primary_phone: str | None,
 	valid_phone: bool,
 ) -> None:
+	photo_rows = parse_photo_rows(poi.get("photos"))
+	primary_photo = photo_rows[0]["url"] if photo_rows else ""
 	try:
+		update_data = {
+			"poi_address": poi.get("address") or "",
+			"poi_location": _format_geolocation(poi.get("location")),
+			"poi_type": poi.get("type") or "",
+			"poi_typecode": poi.get("typecode") or "",
+			"district": poi.get("adname") or poi.get("district") or "",
+			"has_valid_phone": 1 if valid_phone else 0,
+			"mobile_no": primary_phone or "",
+			"phone": phones[1] if len(phones) > 1 else "",
+		}
+		if primary_photo:
+			update_data["image"] = primary_photo
 		frappe.db.set_value(
 			"CRM Lead",
 			lead_name,
-			{
-				"poi_address": poi.get("address") or "",
-				"poi_location": _format_geolocation(poi.get("location")),
-				"poi_type": poi.get("type") or "",
-				"poi_typecode": poi.get("typecode") or "",
-				"district": poi.get("adname") or poi.get("district") or "",
-				"has_valid_phone": 1 if valid_phone else 0,
-				"mobile_no": primary_phone or "",
-				"phone": phones[1] if len(phones) > 1 else "",
-			},
+			update_data,
 		)
 	except Exception:
 		return

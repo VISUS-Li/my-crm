@@ -1,18 +1,9 @@
 <template>
-  <div class="flex h-full flex-col overflow-hidden">
+  <div class="flex h-full min-h-0 flex-col overflow-hidden">
     <LayoutHeader>
       <template #left-header>
-        <div>
-          <div class="text-2xl-semibold text-ink-gray-9">
-            {{ __('Fetch Merchants') }}
-          </div>
-          <p class="mt-0.5 text-p-sm text-ink-gray-6">
-            {{
-              __(
-                'Pull merchant POI data from Amap by region and industry. Leads with phone numbers are created automatically.',
-              )
-            }}
-          </p>
+        <div class="text-2xl-semibold text-ink-gray-9">
+          {{ __('Fetch Merchants') }}
         </div>
       </template>
       <template #right-header>
@@ -25,19 +16,29 @@
       </template>
     </LayoutHeader>
 
-    <div class="shrink-0 px-5 pt-4">
-      <GuideInfoBanner
-        :title="__('Example: restaurants in your city')"
-        :description="
-          __(
-            'Set city + district + keyword 餐饮 to fetch local restaurants with phone numbers, then call from Pending Calls.',
-          )
-        "
-        guide-id="restaurant-region-outreach"
-      />
-    </div>
+    <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div class="shrink-0 space-y-3 px-5 pt-4">
+        <GuideInfoBanner
+          dismiss-key="poi-sync-example-banner"
+          :title="__('Example: restaurants in your city')"
+          :description="
+            __(
+              'Set city + district + keyword 餐饮 to fetch local restaurants with phone numbers, then call from Pending Calls.',
+            )
+          "
+          guide-id="restaurant-region-outreach"
+        />
+        <p class="text-p-sm text-ink-gray-6">
+          {{
+            __(
+              'Pull merchant POI data from Amap by region and industry. Leads with phone numbers are created automatically.',
+            )
+          }}
+        </p>
+      </div>
 
-    <AmapPage class="min-h-0 flex-1 overflow-hidden" />
+      <AmapPage class="min-h-0 flex-1 overflow-hidden" />
+    </div>
   </div>
 </template>
 

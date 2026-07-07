@@ -1,6 +1,7 @@
 import frappe
 from frappe import _
 
+from crm.fcrm.doctype.crm_notification.crm_notification import notify_user
 from crm.utils.i18n import get_doctype_label
 
 

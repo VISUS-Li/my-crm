@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col gap-6 text-ink-gray-8 px-2 pt-2">
+  <div class="flex min-h-0 flex-col gap-6 px-5 pb-6 pt-2 text-ink-gray-8">
     <div class="flex justify-between">
       <Button
         variant="ghost"

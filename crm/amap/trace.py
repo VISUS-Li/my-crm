@@ -56,7 +56,7 @@ def start_sync_segment(sync_job, keyword: str = "", bbox: str = "") -> str | Non
 		log_sync_event(
 			sync_job.name,
 			"segment_started",
-			"Started POI sync segment",
+			"同步分段开始",
 			{"keyword": keyword, "types": sync_job.types or "", "bbox": bbox or sync_job.bbox or ""},
 			segment=doc.name,
 		)

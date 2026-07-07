@@ -2466,6 +2466,10 @@ msgstr "折扣金额"
 msgid "Dismiss"
 msgstr "忽略"
 
+#: frontend/src/components/Settings/Amap/PoiSyncJobPage.vue
+msgid "Showing {0} of {1}"
+msgstr "显示 {0} / {1}"
+
 #. Label of the dismissed (Check) field in DocType 'CRM Product Sync Issue'
 #: crm/fcrm/doctype/crm_product_sync_issue/crm_product_sync_issue.json
 msgid "Dismissed"
@@ -10710,6 +10714,111 @@ msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的
 
 msgid "job_start_failed"
 msgstr "任务启动失败"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Amap polygon search failed"
+msgstr "高德多边形搜索失败"
+
+msgid "POI sync segment failed"
+msgstr "POI 同步分段失败"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Login to TripAI Cloud?"
+msgstr "登录 TripAI 云平台？"
+
+msgid "Are you sure you want to login to your TripAI Cloud dashboard?"
+msgstr "确定登录 TripAI 云控制面板？"
+
+msgid "Login to TripAI Cloud"
+msgstr "登录 TripAI 云平台"
+
+msgid "Trip Mail Site"
+msgstr "Trip 邮件站点"
+
+msgid "Setting up Trip Mail requires you to have an API key and API Secret of your email account. Read more"
+msgstr "设置 Trip Mail 需要邮件账户的 API Key 和 API Secret。了解更多"
+
+msgid "{0} Call"
+msgstr "{0}通话"
+
+msgid "If this stays queued for more than a minute, ensure the Trip background worker is running (bench start or worker-long)."
+msgstr "若排队超过一分钟仍未开始，请确认 Trip 后台 worker 已运行（bench start 或 worker-long）。"
+
+msgid "This field is read only and cannot be edited."
+msgstr "此字段为只读，无法编辑。"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Photos"
+msgstr "图片"
+
+msgid "Lead photo"
+msgstr "线索图片"
+
+msgid "View photo"
+msgstr "查看图片"
+
+msgid "Profile Image"
+msgstr "头像图片"
+
+msgid "Storefront"
+msgstr "门头照"
+
+msgid "Scan on phone"
+msgstr "手机扫码"
+
+msgid "Scan to open this lead on your phone and call directly"
+msgstr "扫码在手机上打开此线索，即可直接拨打电话"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Unable to build page link"
+msgstr "无法生成页面链接"
+
+msgid "Failed to generate QR code"
+msgstr "二维码生成失败"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "View on map"
+msgstr "在地图中查看"
 
 msgid "Are you sure you want to delete \"{0}\" view?"
 msgstr "确定要删除视图「{0}」吗？"

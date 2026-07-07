@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="flex items-center flex-wrap gap-2">
-        <Badge :label="formatDate(call.creation, 'MMM D, dddd')">
+        <Badge :label="formatDate(call.creation, getLocaleBadgeDateFormat())">
           <template #prefix>
             <CalendarIcon class="size-3" />
           </template>
@@ -103,7 +103,7 @@ import AudioPlayer from '@/components/Activities/AudioPlayer.vue'
 import CallLogDetailModal from '@/components/Modals/CallLogDetailModal.vue'
 import TimelineTimestamp from '@/components/Activities/TimelineTimestamp.vue'
 import { statusLabelMap, statusColorMap } from '@/utils/callLog.js'
-import { formatDate } from '@/utils'
+import { formatDate, getLocaleBadgeDateFormat } from '@/utils'
 import { Avatar, Badge, createResource } from 'frappe-ui'
 import { reactive, ref } from 'vue'
 

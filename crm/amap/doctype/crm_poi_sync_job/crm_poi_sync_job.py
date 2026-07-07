@@ -37,7 +37,7 @@ class CRMPOISyncJob(Document):
 		self.db_set(
 			{
 				"status": "Queued",
-				"progress_message": _("Queued for processing"),
+				"progress_message": "已排队等待处理",
 				"error_log": "",
 			}
 		)

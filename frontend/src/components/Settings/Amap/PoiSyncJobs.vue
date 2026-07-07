@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col gap-6 text-ink-gray-8">
+  <div class="flex min-h-0 flex-col gap-6 px-5 pb-6 pt-2 text-ink-gray-8">
     <div class="flex justify-between px-2 pt-2">
       <div class="flex flex-col gap-1 w-9/12">
         <h2 class="text-2xl-semibold">{{ __('POI Sync Jobs') }}</h2>
@@ -70,7 +70,7 @@
       icon="map-pin"
     />
 
-    <div v-else class="flex flex-col overflow-hidden">
+    <div v-else class="flex min-h-0 flex-col overflow-hidden">
       <div class="flex items-center py-2 px-4 text-p-sm text-ink-gray-5">
         <div class="w-3/12">{{ __('Job') }}</div>
         <div class="w-2/12">{{ __('Search') }}</div>
@@ -80,7 +80,7 @@
         <div class="w-2/12">{{ __('Owner') }}</div>
       </div>
       <div class="h-px border-t mx-4 border-outline-elevation-2" />
-      <ul class="overflow-y-auto px-2">
+      <ul class="min-h-0 flex-1 overflow-y-auto px-2">
         <li
           v-for="job in filteredJobs"
           :key="job.name"
@@ -94,7 +94,7 @@
           </div>
           <div class="w-1/12">
             <Badge :theme="STATUS_COLORS[job.status] || 'gray'" size="sm">
-              {{ __(job.status) }}
+              {{ displayStatus(job.status) }}
             </Badge>
           </div>
           <div class="w-2/12 text-p-sm text-ink-gray-6">
@@ -130,14 +130,27 @@ const filters = reactive({
   district: '',
 })
 
+const STATUS_LABELS = {
+  Draft: '草稿',
+  Queued: '排队中',
+  Running: '运行中',
+  Completed: '已完成',
+  Failed: '失败',
+  Cancelled: '已取消',
+}
+
+function displayStatus(status) {
+  return STATUS_LABELS[status] || __(status || '')
+}
+
 const statusFilterOptions = computed(() => [
   { label: __('All'), value: '' },
-  { label: __('Draft'), value: 'Draft' },
-  { label: __('Queued'), value: 'Queued' },
-  { label: __('Running'), value: 'Running' },
-  { label: __('Completed'), value: 'Completed' },
-  { label: __('Failed'), value: 'Failed' },
-  { label: __('Cancelled'), value: 'Cancelled' },
+  { label: displayStatus('Draft'), value: 'Draft' },
+  { label: displayStatus('Queued'), value: 'Queued' },
+  { label: displayStatus('Running'), value: 'Running' },
+  { label: displayStatus('Completed'), value: 'Completed' },
+  { label: displayStatus('Failed'), value: 'Failed' },
+  { label: displayStatus('Cancelled'), value: 'Cancelled' },
 ])
 
 const filteredJobs = computed(() => {

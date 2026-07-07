@@ -59,7 +59,6 @@ import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
 import { getSettings } from '@/stores/settings'
 import { showSettings, isMobileView } from '@/composables/settings'
-import { showAboutModal } from '@/composables/modals'
 import { confirmLoginToFrappeCloud } from '@/composables/frappecloud'
 import { Dropdown } from 'frappe-ui'
 import { computed, h, markRaw } from 'vue'
@@ -91,6 +90,7 @@ const dropdownItems = computed(() => {
 
   items.forEach((item) => {
     if (item.hidden) return
+    if (item.name1 === 'about') return
     if (item.type !== 'Separator') {
       _dropdownItems[_dropdownItems.length - 1].items.push(
         dropdownItemObj(item),
@@ -146,12 +146,6 @@ function getStandardItem(item) {
         label: __(item.label),
         onClick: () => confirmLoginToFrappeCloud(),
         condition: () => !isMobileView.value && window.is_fc_site,
-      }
-    case 'about':
-      return {
-        icon: item.icon,
-        label: __(item.label),
-        onClick: () => (showAboutModal.value = true),
       }
     case 'logout':
       return {

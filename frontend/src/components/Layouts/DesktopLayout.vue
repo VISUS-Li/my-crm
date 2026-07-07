@@ -3,9 +3,11 @@
     <div class="h-full border-r bg-surface-gray-1">
       <AppSidebar />
     </div>
-    <div class="flex-1 flex flex-col h-full overflow-auto bg-surface-base">
-      <AppHeader />
-      <slot />
+    <div class="flex min-h-0 flex-1 flex-col bg-surface-base">
+      <AppHeader class="shrink-0" />
+      <div class="min-h-0 flex-1 overflow-auto">
+        <slot />
+      </div>
     </div>
     <GlobalModals />
   </div>

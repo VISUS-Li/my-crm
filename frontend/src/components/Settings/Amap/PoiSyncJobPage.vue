@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full min-h-0 flex-col gap-6 overflow-y-auto text-ink-gray-8 px-2 pt-2">
+  <div class="flex min-h-0 flex-col gap-6 px-5 pb-6 pt-2 text-ink-gray-8">
     <div class="flex justify-between">
       <Button
         variant="ghost"
@@ -51,12 +51,12 @@
       >
         <div class="flex items-center gap-2">
           <LoadingIndicator class="size-4" />
-          <span>{{ __(job.progress_message || 'Processing...') }}</span>
+          <span>{{ displayMessage(job.progress_message || 'Processing...') }}</span>
         </div>
         <p v-if="job.status === 'Queued'" class="mt-2 text-blue-700">
           {{
             __(
-              'If this stays queued for more than a minute, ensure the Frappe background worker is running (bench start or worker-long).',
+              'If this stays queued for more than a minute, ensure the Trip background worker is running (bench start or worker-long).',
             )
           }}
         </p>
@@ -66,7 +66,7 @@
         <div class="rounded-lg border p-4">
           <div class="text-p-sm text-ink-gray-5">{{ __('Status') }}</div>
           <Badge :theme="STATUS_COLORS[job.status] || 'gray'" class="mt-2">
-            {{ __(job.status) }}
+            {{ displayStatus(job.status) }}
           </Badge>
         </div>
         <div class="rounded-lg border p-4">
@@ -91,16 +91,16 @@
           <div><span class="text-ink-gray-5">{{ __('Owner') }}:</span> {{ ownerLabel(job.job_owner) }}</div>
         </div>
         <div class="rounded-lg border p-4 space-y-2">
-          <div><span class="text-ink-gray-5">{{ __('Started') }}:</span> {{ formatDate(job.started_at) }}</div>
-          <div><span class="text-ink-gray-5">{{ __('Completed') }}:</span> {{ formatDate(job.completed_at) }}</div>
+          <div><span class="text-ink-gray-5">{{ __('Started') }}:</span> {{ displayDate(job.started_at) }}</div>
+          <div><span class="text-ink-gray-5">{{ __('Completed') }}:</span> {{ displayDate(job.completed_at) }}</div>
           <div><span class="text-ink-gray-5">{{ __('Skipped') }}:</span> {{ job.leads_skipped || 0 }}</div>
-          <div><span class="text-ink-gray-5">{{ __('Progress') }}:</span> {{ job.progress_message ? __(job.progress_message) : '-' }}</div>
+          <div><span class="text-ink-gray-5">{{ __('Progress') }}:</span> {{ job.progress_message ? displayMessage(job.progress_message) : '-' }}</div>
         </div>
       </div>
 
       <div v-if="job.error_log" class="rounded-lg border border-red-200 bg-red-50 p-4">
         <div class="text-base-medium text-red-700">{{ __('Error Log') }}</div>
-        <pre class="mt-2 whitespace-pre-wrap text-p-sm text-red-700">{{ __(job.error_log) }}</pre>
+        <pre class="mt-2 whitespace-pre-wrap text-p-sm text-red-700">{{ displayMessage(job.error_log) }}</pre>
       </div>
 
       <div v-if="job.segments?.length" class="rounded-lg border overflow-hidden">
@@ -108,7 +108,7 @@
           <div class="text-base-medium">{{ __('Sync Segments') }}</div>
           <div class="text-p-sm text-ink-gray-5">{{ __('{0} segments', [job.segments.length]) }}</div>
         </div>
-        <div class="overflow-x-auto">
+        <div class="max-h-80 overflow-auto">
           <table class="w-full text-p-sm">
             <thead class="bg-surface-gray-1 text-ink-gray-5">
               <tr>
@@ -125,7 +125,7 @@
                 <td class="px-4 py-2">{{ segment.keyword || '-' }}</td>
                 <td class="px-4 py-2">
                   <Badge :theme="segment.truncated ? 'orange' : STATUS_COLORS[segment.status] || 'gray'" size="sm">
-                    {{ __(segment.status) }}
+                    {{ displayStatus(segment.status) }}
                   </Badge>
                 </td>
                 <td class="px-4 py-2">{{ segment.fetched_count || 0 }}</td>
@@ -133,7 +133,7 @@
                 <td class="px-4 py-2">{{ segment.page_count || 0 }}</td>
                 <td class="px-4 py-2 max-w-[260px] truncate">
                   <span v-if="segment.truncated" class="text-orange-700">{{ __('Truncated') }}</span>
-                  <span v-else-if="segment.error_message" class="text-red-700">{{ segment.error_message }}</span>
+                  <span v-else-if="segment.error_message" class="text-red-700">{{ displayMessage(segment.error_message) }}</span>
                   <span v-else class="text-ink-gray-4">-</span>
                 </td>
               </tr>
@@ -144,25 +144,29 @@
 
       <div v-if="job.events?.length" class="rounded-lg border overflow-hidden">
         <div class="border-b px-4 py-3 text-base-medium">{{ __('Recent Sync Events') }}</div>
-        <div class="divide-y">
+        <div class="max-h-80 divide-y overflow-y-auto">
           <div v-for="event in job.events" :key="event.name" class="grid grid-cols-[160px_1fr] gap-3 px-4 py-2 text-p-sm">
             <div class="text-ink-gray-5">{{ __(event.event_type) }}</div>
             <div class="min-w-0">
-              <div class="truncate">{{ event.message ? __(event.message) : '-' }}</div>
-              <div class="text-p-xs text-ink-gray-4">{{ event.creation }}</div>
+              <div class="truncate">{{ event.message ? displayMessage(event.message) : '-' }}</div>
+              <div class="text-p-xs text-ink-gray-4">{{ displayDate(event.creation) }}</div>
             </div>
           </div>
         </div>
       </div>
 
       <div
-        v-if="['Completed', 'Running'].includes(job.status)"
+        v-if="showSyncedMerchants"
         class="rounded-lg border overflow-hidden"
       >
         <div class="flex items-center justify-between border-b px-4 py-3">
           <div class="text-base-medium">{{ __('Synced Merchants') }}</div>
           <div class="text-p-sm text-ink-gray-5">
-            {{ __('{0} records', [poiTotal]) }}
+            {{
+              poiTotal
+                ? __('Showing {0} of {1}', [poiRecords.length, poiTotal])
+                : __('{0} records', [poiTotal])
+            }}
           </div>
         </div>
 
@@ -172,7 +176,7 @@
         <div v-else-if="!poiRecords.length" class="px-4 py-8 text-center text-p-sm text-ink-gray-5">
           {{ __('No POI records yet. Results appear here as sync progresses.') }}
         </div>
-        <div v-else class="overflow-x-auto">
+        <div v-else class="max-h-[32rem] overflow-auto">
           <table class="w-full text-p-sm">
             <thead class="bg-surface-gray-1 text-ink-gray-5">
               <tr>
@@ -264,9 +268,17 @@
       </div>
 
       <div
-        v-if="job.status === 'Completed' && job.leads_created > 0"
-        class="rounded-lg border border-green-200 bg-green-50 p-4 text-p-sm text-green-800"
+        v-if="showLeadsTip"
+        class="relative rounded-lg border border-green-200 bg-green-50 p-4 pr-10 text-p-sm text-green-800"
       >
+        <button
+          type="button"
+          class="absolute right-3 top-3 rounded p-1 text-green-700 hover:bg-green-100"
+          :aria-label="__('Dismiss')"
+          @click="dismissLeadsTip"
+        >
+          <LucideX class="size-4" />
+        </button>
         {{
           __(
             'Leads with phone numbers are in Pending Calls. Open Leads and switch to the Amap pending view.',
@@ -301,11 +313,14 @@
 </template>
 
 <script setup>
+import { formatDate } from '@/utils'
 import { Badge, toast, call, Dialog, FormControl, Button } from 'frappe-ui'
 import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
+import LucideX from '~icons/lucide/x'
 import { usersStore } from '@/stores/users'
 import { getUserContactDisplay } from '@/utils/userContact'
 import { getTripAILicenseDeviceId, isLicenseError } from '@/utils/tripaiLicense'
+import { useDismissibleTip } from '@/composables/useDismissibleTip'
 import { STATUS_COLORS } from './amapConfig'
 
 const props = defineProps({
@@ -347,6 +362,54 @@ const canStart = computed(() =>
   ['Draft', 'Completed', 'Failed', 'Cancelled'].includes(job.value?.status),
 )
 const canCancel = computed(() => ['Running', 'Queued'].includes(job.value?.status))
+
+const showSyncedMerchants = computed(() => {
+  const status = job.value?.status
+  return status && !['Draft', 'Queued'].includes(status)
+})
+
+const { visible: leadsTipVisible, dismiss: dismissLeadsTip } =
+  useDismissibleTip('poi-sync-leads-tip')
+
+const showLeadsTip = computed(
+  () =>
+    leadsTipVisible.value &&
+    job.value?.status === 'Completed' &&
+    (job.value?.leads_created || 0) > 0,
+)
+
+const STATUS_LABELS = {
+  Draft: '草稿',
+  Queued: '排队中',
+  Running: '运行中',
+  Completed: '已完成',
+  Failed: '失败',
+  Cancelled: '已取消',
+  Partial: '部分完成',
+}
+
+const MESSAGE_LABELS = {
+  'Queued for processing': '已排队等待处理',
+  'Starting sync': '正在启动同步',
+  'Fetching POI data with quadtree...': '正在使用四叉树获取 POI 数据...',
+  'Fetching POI data via city text search...': '正在通过城市文本搜索获取 POI 数据...',
+  'Sync completed successfully': '同步成功完成',
+  'Sync failed': '同步失败',
+  'POI sync segment failed': 'POI 同步分段失败',
+  'Started POI sync segment': '同步分段开始',
+  'Processing...': '处理中...',
+  'Force stopped': '已强制停止',
+}
+
+function displayStatus(status) {
+  return STATUS_LABELS[status] || __(status || '')
+}
+
+function displayMessage(message) {
+  if (!message) return ''
+  const text = String(message)
+  return MESSAGE_LABELS[text] || __(text)
+}
 
 async function fetchPoiRecords(reset = false) {
   if (!props.jobName) return
@@ -391,7 +454,7 @@ async function fetchProgress() {
       job_name: props.jobName,
     })
     job.value = result
-    if (['Running', 'Completed'].includes(result.status)) {
+    if (result.status && !['Draft', 'Queued'].includes(result.status)) {
       await fetchPoiRecords(true)
     }
     if (['Running', 'Queued'].includes(result.status)) {
@@ -419,8 +482,8 @@ function clearPoll() {
   }
 }
 
-function formatDate(value) {
-  return value || '-'
+function displayDate(value) {
+  return value ? formatDate(value) : '-'
 }
 
 function phoneValues(record) {

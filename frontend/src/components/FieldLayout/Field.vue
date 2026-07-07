@@ -8,7 +8,7 @@
       "
       class="mb-2 text-p-sm text-ink-gray-5"
     >
-      {{ __(field.label) }}
+      {{ translateLabel(field.label) }}
       <span
         v-if="
           field.reqd ||
@@ -39,7 +39,7 @@
       "
       v-model="data[field.fieldname]"
       type="text"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="true"
       :description="getFieldDescription(field)"
     />
@@ -58,7 +58,7 @@
       class="form-control"
       :class="field.prefix ? 'prefix' : ''"
       :options="field.options"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :description="getFieldDescription(field)"
       @update:modelValue="(e) => fieldChange(e, field)"
     >
@@ -85,7 +85,7 @@
           }
         "
       >
-        {{ __(field.label) }}
+        {{ translateLabel(field.label) }}
         <span v-if="field.mandatory" class="text-ink-red-6">*</span>
       </label>
     </div>
@@ -100,7 +100,7 @@
           field.fieldtype == 'Link' ? field.options : data[field.options]
         "
         :filters="field.filters"
-        :placeholder="getPlaceholder(field)"
+        :placeholder="getFieldPlaceholder(field)"
         :onCreate="field.create"
         @change="(v) => fieldChange(v, field)"
       />
@@ -126,7 +126,7 @@
       :value="data[field.fieldname] && getUser(data[field.fieldname]).full_name"
       :doctype="field.options"
       :filters="field.filters"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :hideMe="true"
       @change="(v) => fieldChange(v, field)"
     >
@@ -153,7 +153,7 @@
       v-else-if="field.fieldtype === 'Autocomplete'"
       v-model="data[field.fieldname]"
       :options="getOptions(field.options)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       @update:modelValue="(v) => fieldChange(v, field, data)"
     />
@@ -161,7 +161,7 @@
       v-else-if="field.fieldtype === 'Time'"
       :value="data[field.fieldname]"
       :format="getFormat('', '', false, true, false)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       input-class="border-none"
       @change="(v) => fieldChange(v, field)"
     />
@@ -169,7 +169,7 @@
       v-else-if="field.fieldtype === 'Datetime'"
       :value="data[field.fieldname]"
       :format="getFormat('', '', true, true, false)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       input-class="border-none"
       @change="(v) => fieldChange(v, field)"
     />
@@ -177,8 +177,20 @@
       v-else-if="field.fieldtype === 'Date'"
       :value="data[field.fieldname]"
       :format="getFormat('', '', true, false, false)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       input-class="border-none"
+      @change="(v) => fieldChange(v, field)"
+    />
+    <PoiAddressControl
+      v-else-if="field.fieldname === 'poi_address'"
+      :address="data.poi_address"
+      :district="data.district"
+      :location="data.poi_location"
+      :poi-id="data.amap_poi_id"
+      :name="data.organization || data.lead_name"
+      :read-only="Boolean(field.read_only)"
+      :editable="!Boolean(field.read_only)"
+      :placeholder="getFieldPlaceholder(field)"
       @change="(v) => fieldChange(v, field)"
     />
     <FormControl
@@ -187,21 +199,21 @@
       "
       type="textarea"
       :value="data[field.fieldname]"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
     <Password
       v-else-if="field.fieldtype === 'Password'"
       :value="data[field.fieldname]"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :description="getFieldDescription(field)"
       @change="fieldChange($event.target.value, field)"
     />
     <FormattedInput
       v-else-if="field.fieldtype === 'Int'"
       type="text"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :value="data[field.fieldname] || '0'"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
@@ -211,7 +223,7 @@
       v-else-if="field.fieldtype === 'Percent'"
       type="text"
       :value="getFormattedPercent(field.fieldname, data)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
@@ -220,7 +232,7 @@
       v-else-if="field.fieldtype === 'Float'"
       type="text"
       :value="getFormattedFloat(field.fieldname, data)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
@@ -229,7 +241,7 @@
       v-else-if="field.fieldtype === 'Currency'"
       type="text"
       :value="getFormattedCurrency(field.fieldname, data, parentDoc)"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
       @change="fieldChange(flt($event.target.value), field)"
@@ -237,7 +249,7 @@
     <DurationInput
       v-else-if="field.fieldtype === 'Duration'"
       :value="data[field.fieldname]"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
       @change="(v) => fieldChange(v, field)"
@@ -272,7 +284,7 @@
     <TextEditorControl
       v-else-if="field.fieldtype === 'Text Editor'"
       :value="data[field.fieldname]"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :disabled="Boolean(field.read_only)"
       @change="(v) => fieldChange(v, field)"
     />
@@ -285,7 +297,7 @@
     <FormControl
       v-else
       type="text"
-      :placeholder="getPlaceholder(field)"
+      :placeholder="getFieldPlaceholder(field)"
       :value="data[field.fieldname]"
       :disabled="Boolean(field.read_only)"
       :description="getFieldDescription(field)"
@@ -302,6 +314,7 @@ import AttachControl from '@/components/Controls/AttachControl.vue'
 import HtmlControl from '@/components/Controls/HtmlControl.vue'
 import TextEditorControl from '@/components/Controls/TextEditorControl.vue'
 import GeolocationControl from '@/components/Controls/GeolocationControl.vue'
+import PoiAddressControl from '@/components/Controls/PoiAddressControl.vue'
 import ButtonControl, {
   getButtonTheme,
   getButtonVariant,
@@ -319,7 +332,7 @@ import {
   isNull,
   interpolateTemplate,
 } from '@/utils'
-import { translateLabel, translateSelectOptions } from '@/utils/translateField'
+import { translateLabel, translateSelectOptions, getFieldPlaceholder } from '@/utils/translateField'
 import { flt, formatNumber, formatCurrency } from '@/utils/numberFormat.js'
 import { getMeta } from '@/stores/meta'
 import { parseLinkFilters } from '@/utils/fieldTransforms'
@@ -512,7 +525,6 @@ const field = computed(() => {
   let _field = {
     ...field,
     filters: parseLinkFilters(field.link_filters),
-    placeholder: field.placeholder || field.label,
     display_via_depends_on: displayViaDependsOn,
     mandatory_via_depends_on: evaluateDependsOnValue(
       field.mandatory_depends_on,
@@ -556,17 +568,6 @@ const resolvedHtml = computed(() => {
 
 const getFieldDescription = (f) => {
   return f.description ? translateLabel(f.description) : f.description
-}
-
-const getPlaceholder = (field) => {
-  if (field.placeholder) {
-    return __(field.placeholder)
-  }
-  if (['Select', 'Link'].includes(field.fieldtype)) {
-    return __('Select {0}', [__(field.label)])
-  } else {
-    return __('Enter {0}', [__(field.label)])
-  }
 }
 
 const getOptions = (options) => {

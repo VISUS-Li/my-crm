@@ -67,8 +67,14 @@
             <IndicatorIcon :class="item.color" />
           </div>
           <div v-else-if="column.key === 'lead_name'">
+            <LeadPhotoThumbnail
+              v-if="item.image"
+              :src="item.image"
+              :alt="item.label"
+              size="md"
+            />
             <Avatar
-              v-if="item.label"
+              v-else-if="item.label"
               class="flex items-center"
               :image="item.image"
               :label="item.image_label"
@@ -189,6 +195,22 @@
                 })
             "
           />
+          <div v-else-if="column.key === 'poi_address'" class="truncate text-p-base">
+            <button
+              v-if="canOpenPoiMap(row) && getPoiAddressLabel(row)"
+              type="button"
+              class="inline-flex max-w-full items-center gap-1 truncate text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+              :title="__('View on map')"
+              @click.stop="openPoiMap(row)"
+            >
+              <span class="lucide-map-pin size-3.5 shrink-0" aria-hidden="true" />
+              <span class="truncate">{{ getPoiAddressLabel(row) }}</span>
+            </button>
+            <span v-else-if="getPoiAddressLabel(row)" class="truncate">{{
+              getPoiAddressLabel(row)
+            }}</span>
+            <span v-else class="text-ink-gray-4">—</span>
+          </div>
           <div
             v-else-if="label"
             class="truncate text-p-base"
@@ -237,6 +259,7 @@ import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import RatingInput from '@/components/Controls/RatingInput.vue'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
+import LeadPhotoThumbnail from '@/components/Leads/LeadPhotoThumbnail.vue'
 import ListBulkActions from '@/components/ListBulkActions.vue'
 import ListRows from '@/components/ListViews/ListRows.vue'
 import { formatDuration } from '@/utils'
@@ -258,6 +281,11 @@ import { globalStore } from '@/stores/global'
 import { usePhoneSalesMode } from '@/composables/usePhoneSalesMode'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import {
+  canOpenAmapMarker,
+  getPoiDisplayAddress,
+  openAmapMarker,
+} from '@/utils/amapUri'
 
 defineProps({
   rows: { type: Array, required: true },
@@ -290,6 +318,27 @@ const list = defineModel('list', { type: Object })
 
 function getLabel(label, column) {
   return getListCellLabel(label, column, { formatDuration })
+}
+
+function getPoiAddressLabel(row) {
+  return getPoiDisplayAddress(row.poi_address, row.district)
+}
+
+function canOpenPoiMap(row) {
+  return canOpenAmapMarker({
+    location: row.poi_location,
+    poiId: row.amap_poi_id,
+  })
+}
+
+function openPoiMap(row) {
+  openAmapMarker({
+    address: row.poi_address,
+    district: row.district,
+    location: row.poi_location,
+    poiId: row.amap_poi_id,
+    name: row.organization || row.lead_name,
+  })
 }
 
 const isLikeFilterApplied = computed(() => {

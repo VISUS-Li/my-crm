@@ -481,7 +481,7 @@ BULK_TRANSLATIONS: dict[str, str] = {
     'Setting Up': '正在设置',
     'Setting disabled successfully': '设置已禁用',
     'Setting enabled successfully': '设置已启用',
-    'Setting up Frappe Mail requires you to have an API key and API Secret of your email account. Read more': '设置 Frappe Mail 需要邮件账户的 API Key 和 API Secret。了解更多',
+    'Setting up Trip Mail requires you to have an API key and API Secret of your email account. Read more': '设置 Trip Mail 需要邮件账户的 API Key 和 API Secret。了解更多',
     'Setting up GMail requires you to enable two factor authentication and app specific passwords. Read more': '设置 Gmail 需要启用双因素认证和应用专用密码。了解更多',
     'Setting up Outlook requires you to enable two factor authentication and app specific passwords. Read more': '设置 Outlook 需要启用双因素认证和应用专用密码。了解更多',
     'Setting up Sendgrid requires you to enable two factor authentication and app specific passwords. Read more': '设置 Sendgrid 需要启用双因素认证和应用专用密码。了解更多',

@@ -63,8 +63,22 @@ docs/amap-poi-*-test-report.md
 # pytest
 .pytest_cache/
 
+# Vitest / Vite caches (when created outside node_modules)
+.vitest/
+frontend/.vitest/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Windows metadata
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
 # Yarn Berry local state (keep .yarnrc.yml)
 frontend/.yarn/
+
+# NOTE: frontend/tests/unit/*.test.js are project unit tests — keep tracked.
 
 # Local i18n diagnostics / codemods (one-off dev utilities)
 scripts/list_empty_po.py

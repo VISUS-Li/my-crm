@@ -7,6 +7,13 @@ import { gemoji } from 'gemoji'
 import DOMPurify from 'dompurify'
 import { toast, dayjsLocal, dayjs, getConfig, FeatherIcon } from 'frappe-ui'
 import { h } from 'vue'
+import {
+  normalizeDatetime,
+  getDefaultDateTimeFormat,
+  getLocaleBadgeDateFormat,
+} from '@/utils/datetime'
+
+export { getDefaultDateTimeFormat, getLocaleBadgeDateFormat } from '@/utils/datetime'
 
 export function formatTime(seconds) {
   const days = Math.floor(seconds / (3600 * 24))
@@ -35,6 +42,7 @@ export function formatTime(seconds) {
 
 export function formatDate(date, format, onlyDate = false, onlyTime = false) {
   if (!date) return ''
+  date = normalizeDatetime(date)
   format = getFormat(date, format, onlyDate, onlyTime, false)
   return dayjsLocal(date).format(format)
 }
@@ -72,14 +80,6 @@ export function formatDuration(totalSeconds, longForm = false) {
 
 function getUserLanguage() {
   return window.sysdefaults?.language || 'en'
-}
-
-function getDefaultDateTimeFormat() {
-  const lang = getUserLanguage()
-  if (lang === 'zh' || lang.startsWith('zh-')) {
-    return 'YYYY年M月D日 HH:mm'
-  }
-  return 'ddd, MMM D, YYYY h:mm a'
 }
 
 export function getFormat(

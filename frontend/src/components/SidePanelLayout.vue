@@ -40,14 +40,14 @@
                   >
                     <Tooltip
                       v-if="!['Button', 'HTML'].includes(field.fieldtype)"
-                      :text="__(field.label)"
+                      :text="translateLabel(field.label)"
                       :hoverDelay="1"
                     >
                       <div
                         class="w-[35%] min-w-20 shrink-0 flex items-center gap-0.5"
                       >
                         <div class="truncate text-p-sm text-ink-gray-5">
-                          {{ __(field.label) }}
+                          {{ translateLabel(field.label) }}
                         </div>
                         <div
                           v-if="
@@ -75,6 +75,7 @@
                         <div
                           v-if="
                             field.read_only &&
+                            !isLeadPhoneField(field) &&
                             ![
                               'Int',
                               'Float',
@@ -116,6 +117,18 @@
                             fieldChange($event.target.checked, field)
                           "
                         />
+                        <PoiAddressControl
+                          v-else-if="field.fieldname === 'poi_address'"
+                          :address="doc.poi_address"
+                          :district="doc.district"
+                          :location="doc.poi_location"
+                          :poi-id="doc.amap_poi_id"
+                          :name="doc.organization || doc.lead_name"
+                          :read-only="Boolean(field.read_only)"
+                          :editable="!Boolean(field.read_only)"
+                          :placeholder="getFieldPlaceholder(field)"
+                          @change="(v) => fieldChange(v, field)"
+                        />
                         <FormControl
                           v-else-if="
                             [
@@ -151,7 +164,7 @@
                           doctype="User"
                           :filters="field.filters"
                           :placeholder="
-                            __('Select {0}...', [translateLabel(field.label)])
+                            getFieldPlaceholder(field)
                           "
                           :hideMe="true"
                           @change="(v) => fieldChange(v, field)"
@@ -349,6 +362,14 @@
                           :disabled="Boolean(field.read_only)"
                           @change="(v) => fieldChange(v, field)"
                         />
+                        <LeadPhoneControl
+                          v-else-if="isLeadPhoneField(field)"
+                          :modelValue="doc[field.fieldname]"
+                          :lead-id="docname"
+                          :read-only="Boolean(field.read_only)"
+                          :placeholder="getFieldPlaceholder(field)"
+                          @change="(v) => fieldChange(v, field)"
+                        />
                         <FormControl
                           v-else
                           class="form-control"
@@ -418,6 +439,8 @@ import EditIcon from '@/components/Icons/EditIcon.vue'
 import Link from '@/components/Controls/Link.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import SidePanelModal from '@/components/Modals/SidePanelModal.vue'
+import LeadPhoneControl from '@/components/Leads/LeadPhoneControl.vue'
+import PoiAddressControl from '@/components/Controls/PoiAddressControl.vue'
 import { getMeta } from '@/stores/meta'
 import { parseLinkFilters } from '@/utils/fieldTransforms'
 import { usersStore } from '@/stores/users'
@@ -428,7 +451,7 @@ import {
   isNull,
   interpolateTemplate,
 } from '@/utils'
-import { translateLabel, translateSelectOptions, translateFieldValue } from '@/utils/translateField'
+import { translateLabel, translateSelectOptions, translateFieldValue, getFieldPlaceholder } from '@/utils/translateField'
 import { flt } from '@/utils/numberFormat.js'
 import { Tooltip, DateTimePicker, DatePicker, TimePicker } from 'frappe-ui'
 import { useDocument } from '@/data/document'
@@ -481,14 +504,6 @@ const _sections = computed(() => {
   })
 })
 
-function getFieldPlaceholder(field) {
-  if (field.placeholder) return translateLabel(field.placeholder)
-  if (['Select', 'Link', 'User', 'Dynamic Link'].includes(field.fieldtype)) {
-    return __('Select {0}...', [translateLabel(field.label)])
-  }
-  return __('Enter {0}', [translateLabel(field.label)])
-}
-
 function parsedField(field) {
   // Clone to avoid mutating the cached layout data
   field = { ...field }
@@ -532,7 +547,6 @@ function parsedField(field) {
   let _field = {
     ...field,
     filters: parseLinkFilters(field.link_filters),
-    placeholder: field.placeholder || field.label,
     display_via_depends_on: evaluateDependsOnValue(field.depends_on, doc.value),
     mandatory_via_depends_on: evaluateDependsOnValue(
       field.mandatory_depends_on,
@@ -589,6 +603,15 @@ function parsedSection(section, editButtonAdded) {
   }
 
   return section
+}
+
+function isLeadPhoneField(field) {
+  return (
+    props.doctype === 'CRM Lead' &&
+    field.fieldtype === 'Data' &&
+    field.options === 'Phone' &&
+    ['mobile_no', 'phone'].includes(field.fieldname)
+  )
 }
 
 function isFieldVisible(field, scriptHidden) {
