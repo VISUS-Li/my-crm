@@ -68,6 +68,11 @@ fi
 bench --site "${SITE_NAME}" set-config developer_mode "${DEVELOPER_MODE}"
 bench --site "${SITE_NAME}" set-config host_name "${SERVER_URL}"
 bench --site "${SITE_NAME}" set-config mute_emails 1
+if [ -n "${TRIPAI_BASE_URL:-}" ]; then
+  bench --site "${SITE_NAME}" set-config tripai_base_url "${TRIPAI_BASE_URL}"
+  bench --site "${SITE_NAME}" set-config tripai_project_key "${TRIPAI_PROJECT_KEY:-nextdevtpl}"
+  bench --site "${SITE_NAME}" set-config tripai_tool_key "${TRIPAI_TOOL_KEY:-my-crm}"
+fi
 bench use "${SITE_NAME}"
 
 bench --site "${SITE_NAME}" migrate

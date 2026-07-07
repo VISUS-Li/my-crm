@@ -44,8 +44,8 @@ services:
     volumes:
       - crm-sites:/home/frappe/frappe-bench/sites
     ports:
-      - "${APP_PUBLISH_PORT:-8000}:8000"
-      - "${SOCKETIO_PUBLISH_PORT:-9000}:9000"
+      - "${APP_PUBLISH_HOST:-127.0.0.1}:${APP_PUBLISH_PORT:-8000}:8000"
+      - "${APP_PUBLISH_HOST:-127.0.0.1}:${SOCKETIO_PUBLISH_PORT:-9000}:9000"
     depends_on:
       mariadb:
         condition: service_healthy

@@ -29,7 +29,8 @@ usage() {
   echo "子命令:"
   echo "  init [version]  新服务器：mariadb + redis + crm-app + Nginx + HTTPS"
   echo "  app  [version]  已部署：仅 pull 并重建 crm-app"
-  echo "  nginx           已部署栈：生成/刷新 Nginx 配置并申请或续期证书"
+  echo "  nginx           Docker Nginx + HTTPS（ENABLE_NGINX=true 时）"
+  echo "  nginx-host      宿主机 Nginx 反代 + HTTPS（HOST_NGINX=true 时）"
   echo "  reset           停止栈并删除 ${PROD_DIR:-/opt/crm}（需 CONFIRM_RESET=yes）"
 }
 
@@ -68,6 +69,11 @@ load_release_vars() {
   SWAP_SIZE_GB="${SWAP_SIZE_GB:-2}"
   KEEP_DB_VOLUME="${KEEP_DB_VOLUME:-true}"
   DEVELOPER_MODE="${DEVELOPER_MODE:-0}"
+  HOST_NGINX="${HOST_NGINX:-false}"
+  HOST_NGINX_CONF="${HOST_NGINX_CONF:-/etc/nginx/conf.d/crm.conf}"
+  TRIPAI_BASE_URL="${TRIPAI_BASE_URL:-}"
+  TRIPAI_PROJECT_KEY="${TRIPAI_PROJECT_KEY:-nextdevtpl}"
+  TRIPAI_TOOL_KEY="${TRIPAI_TOOL_KEY:-my-crm}"
 
   if [ -z "${DOMAIN}" ]; then
     case "${SERVER_URL}" in
@@ -78,6 +84,20 @@ load_release_vars() {
     esac
   fi
   [ -n "${SITE_NAME}" ] || SITE_NAME="${DOMAIN}"
+
+  # 47.95.2.50 等已有宿主机 Nginx：复用 /etc/nginx，容器只绑定 127.0.0.1
+  if [ "${HOST_NGINX}" = "true" ]; then
+    COMPOSE_SRC="${REPO_ROOT}/deploy/docker-compose.prod-ip.yml"
+    APP_PUBLISH_HOST="127.0.0.1"
+    APP_UPSTREAM_HOST="127.0.0.1"
+    ENABLE_NGINX="false"
+    case "${SERVER_URL}" in
+      http://*) SERVER_URL="https://${DOMAIN}" ;;
+    esac
+    SERVER_URL="${SERVER_URL:-https://${DOMAIN}}"
+    log "模式: 宿主机 Nginx（${HOST_NGINX_CONF}）→ 127.0.0.1:${APP_PUBLISH_PORT}"
+    return 0
+  fi
 
   ENABLE_NGINX="$(resolve_enable_nginx)"
   if [ "${ENABLE_NGINX}" = "true" ]; then
@@ -126,9 +146,9 @@ write_compose_dotenv() {
   cat > "${env_file}" <<EOF
 DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
 CRM_IMAGE=${image}
-APP_PUBLISH_HOST=${APP_PUBLISH_HOST}
-APP_PUBLISH_PORT=${APP_PUBLISH_PORT}
-SOCKETIO_PUBLISH_PORT=${SOCKETIO_PUBLISH_PORT}
+APP_PUBLISH_HOST=${APP_PUBLISH_HOST:-127.0.0.1}
+APP_PUBLISH_PORT=${APP_PUBLISH_PORT:-8000}
+SOCKETIO_PUBLISH_PORT=${SOCKETIO_PUBLISH_PORT:-9000}
 EOF
   chmod 600 "${env_file}" 2>/dev/null || true
 }
@@ -175,6 +195,9 @@ DEVELOPER_MODE=${DEVELOPER_MODE}
 MARIADB_HOST=mariadb
 REDIS_HOST=redis
 DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+TRIPAI_BASE_URL=${TRIPAI_BASE_URL}
+TRIPAI_PROJECT_KEY=${TRIPAI_PROJECT_KEY}
+TRIPAI_TOOL_KEY=${TRIPAI_TOOL_KEY}
 EOF
   chmod 600 "${release_file}" 2>/dev/null || true
   log "已写入 ${release_file}"
@@ -196,7 +219,7 @@ compose_in_prod_dir() {
 }
 
 wait_for_public_site() {
-  if [ "${ENABLE_NGINX}" != "true" ]; then
+  if [ "${ENABLE_NGINX}" != "true" ] && [ "${HOST_NGINX}" != "true" ]; then
     return 0
   fi
   local url="https://${DOMAIN}/api/method/ping"
@@ -209,6 +232,22 @@ wait_for_public_site() {
     sleep 3
   done
   log "警告：HTTPS 探活未通过，请检查 DNS / 安全组 / certbot 日志"
+}
+
+run_host_nginx_setup() {
+  log "配置宿主机 Nginx（${HOST_NGINX_CONF}）..."
+  setup_host_nginx_tls \
+    "${REPO_ROOT}" \
+    "${PROD_DIR}" \
+    "${DOMAIN}" \
+    "${SITE_NAME}" \
+    "${HOST_NGINX_CONF}" \
+    "${APP_PUBLISH_PORT}" \
+    "${SOCKETIO_PUBLISH_PORT}" \
+    "${CERTBOT_EMAIL}" \
+    "${CERT_PROVIDER:-acme-dns-ali}"
+  wait_for_public_site
+  log "宿主机 Nginx 已启用: https://${DOMAIN}/crm"
 }
 
 run_nginx_setup() {
@@ -258,7 +297,9 @@ cmd_init() {
   verify_crm_container crm-app
   docker logs crm-app --tail 50 2>&1 || true
 
-  if [ "${ENABLE_NGINX}" = "true" ]; then
+  if [ "${HOST_NGINX}" = "true" ]; then
+    run_host_nginx_setup
+  elif [ "${ENABLE_NGINX}" = "true" ]; then
     run_nginx_setup "true"
   fi
 
@@ -296,6 +337,14 @@ cmd_app() {
   log "应用已更新: $(full_image "${version}")"
 }
 
+cmd_nginx_host() {
+  load_release_vars
+  [ "${HOST_NGINX}" = "true" ] || die "请在 release.env 设置 HOST_NGINX=true"
+  [ -d "${PROD_DIR}" ] || die "未找到 ${PROD_DIR}，请先 deploy.sh init"
+  wait_app_ready "${APP_PUBLISH_PORT}" || die "crm-app 未就绪（127.0.0.1:${APP_PUBLISH_PORT}）"
+  run_host_nginx_setup
+}
+
 cmd_nginx() {
   load_release_vars
   ensure_docker
@@ -331,10 +380,11 @@ main() {
   case "${cmd}" in
     init) shift; cmd_init "$@" ;;
     app) shift; cmd_app "$@" ;;
+    nginx-host) cmd_nginx_host ;;
     nginx) cmd_nginx ;;
     reset) cmd_reset ;;
     -h|--help|help) usage ;;
-    "") die "请指定: init | app | nginx | reset" ;;
+    "") die "请指定: init | app | nginx | nginx-host | reset" ;;
     *) die "未知子命令: ${cmd}" ;;
   esac
 }

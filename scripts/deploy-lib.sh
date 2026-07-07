@@ -445,3 +445,70 @@ ensure_docker() {
   }
   docker_compose_bin >/dev/null
 }
+
+host_cert_exists() {
+  local domain="$1"
+  [ -f "/etc/letsencrypt/live/${domain}/fullchain.pem" ]
+}
+
+setup_host_nginx_tls() {
+  local repo_root="$1"
+  local prod_dir="$2"
+  local domain="$3"
+  local site_name="$4"
+  local nginx_conf="$5"
+  local web_port="$6"
+  local socketio_port="$7"
+  local certbot_email="$8"
+  local cert_provider="${9:-acme-dns-ali}"
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+
+  mkdir -p "$(dirname "${nginx_conf}")" /var/www/certbot
+
+  render_host_nginx_config() {
+    local mode="$1"
+    local out="$2"
+    NGINX_MODE="${mode}" \
+      DOMAIN="${domain}" \
+      SITE_NAME="${site_name}" \
+      APP_UPSTREAM_HOST="127.0.0.1" \
+      WEB_PORT="${web_port}" \
+      SOCKETIO_PORT="${socketio_port}" \
+      bash "${repo_root}/deploy/nginx/render-nginx-crm.sh" "${out}"
+  }
+
+  if [ "${cert_provider}" = "manual" ]; then
+    host_cert_exists "${domain}" || {
+      echo "错误：manual 模式请先导入证书到 /etc/letsencrypt/live/${domain}/" >&2
+      return 1
+    }
+    render_host_nginx_config "full" "${tmp_dir}"
+    cp "${tmp_dir}/00-crm.conf" "${nginx_conf}"
+    nginx -t && systemctl reload nginx
+    rm -rf "${tmp_dir}"
+    return 0
+  fi
+
+  render_host_nginx_config "http" "${tmp_dir}"
+  cp "${tmp_dir}/00-crm.conf" "${nginx_conf}"
+  nginx -t && systemctl reload nginx
+
+  if ! host_cert_exists "${domain}"; then
+    echo "申请 Let's Encrypt 证书: ${domain}"
+    certbot certonly --webroot -w /var/www/certbot \
+      -d "${domain}" --email "${certbot_email}" \
+      --agree-tos --no-eff-email --non-interactive \
+      || {
+        echo "certbot 失败；可改用阿里云证书 + CERT_PROVIDER=manual" >&2
+        rm -rf "${tmp_dir}"
+        return 1
+      }
+  fi
+
+  render_host_nginx_config "full" "${tmp_dir}"
+  cp "${tmp_dir}/00-crm.conf" "${nginx_conf}"
+  nginx -t && systemctl reload nginx
+  rm -rf "${tmp_dir}"
+  echo "宿主机 Nginx HTTPS 已配置: ${nginx_conf}"
+}
