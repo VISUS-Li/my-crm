@@ -10614,3 +10614,90 @@ msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的
 
 msgid "Are you sure you want to delete \"{0}\" view?"
 msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Sync Segments"
+msgstr "同步分段"
+
+msgid "{0} segments"
+msgstr "{0} 个分段"
+
+msgid "Keyword"
+msgstr "关键词"
+
+msgid "Fetched"
+msgstr "已抓取"
+
+msgid "Reported"
+msgstr "高德报告"
+
+msgid "Pages"
+msgstr "页数"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Truncated"
+msgstr "结果截断"
+
+msgid "Recent Sync Events"
+msgstr "最近同步事件"
+
+msgid "Photo"
+msgstr "图片"
+
+msgid "Phones"
+msgstr "电话"
+
+msgid "Rating / Cost"
+msgstr "评分 / 人均"
+
+msgid "Sync"
+msgstr "同步"
+
+msgid "CNY {0}"
+msgstr "{0} 元"
+
+msgid "Inserted"
+msgstr "已新增"
+
+msgid "Updated"
+msgstr "已更新"
+
+msgid "duplicate_phone"
+msgstr "电话重复，已关联已有线索"
+
+msgid "job_started"
+msgstr "任务开始"
+
+msgid "segment_started"
+msgstr "分段开始"
+
+msgid "import_started"
+msgstr "开始导入"
+
+msgid "job_completed"
+msgstr "任务完成"
+
+msgid "job_failed"
+msgstr "任务失败"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "job_start_failed"
+msgstr "任务启动失败"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"

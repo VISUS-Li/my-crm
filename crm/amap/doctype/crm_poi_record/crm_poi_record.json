@@ -6,23 +6,48 @@
  "engine": "InnoDB",
  "field_order": [
   "amap_poi_id",
+  "parent_poi_id",
   "name1",
   "tel",
   "tel_normalized",
+  "all_phones",
   "has_valid_phone",
   "column_break_contact",
+  "website",
+  "email",
+  "postcode",
   "address",
   "location",
   "section_break_meta",
   "poi_type",
   "poi_typecode",
+  "biz_type",
+  "business_area",
+  "tag",
+  "rating",
+  "cost",
+  "alias",
   "province",
+  "pcode",
   "city",
+  "citycode",
   "district",
+  "adcode",
+  "section_break_media",
+  "primary_photo_url",
+  "photo_count",
+  "photos",
+  "section_break_phones",
+  "phones",
   "column_break_links",
   "lead",
   "sync_job",
   "job_owner",
+  "last_synced_at",
+  "source_api_version",
+  "sync_action",
+  "skip_reason",
+  "is_truncated_source",
   "section_break_raw",
   "raw_json"
  ],
@@ -35,6 +60,11 @@
    "label": "Amap POI ID",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "parent_poi_id",
+   "fieldtype": "Data",
+   "label": "Parent POI ID"
   },
   {
    "fieldname": "name1",
@@ -55,6 +85,11 @@
    "label": "Normalized Phone"
   },
   {
+   "fieldname": "all_phones",
+   "fieldtype": "Small Text",
+   "label": "All Phones"
+  },
+  {
    "default": "0",
    "fieldname": "has_valid_phone",
    "fieldtype": "Check",
@@ -64,6 +99,21 @@
   {
    "fieldname": "column_break_contact",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "website",
+   "fieldtype": "Data",
+   "label": "Website"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "postcode",
+   "fieldtype": "Data",
+   "label": "Postcode"
   },
   {
    "fieldname": "address",
@@ -92,10 +142,45 @@
    "label": "POI Type Code"
   },
   {
+   "fieldname": "biz_type",
+   "fieldtype": "Data",
+   "label": "Business Type"
+  },
+  {
+   "fieldname": "business_area",
+   "fieldtype": "Data",
+   "label": "Business Area"
+  },
+  {
+   "fieldname": "tag",
+   "fieldtype": "Data",
+   "label": "Tag"
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Data",
+   "label": "Rating"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Data",
+   "label": "Cost"
+  },
+  {
+   "fieldname": "alias",
+   "fieldtype": "Data",
+   "label": "Alias"
+  },
+  {
    "fieldname": "province",
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Province"
+  },
+  {
+   "fieldname": "pcode",
+   "fieldtype": "Data",
+   "label": "Province Code"
   },
   {
    "fieldname": "city",
@@ -104,10 +189,53 @@
    "label": "City"
   },
   {
+   "fieldname": "citycode",
+   "fieldtype": "Data",
+   "label": "City Code"
+  },
+  {
    "fieldname": "district",
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "District"
+  },
+  {
+   "fieldname": "adcode",
+   "fieldtype": "Data",
+   "label": "Adcode"
+  },
+  {
+   "fieldname": "section_break_media",
+   "fieldtype": "Section Break",
+   "label": "Media"
+  },
+  {
+   "fieldname": "primary_photo_url",
+   "fieldtype": "Small Text",
+   "label": "Primary Photo URL"
+  },
+  {
+   "default": "0",
+   "fieldname": "photo_count",
+   "fieldtype": "Int",
+   "label": "Photo Count"
+  },
+  {
+   "fieldname": "photos",
+   "fieldtype": "Table",
+   "label": "Photos",
+   "options": "CRM POI Photo"
+  },
+  {
+   "fieldname": "section_break_phones",
+   "fieldtype": "Section Break",
+   "label": "Phones"
+  },
+  {
+   "fieldname": "phones",
+   "fieldtype": "Table",
+   "label": "Phones",
+   "options": "CRM POI Phone"
   },
   {
    "fieldname": "column_break_links",
@@ -132,6 +260,33 @@
    "in_standard_filter": 1,
    "label": "Job Owner",
    "options": "User"
+  },
+  {
+   "fieldname": "last_synced_at",
+   "fieldtype": "Datetime",
+   "label": "Last Synced At"
+  },
+  {
+   "default": "v3",
+   "fieldname": "source_api_version",
+   "fieldtype": "Data",
+   "label": "Source API Version"
+  },
+  {
+   "fieldname": "sync_action",
+   "fieldtype": "Data",
+   "label": "Sync Action"
+  },
+  {
+   "fieldname": "skip_reason",
+   "fieldtype": "Data",
+   "label": "Skip Reason"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_truncated_source",
+   "fieldtype": "Check",
+   "label": "Is Truncated Source"
   },
   {
    "fieldname": "section_break_raw",

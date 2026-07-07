@@ -103,6 +103,58 @@
         <pre class="mt-2 whitespace-pre-wrap text-p-sm text-red-700">{{ __(job.error_log) }}</pre>
       </div>
 
+      <div v-if="job.segments?.length" class="rounded-lg border overflow-hidden">
+        <div class="flex items-center justify-between border-b px-4 py-3">
+          <div class="text-base-medium">{{ __('Sync Segments') }}</div>
+          <div class="text-p-sm text-ink-gray-5">{{ __('{0} segments', [job.segments.length]) }}</div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-p-sm">
+            <thead class="bg-surface-gray-1 text-ink-gray-5">
+              <tr>
+                <th class="px-4 py-2 text-left">{{ __('Keyword') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Status') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Fetched') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Reported') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Pages') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Warning') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="segment in job.segments" :key="segment.name" class="border-t">
+                <td class="px-4 py-2">{{ segment.keyword || '-' }}</td>
+                <td class="px-4 py-2">
+                  <Badge :theme="segment.truncated ? 'orange' : STATUS_COLORS[segment.status] || 'gray'" size="sm">
+                    {{ __(segment.status) }}
+                  </Badge>
+                </td>
+                <td class="px-4 py-2">{{ segment.fetched_count || 0 }}</td>
+                <td class="px-4 py-2">{{ segment.reported_count || 0 }}</td>
+                <td class="px-4 py-2">{{ segment.page_count || 0 }}</td>
+                <td class="px-4 py-2 max-w-[260px] truncate">
+                  <span v-if="segment.truncated" class="text-orange-700">{{ __('Truncated') }}</span>
+                  <span v-else-if="segment.error_message" class="text-red-700">{{ segment.error_message }}</span>
+                  <span v-else class="text-ink-gray-4">-</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div v-if="job.events?.length" class="rounded-lg border overflow-hidden">
+        <div class="border-b px-4 py-3 text-base-medium">{{ __('Recent Sync Events') }}</div>
+        <div class="divide-y">
+          <div v-for="event in job.events" :key="event.name" class="grid grid-cols-[160px_1fr] gap-3 px-4 py-2 text-p-sm">
+            <div class="text-ink-gray-5">{{ __(event.event_type) }}</div>
+            <div class="min-w-0">
+              <div class="truncate">{{ event.message ? __(event.message) : '-' }}</div>
+              <div class="text-p-xs text-ink-gray-4">{{ event.creation }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div
         v-if="['Completed', 'Running'].includes(job.status)"
         class="rounded-lg border overflow-hidden"
@@ -124,11 +176,14 @@
           <table class="w-full text-p-sm">
             <thead class="bg-surface-gray-1 text-ink-gray-5">
               <tr>
+                <th class="px-4 py-2 text-left">{{ __('Photo') }}</th>
                 <th class="px-4 py-2 text-left">{{ __('Name') }}</th>
-                <th class="px-4 py-2 text-left">{{ __('Phone') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Phones') }}</th>
                 <th class="px-4 py-2 text-left">{{ __('Address') }}</th>
                 <th class="px-4 py-2 text-left">{{ __('District') }}</th>
                 <th class="px-4 py-2 text-left">{{ __('Type') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Rating / Cost') }}</th>
+                <th class="px-4 py-2 text-left">{{ __('Sync') }}</th>
                 <th class="px-4 py-2 text-left">{{ __('Lead') }}</th>
               </tr>
             </thead>
@@ -138,16 +193,47 @@
                 :key="record.name"
                 class="border-t hover:bg-surface-gray-1"
               >
-                <td class="px-4 py-2 max-w-[160px] truncate">{{ record.name1 }}</td>
                 <td class="px-4 py-2">
-                  <span v-if="record.tel_normalized || record.tel">
-                    {{ record.tel_normalized || record.tel }}
-                  </span>
+                  <img
+                    v-if="record.primary_photo_url"
+                    :src="record.primary_photo_url"
+                    :alt="record.name1"
+                    class="size-12 rounded object-cover"
+                    loading="lazy"
+                  />
+                  <div v-else class="flex size-12 items-center justify-center rounded bg-surface-gray-2 text-ink-gray-4">
+                    -
+                  </div>
+                </td>
+                <td class="px-4 py-2 max-w-[160px] truncate">{{ record.name1 }}</td>
+                <td class="px-4 py-2 min-w-[180px]">
+                  <div v-if="phoneValues(record).length" class="flex max-w-[220px] flex-wrap gap-1">
+                    <Badge
+                      v-for="phone in phoneValues(record)"
+                      :key="phone"
+                      theme="gray"
+                      size="sm"
+                    >
+                      {{ phone }}
+                    </Badge>
+                  </div>
                   <span v-else class="text-ink-gray-4">{{ __('No phone') }}</span>
                 </td>
                 <td class="px-4 py-2 max-w-[220px] truncate">{{ record.address || '-' }}</td>
                 <td class="px-4 py-2">{{ record.district || record.city || '-' }}</td>
                 <td class="px-4 py-2 max-w-[120px] truncate">{{ record.poi_type || '-' }}</td>
+                <td class="px-4 py-2">
+                  <span v-if="record.rating || record.cost">
+                    {{ [record.rating, record.cost ? __('CNY {0}', [record.cost]) : ''].filter(Boolean).join(' / ') }}
+                  </span>
+                  <span v-else class="text-ink-gray-4">-</span>
+                </td>
+                <td class="px-4 py-2">
+                  <div>{{ record.sync_action ? __(record.sync_action) : '-' }}</div>
+                  <div v-if="record.skip_reason" class="text-p-xs text-orange-700">
+                    {{ __(record.skip_reason) }}
+                  </div>
+                </td>
                 <td class="px-4 py-2">
                   <router-link
                     v-if="record.lead"
@@ -331,6 +417,28 @@ function clearPoll() {
 
 function formatDate(value) {
   return value || '-'
+}
+
+function phoneValues(record) {
+  const values = []
+  if (record.all_phones) {
+    values.push(
+      ...String(record.all_phones)
+        .split(/\n|,|，|;|；/)
+        .map((phone) => phone.trim())
+        .filter(Boolean),
+    )
+  }
+  if (record.tel_normalized) values.push(record.tel_normalized)
+  if (record.tel) {
+    values.push(
+      ...String(record.tel)
+        .split(/\n|,|，|;|；/)
+        .map((phone) => phone.trim())
+        .filter(Boolean),
+    )
+  }
+  return [...new Set(values)].slice(0, 4)
 }
 
 async function loadLicenseStatus() {

@@ -76,6 +76,7 @@ class AmapClient:
 		types: str = "",
 		limit: int = 10,
 		page: int = 1,
+		citylimit: bool = True,
 	) -> APIResult:
 		params = {
 			"keywords": keywords,
@@ -84,6 +85,8 @@ class AmapClient:
 			"page": page,
 			"extensions": "all",
 		}
+		if citylimit and city:
+			params["citylimit"] = "true"
 		if types:
 			params["types"] = types
 		return self._search(AMAP_TEXT_URL, params)
@@ -189,10 +192,14 @@ class AmapClient:
 			return None
 		return (bounds.min_lng, bounds.min_lat, bounds.max_lng, bounds.max_lat)
 
-	def _search(self, url: str, params: dict[str, Any]) -> APIResult:
+	def _search(self, url: str, params: dict[str, Any], attempted_key_indexes: set[int] | None = None) -> APIResult:
 		api_key = self._get_current_key()
 		if not api_key:
 			return APIResult(success=False, error_message=_("No API keys configured"))
+
+		attempted_key_indexes = attempted_key_indexes or set()
+		current_index = self._current_key_index % len(self.api_keys)
+		attempted_key_indexes.add(current_index)
 
 		params = {**params, "key": api_key}
 		data, error = self._make_request(url, params, api_key)
@@ -208,8 +215,14 @@ class AmapClient:
 				"ACCESS_TOO_FREQUENT",
 				"CUQPS_HAS_EXCEEDED_THE_LIMIT",
 			}:
+				if len(attempted_key_indexes) >= len(self.api_keys):
+					return APIResult(success=False, error_message=format_amap_error(info), status=status, info=info)
 				self._rotate_key()
-				return self._search(url, {k: v for k, v in params.items() if k != "key"})
+				return self._search(
+					url,
+					{k: v for k, v in params.items() if k != "key"},
+					attempted_key_indexes=attempted_key_indexes,
+				)
 			return APIResult(success=False, error_message=format_amap_error(info), status=status, info=info)
 
 		pois = data.get("pois") or []

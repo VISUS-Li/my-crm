@@ -1,0 +1,216 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-07-07 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "sync_job",
+  "keyword",
+  "types",
+  "status",
+  "section_break_region",
+  "province",
+  "city",
+  "district",
+  "adcode",
+  "bbox",
+  "depth",
+  "parent_segment",
+  "section_break_counts",
+  "reported_count",
+  "fetched_count",
+  "page_count",
+  "api_calls",
+  "truncated",
+  "column_break_error",
+  "error_code",
+  "error_message",
+  "started_at",
+  "completed_at"
+ ],
+ "fields": [
+  {
+   "default": "POI-SEG-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "POI-SEG-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sync_job",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sync Job",
+   "options": "CRM POI Sync Job",
+   "reqd": 1
+  },
+  {
+   "fieldname": "keyword",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Keyword"
+  },
+  {
+   "fieldname": "types",
+   "fieldtype": "Data",
+   "label": "Types"
+  },
+  {
+   "default": "Queued",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Queued\nRunning\nCompleted\nFailed\nPartial\nCancelled"
+  },
+  {
+   "fieldname": "section_break_region",
+   "fieldtype": "Section Break",
+   "label": "Region"
+  },
+  {
+   "fieldname": "province",
+   "fieldtype": "Data",
+   "label": "Province"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District"
+  },
+  {
+   "fieldname": "adcode",
+   "fieldtype": "Data",
+   "label": "Adcode"
+  },
+  {
+   "fieldname": "bbox",
+   "fieldtype": "Data",
+   "label": "Bounding Box"
+  },
+  {
+   "default": "0",
+   "fieldname": "depth",
+   "fieldtype": "Int",
+   "label": "Depth"
+  },
+  {
+   "fieldname": "parent_segment",
+   "fieldtype": "Link",
+   "label": "Parent Segment",
+   "options": "CRM POI Sync Segment"
+  },
+  {
+   "fieldname": "section_break_counts",
+   "fieldtype": "Section Break",
+   "label": "Counts"
+  },
+  {
+   "default": "0",
+   "fieldname": "reported_count",
+   "fieldtype": "Int",
+   "label": "Reported Count"
+  },
+  {
+   "default": "0",
+   "fieldname": "fetched_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Fetched Count"
+  },
+  {
+   "default": "0",
+   "fieldname": "page_count",
+   "fieldtype": "Int",
+   "label": "Page Count"
+  },
+  {
+   "default": "0",
+   "fieldname": "api_calls",
+   "fieldtype": "Int",
+   "label": "API Calls"
+  },
+  {
+   "default": "0",
+   "fieldname": "truncated",
+   "fieldtype": "Check",
+   "in_standard_filter": 1,
+   "label": "Truncated"
+  },
+  {
+   "fieldname": "column_break_error",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "error_code",
+   "fieldtype": "Data",
+   "label": "Error Code"
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "Error Message"
+  },
+  {
+   "fieldname": "started_at",
+   "fieldtype": "Datetime",
+   "label": "Started At"
+  },
+  {
+   "fieldname": "completed_at",
+   "fieldtype": "Datetime",
+   "label": "Completed At"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-07 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Amap",
+ "name": "CRM POI Sync Segment",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Sales User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

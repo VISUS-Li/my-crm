@@ -6,8 +6,15 @@ import json
 from typing import Any
 
 import frappe
+from frappe.utils import now_datetime
 
-from crm.amap.poi.normalize import get_primary_phone, has_valid_phone, normalize_phone
+from crm.amap.poi.normalize import (
+	get_primary_phone,
+	has_valid_phone,
+	normalize_phone,
+	parse_phone_rows,
+	parse_photo_rows,
+)
 
 
 class POIImporter:
@@ -59,6 +66,9 @@ class POIImporter:
 			self._maybe_flush_stats()
 			return
 
+		duplicate_phone_lead = (
+			frappe.db.get_value("CRM Lead", {"mobile_no": primary_phone}) if primary_phone else None
+		)
 		lead_name = create_or_update_lead(
 			poi,
 			sync_job=self.sync_job,
@@ -69,9 +79,13 @@ class POIImporter:
 		)
 
 		if lead_name:
-			self.stats["leads_created"] += 1
 			frappe.db.set_value("CRM POI Record", poi_record_name, "lead", lead_name)
-			if valid_phone:
+			if duplicate_phone_lead and duplicate_phone_lead == lead_name:
+				self.stats["leads_skipped"] += 1
+				frappe.db.set_value("CRM POI Record", poi_record_name, "skip_reason", "duplicate_phone")
+			else:
+				self.stats["leads_created"] += 1
+			if valid_phone and not duplicate_phone_lead:
 				self._bill_poi_import()
 		else:
 			self.stats["leads_skipped"] += 1
@@ -111,30 +125,65 @@ def upsert_poi_record(
 	amap_poi_id = poi.get("id")
 	existing = frappe.db.exists("CRM POI Record", amap_poi_id)
 	location = _format_geolocation(poi.get("location"))
+	phone_rows = parse_phone_rows(poi.get("tel"))
+	photo_rows = parse_photo_rows(poi.get("photos"))
+	biz_ext = poi.get("biz_ext") if isinstance(poi.get("biz_ext"), dict) else {}
+	all_phones = "\n".join(
+		row.get("normalized_value") or row.get("raw_value") or "" for row in phone_rows
+	)
 
 	doc_data = {
 		"doctype": "CRM POI Record",
 		"amap_poi_id": amap_poi_id,
+		"parent_poi_id": poi.get("parent") or "",
 		"name1": poi.get("name") or amap_poi_id,
 		"tel": poi.get("tel") or "",
 		"tel_normalized": primary_phone or (phones[0] if phones else ""),
+		"all_phones": all_phones,
 		"has_valid_phone": 1 if valid_phone else 0,
+		"website": poi.get("website") or "",
+		"email": poi.get("email") or "",
+		"postcode": poi.get("postcode") or "",
 		"address": poi.get("address") or "",
 		"location": location,
 		"poi_type": poi.get("type") or "",
 		"poi_typecode": poi.get("typecode") or "",
+		"biz_type": poi.get("biz_type") or "",
+		"business_area": poi.get("business_area") or "",
+		"tag": poi.get("tag") or "",
+		"rating": poi.get("rating") or biz_ext.get("rating") or "",
+		"cost": poi.get("cost") or biz_ext.get("cost") or "",
+		"alias": poi.get("alias") or "",
 		"province": poi.get("pname") or poi.get("province") or "",
+		"pcode": poi.get("pcode") or "",
 		"city": poi.get("cityname") or poi.get("city") or "",
+		"citycode": poi.get("citycode") or "",
 		"district": poi.get("adname") or poi.get("district") or "",
+		"adcode": poi.get("adcode") or "",
+		"primary_photo_url": photo_rows[0]["url"] if photo_rows else "",
+		"photo_count": len(photo_rows),
 		"sync_job": sync_job,
 		"job_owner": job_owner,
 		"agent_tenant_id": agent_tenant_id,
+		"last_synced_at": now_datetime(),
+		"source_api_version": poi.get("_source_api_version") or "v3",
+		"sync_action": "Updated" if existing else "Inserted",
+		"skip_reason": "",
+		"is_truncated_source": 1 if poi.get("_truncated") else 0,
 		"raw_json": json.dumps(poi, ensure_ascii=False),
+		"phones": phone_rows,
+		"photos": photo_rows,
 	}
 
 	if existing:
 		doc = frappe.get_doc("CRM POI Record", existing)
 		doc.update(doc_data)
+		doc.set("phones", [])
+		for row in phone_rows:
+			doc.append("phones", row)
+		doc.set("photos", [])
+		for row in photo_rows:
+			doc.append("photos", row)
 		doc.save(ignore_permissions=True)
 		return doc.name
 
@@ -157,10 +206,11 @@ def create_or_update_lead(
 
 	existing_lead = frappe.db.get_value("CRM Lead", {"amap_poi_id": amap_poi_id})
 	if existing_lead:
+		update_existing_lead_from_poi(existing_lead, poi, phones, primary_phone, valid_phone)
 		return existing_lead
 
 	if primary_phone and frappe.db.exists("CRM Lead", {"mobile_no": primary_phone}):
-		return None
+		return frappe.db.get_value("CRM Lead", {"mobile_no": primary_phone})
 
 	lead_owner = sync_job.assign_to or settings.default_lead_owner or sync_job.job_owner
 	lead_source = sync_job.lead_source or "高德地图"
@@ -199,6 +249,32 @@ def create_or_update_lead(
 	doc = frappe.get_doc(lead_data)
 	doc.insert(ignore_permissions=True)
 	return doc.name
+
+
+def update_existing_lead_from_poi(
+	lead_name: str,
+	poi: dict[str, Any],
+	phones: list[str],
+	primary_phone: str | None,
+	valid_phone: bool,
+) -> None:
+	try:
+		frappe.db.set_value(
+			"CRM Lead",
+			lead_name,
+			{
+				"poi_address": poi.get("address") or "",
+				"poi_location": _format_geolocation(poi.get("location")),
+				"poi_type": poi.get("type") or "",
+				"poi_typecode": poi.get("typecode") or "",
+				"district": poi.get("adname") or poi.get("district") or "",
+				"has_valid_phone": 1 if valid_phone else 0,
+				"mobile_no": primary_phone or "",
+				"phone": phones[1] if len(phones) > 1 else "",
+			},
+		)
+	except Exception:
+		return
 
 
 def promote_poi_to_lead(poi_record_name: str) -> str:

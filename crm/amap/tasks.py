@@ -9,6 +9,7 @@ from frappe.utils import now_datetime
 from crm.amap.poi.client import build_client_from_settings
 from crm.amap.poi.importer import POIImporter, promote_poi_to_lead
 from crm.amap.poi.quadtree import BoundingBox, QuadTreeSplitter, bbox_from_string
+from crm.amap.trace import finish_sync_segment, log_sync_event, start_sync_segment
 
 
 def run_poi_sync(sync_job_name: str) -> None:
@@ -60,6 +61,7 @@ def run_poi_sync(sync_job_name: str) -> None:
 		}
 	)
 	frappe.db.commit()
+	log_sync_event(sync_job_name, "job_started", _("Starting sync"), {"keywords": job.keywords, "city": job.city})
 
 	try:
 		client = build_client_from_settings(settings, tripai_user_id=tripai_user_id, job_name=sync_job_name)
@@ -89,12 +91,20 @@ def run_poi_sync(sync_job_name: str) -> None:
 				return
 
 			job.update_progress(_("Fetching POI data with quadtree..."))
-			pois = splitter.quadtree_split(
-				bounds,
-				keywords=job.keywords,
-				types=job.types or "",
-				on_log=on_log,
-			)
+			pois = []
+			for keyword in split_keywords(job.keywords):
+				if job.is_cancelled():
+					break
+				job.update_progress(_("Fetching POI data for keyword: {0}").format(keyword))
+				segment = start_sync_segment(job, keyword=keyword, bbox=bounds.to_polygon())
+				keyword_pois = splitter.quadtree_split(
+						bounds,
+						keywords=keyword,
+						types=job.types or "",
+						on_log=on_log,
+					)
+				pois.extend(keyword_pois)
+				finish_sync_segment(segment, fetched_count=len(keyword_pois))
 		else:
 			job.update_progress(_("Fetching POI data via city text search..."))
 			pois = _fetch_pois_by_text(client, job)
@@ -104,6 +114,7 @@ def run_poi_sync(sync_job_name: str) -> None:
 			return
 
 		job.update_progress(_("Importing {0} POI records...").format(len(pois)))
+		log_sync_event(sync_job_name, "import_started", _("Importing {0} POI records...").format(len(pois)))
 		importer.process_pois(pois)
 
 		job.db_set(
@@ -118,6 +129,17 @@ def run_poi_sync(sync_job_name: str) -> None:
 			}
 		)
 		frappe.db.commit()
+		log_sync_event(
+			sync_job_name,
+			"job_completed",
+			_("Sync completed successfully"),
+			{
+				"total_fetched": importer.stats["total_fetched"],
+				"with_phone_count": importer.stats["with_phone_count"],
+				"leads_created": importer.stats["leads_created"],
+				"leads_skipped": importer.stats["leads_skipped"],
+			},
+		)
 	except Exception as exc:
 		frappe.log_error(title=f"POI Sync Job failed: {sync_job_name}", message=frappe.get_traceback())
 		error_log = str(exc)
@@ -138,6 +160,7 @@ def run_poi_sync(sync_job_name: str) -> None:
 				"progress_message": _("Sync failed"),
 			}
 		)
+		log_sync_event(sync_job_name, "job_failed", _("Sync failed"), {"error": error_log})
 
 
 def _ensure_job_adcode(job, client) -> None:
@@ -184,22 +207,57 @@ def _resolve_bounds(job, client) -> BoundingBox | None:
 
 def _fetch_pois_by_text(client, job) -> list:
 	all_pois = []
-	page = 1
-	while page <= 8:
-		result = client.search_text(
-			keywords=job.keywords,
-			city=job.city,
-			types=job.types or "",
-			limit=25,
-			page=page,
+	for keyword in split_keywords(job.keywords):
+		segment = start_sync_segment(job, keyword=keyword)
+		segment_pois = []
+		reported_count = 0
+		page_count = 0
+		error_message = ""
+		page = 1
+		while page <= 8:
+			result = client.search_text(
+				keywords=keyword,
+				city=job.city,
+				types=job.types or "",
+				limit=25,
+				page=page,
+				citylimit=True,
+			)
+			if not result.success or not result.data:
+				error_message = result.error_message if not result.success else ""
+				break
+			reported_count = max(reported_count, result.count or 0)
+			page_count = page
+			segment_pois.extend(result.data)
+			if len(result.data) < 25:
+				break
+			page += 1
+		all_pois.extend(segment_pois)
+		finish_sync_segment(
+			segment,
+			status="Failed" if error_message else "Completed",
+			fetched_count=len(segment_pois),
+			reported_count=reported_count,
+			page_count=page_count,
+			api_calls=page_count,
+			truncated=bool(reported_count and reported_count > len(segment_pois)),
+			error_message=error_message,
 		)
-		if not result.success or not result.data:
-			break
-		all_pois.extend(result.data)
-		if len(result.data) < 25:
-			break
-		page += 1
 	return all_pois
+
+
+def split_keywords(keywords: str | None) -> list[str]:
+	if not keywords:
+		return [""]
+
+	parts: list[str] = []
+	for delimiter in ("|", ",", "，", ";", "；", "\n"):
+		keywords = keywords.replace(delimiter, "|")
+	for part in keywords.split("|"):
+		part = part.strip()
+		if part and part not in parts:
+			parts.append(part)
+	return parts or [""]
 
 
 def promote_poi_record_to_lead(poi_record_name: str) -> str:
@@ -237,4 +295,3 @@ def _pre_sync_billing_check(job, tripai_user_id: str | None, settings) -> None:
 	result = check_credits_for_sync(tripai_user_id, estimated_api_calls=50, estimated_poi_imports=100)
 	if not result.get("sufficient"):
 		raise InsufficientCreditsError(result.get("required", 0), result.get("balance"))
-

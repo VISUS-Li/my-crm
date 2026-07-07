@@ -41,6 +41,8 @@ scripts/tripai/
 
 # Local Python tests (run on Frappe bench locally, not committed)
 crm/**/test_*.py
+crm/amap/conftest.py
+crm/amap/**/*_test.py
 crm/tests/
 crm/integrations/erpnext/test_utils.py
 crm/permissions/test_*.py
@@ -55,6 +57,7 @@ crm/integrations/tripai/backfill_contacts.py
 
 # Local feature planning notes (project docs live in .pi/)
 docs/amap-poi-sales-dev-plan.md
+docs/amap-poi-*-test-report.md
 
 # pytest
 .pytest_cache/

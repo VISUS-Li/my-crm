@@ -67,7 +67,7 @@ class QuadTreeSplitter:
 		bounds: BoundingBox,
 		keywords: str = "",
 		types: str = "",
-	) -> tuple[list[dict[str, Any]], bool]:
+	) -> tuple[list[dict[str, Any]], bool, int]:
 		polygon = bounds.to_polygon()
 
 		result = self.api_client.search_polygon(
@@ -75,11 +75,45 @@ class QuadTreeSplitter:
 			keywords=keywords,
 			types=types,
 			page_size=25,
-			page_num=8,
+			page_num=1,
 		)
-		if result.success and result.data:
-			return [], True
+		if not result.success or not result.data:
+			return [], False, 0
 
+		reported_count = result.count or len(result.data)
+		if reported_count > self.poi_threshold:
+			return result.data, True, reported_count
+
+		all_pois: list[dict[str, Any]] = list(result.data)
+		page = 2
+		while page <= 8:
+			if self._cancelled:
+				break
+
+			result = self.api_client.search_polygon(
+				polygon=polygon,
+				keywords=keywords,
+				types=types,
+				page_size=25,
+				page_num=page,
+			)
+			if not result.success or not result.data:
+				break
+
+			all_pois.extend(result.data)
+			if len(result.data) < 25:
+				break
+			page += 1
+
+		return all_pois, False, reported_count
+
+	def fetch_available_pois_in_bounds(
+		self,
+		bounds: BoundingBox,
+		keywords: str = "",
+		types: str = "",
+	) -> list[dict[str, Any]]:
+		polygon = bounds.to_polygon()
 		all_pois: list[dict[str, Any]] = []
 		page = 1
 		while page <= 8:
@@ -101,7 +135,7 @@ class QuadTreeSplitter:
 				break
 			page += 1
 
-		return all_pois, False
+		return all_pois
 
 	def quadtree_split(
 		self,
@@ -114,21 +148,25 @@ class QuadTreeSplitter:
 		if self._cancelled:
 			return []
 
-		pois, need_split = self.fetch_pois_in_bounds(bounds, keywords, types)
+		pois, need_split, reported_count = self.fetch_pois_in_bounds(bounds, keywords, types)
 		if not need_split:
 			return pois
 
 		if bounds.width < self.min_grid_span or bounds.height < self.min_grid_span:
 			if on_log:
-				on_log(_("Grid reached minimum span, stopping split"))
-			return []
+				on_log(_("Grid reached minimum span, keeping available POI data"))
+			return self.fetch_available_pois_in_bounds(bounds, keywords, types) or pois
 
 		if current_depth >= self.max_depth:
 			if on_log:
-				on_log(_("Reached max recursion depth, stopping split"))
-			return []
+				on_log(_("Reached max recursion depth, keeping available POI data"))
+			return self.fetch_available_pois_in_bounds(bounds, keywords, types) or pois
 
 		all_pois: list[dict[str, Any]] = []
+		if on_log:
+			on_log(
+				_("Grid reported {0} POIs, splitting for better coverage").format(reported_count)
+			)
 		for sub_bounds in bounds.split():
 			if self._cancelled:
 				break
