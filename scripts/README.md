@@ -117,6 +117,100 @@ cd ~/frappe-bench && nohup bench start > ~/crm-bench.log 2>&1 &
 
 ---
 
+## Docker 生产部署（推荐：build.sh + deploy.sh）
+
+与 [NextDevTpl](https://github.com/...) 相同模式：**构建机 push 镜像 → 生产机 pull 运行**。
+
+### 架构
+
+```
+构建机                          生产机 47.95.2.50
+────────                        ─────────────────────────────
+./scripts/build.sh              /opt/crm/docker-compose.yml
+  docker build                    ├─ crm-mariadb
+  docker push 阿里云              ├─ crm-redis
+                                  ├─ crm-app  (预构建镜像)
+                                  └─ crm-nginx :80/:443 → crm-app:8000/9000
+```
+
+### 1. 配置 release.env
+
+```bash
+cp scripts/release.env.example scripts/release.env
+# 填写 REGISTRY_*、DOMAIN=crm.zccmz.cn、CERTBOT_EMAIL、阿里云 DNS 密钥等
+```
+
+### 2. 构建并推送（开发机，需 Docker）
+
+```bash
+./scripts/build.sh          # 默认 tag: latest
+./scripts/build.sh v1.0.0     # 指定版本
+```
+
+镜像内含：Frappe v15 + CRM 应用 + **已编译前端** + zh.po 编译。
+
+### 3. 生产机首次部署
+
+将仓库 clone 到服务器（或仅复制 `scripts/` + `deploy/`），然后：
+
+```bash
+cp scripts/release.env.example scripts/release.env
+# 编辑 release.env（与构建机相同的 REGISTRY 配置）
+./scripts/deploy.sh init          # 或 init v1.0.0
+```
+
+完成后访问：**https://crm.zccmz.cn/crm**
+
+### 4. 日常发版
+
+```bash
+# 构建机
+./scripts/build.sh v1.0.1
+
+# 生产机
+./scripts/deploy.sh app v1.0.1
+```
+
+`app` 子命令仅重建 `crm-app` 容器，**不删除** MariaDB / 站点数据卷。
+
+### 5. 子命令
+
+| 命令 | 作用 |
+|------|------|
+| `deploy.sh init [ver]` | 新服务器全量部署 + Nginx + HTTPS |
+| `deploy.sh app [ver]` | 仅更新 crm-app 镜像 |
+| `deploy.sh nginx` | 刷新 Nginx / 证书 |
+| `deploy.sh reset` | 危险：清空 `/opt/crm`（需 `CONFIRM_RESET=yes`） |
+
+### 6. 关键文件
+
+| 文件 | 作用 |
+|------|------|
+| `Dockerfile` | 多阶段构建 frappe + crm + frontend |
+| `deploy/docker-compose.prod.yml` | MariaDB + Redis + crm-app + Nginx |
+| `deploy/docker-compose.prod-ip.yml` | 无 Nginx，IP:8000 直连 |
+| `deploy/docker-entrypoint.sh` | 容器内建站点 / migrate / bench start |
+| `scripts/build.sh` | build + push 阿里云 |
+| `scripts/deploy.sh` | 生产 init / app / nginx |
+| `scripts/release.env.example` | 构建与部署共用配置 |
+
+### 7. 证书（国内阿里云）
+
+推荐 `CERT_PROVIDER=acme-dns-ali`，或 manual：
+
+```bash
+./scripts/import-aliyun-cert.sh crm.zccmz.cn key.pem cert.pem
+CERT_PROVIDER=manual ./scripts/deploy.sh nginx
+```
+
+---
+
+## 生产部署（宿主机 bench + SFTP 同步，旧方案）
+
+仍可用 `python scripts/sync_to_server.py --deploy` + `deploy-prod.sh init`。Docker 方案为推荐路径。
+
+---
+
 ## 访问信息（当前环境）
 
 | 项 | 值 |

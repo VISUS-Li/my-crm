@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CRM_SRC="${CRM_SRC:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 BENCH_DIR="${BENCH_DIR:-$HOME/frappe-bench}"
 SITE_NAME="${SITE_NAME:-crm.localhost}"
+WEB_PORT="${WEB_PORT:-8010}"
 
 echo "==> Building frontend..."
 cd "$CRM_SRC/frontend"
@@ -33,7 +34,7 @@ cd "$BENCH_DIR"
 bench --site "$SITE_NAME" clear-cache
 
 sed -i '/watch/d' Procfile
-sed -i 's/--port 8000/--port 8010/g' Procfile
+sed -i "s/--port 8000/--port ${WEB_PORT}/g" Procfile
 
 echo "==> Restarting bench..."
 cd "$BENCH_DIR"
@@ -49,7 +50,12 @@ else
   tail -20 ~/crm-bench.log || true
 fi
 
-WEB_PORT="$(bench --site "$SITE_NAME" get-config webserver_port 2>/dev/null || echo 8010)"
-SERVER_IP="$(hostname -I | awk '{print $1}')"
+WEB_PORT="$(bench --site "$SITE_NAME" get-config webserver_port 2>/dev/null || echo "${WEB_PORT}")"
+HOST_NAME="$(bench --site "$SITE_NAME" get-config host_name 2>/dev/null || true)"
 echo ""
-echo "Done. Open: http://${SERVER_IP}:${WEB_PORT}/crm"
+if [ -n "${HOST_NAME}" ]; then
+  echo "Done. Open: ${HOST_NAME}/crm"
+else
+  SERVER_IP="$(hostname -I | awk '{print $1}')"
+  echo "Done. Open: http://${SERVER_IP}:${WEB_PORT}/crm"
+fi

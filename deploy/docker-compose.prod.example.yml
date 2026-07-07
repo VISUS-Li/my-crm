@@ -1,0 +1,95 @@
+# CRM 生产栈示例（复制到服务器 /opt/crm/ 后按域名与密钥修改）
+# 用法见 scripts/README.md
+#
+# 仅更新应用镜像时：
+#   docker compose pull crm-app
+#   docker compose up -d crm-app
+#
+# 不要随应用发布重建 mariadb / crm-sites 数据卷。
+
+name: crm
+
+services:
+  mariadb:
+    image: mariadb:10.8
+    container_name: crm-mariadb
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD}
+    volumes:
+      - crm-mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      - crm
+
+  redis:
+    image: redis:7-alpine
+    container_name: crm-redis
+    restart: unless-stopped
+    networks:
+      - crm
+
+  crm-app:
+    image: ${CRM_IMAGE:?set CRM_IMAGE}
+    container_name: crm-app
+    restart: unless-stopped
+    env_file:
+      - .env.release
+    environment:
+      MARIADB_HOST: mariadb
+      REDIS_HOST: redis
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - crm-sites:/home/frappe/frappe-bench/sites
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    expose:
+      - "8000"
+      - "9000"
+    networks:
+      - crm
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: crm-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    depends_on:
+      - crm-app
+    networks:
+      - crm
+
+  certbot:
+    profiles: ["tools"]
+    image: certbot/certbot:v2.11.0
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - crm
+
+volumes:
+  crm-mariadb-data:
+  crm-sites:
+
+networks:
+  crm:
+    name: crm

@@ -29,6 +29,8 @@ AGENTS.md
 
 # Local deploy credentials (copy from deploy.config.example.json)
 scripts/deploy.config.json
+scripts/release.env
+scripts/release.prod.env
 scripts/__pycache__/
 
 # Local verification / E2E scripts (depend on deploy.config.json)

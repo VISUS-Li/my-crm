@@ -1,0 +1,31 @@
+{
+  "host": "47.95.2.50",
+  "user": "root",
+  "password": "",
+  "port": 22,
+  "remote_crm_src": "/root/crm-src",
+  "remote_bench": "/root/frappe-bench",
+  "site_name": "crm.zccmz.cn",
+  "web_port": 8010,
+  "socketio_port": 9010,
+  "db_host": "127.0.0.1",
+  "db_port": 3307,
+  "db_type": "mariadb",
+  "db_root_password": "",
+  "admin_password": "",
+  "exclude": [
+    ".git",
+    "node_modules",
+    "frontend/node_modules",
+    "frappe-ui/node_modules",
+    "crm/public/frontend",
+    "frontend/coverage",
+    "dev-dist",
+    "build",
+    "test-results",
+    "playwright-report",
+    "__pycache__",
+    ".vscode",
+    ".pi"
+  ]
+}

@@ -1,0 +1,63 @@
+# 生产机仅运行预构建镜像（不在此机 build）；适配 IP 直连或小内存 VPS
+# 由 scripts/deploy.sh init 安装（ENABLE_NGINX=false 时）
+name: crm
+
+services:
+  mariadb:
+    image: mariadb:10.8
+    container_name: crm-mariadb
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD}
+    volumes:
+      - crm-mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      - crm
+
+  redis:
+    image: redis:7-alpine
+    container_name: crm-redis
+    restart: unless-stopped
+    networks:
+      - crm
+
+  crm-app:
+    image: ${CRM_IMAGE:?set CRM_IMAGE}
+    container_name: crm-app
+    restart: unless-stopped
+    env_file:
+      - .env.release
+    environment:
+      MARIADB_HOST: mariadb
+      REDIS_HOST: redis
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - crm-sites:/home/frappe/frappe-bench/sites
+    ports:
+      - "${APP_PUBLISH_PORT:-8000}:8000"
+      - "${SOCKETIO_PUBLISH_PORT:-9000}:9000"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - crm
+
+volumes:
+  crm-mariadb-data:
+  crm-sites:
+
+networks:
+  crm:
+    name: crm
