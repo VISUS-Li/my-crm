@@ -120,18 +120,24 @@
               @click="router.push({ name: 'PoiSync' })"
             />
           </div>
-          <div v-if="!stats.data?.recent_jobs?.length" class="p-8 text-center">
-            <EmptyState
-              :name="__('POI Sync Jobs')"
-              :description="
-                __(
-                  'No sync jobs yet. Create one to fetch merchant data from Amap.',
-                )
-              "
-              icon="map-pin"
-            />
+          <div
+            v-if="!stats.data?.recent_jobs?.length"
+            class="flex flex-col items-center gap-4 px-8 py-10 text-center"
+          >
+            <Icon icon="map-pin" class="size-8 text-ink-gray-5" />
+            <div class="flex flex-col items-center gap-1">
+              <p class="text-lg-medium text-ink-gray-8">
+                {{ __('No sync jobs yet') }}
+              </p>
+              <p class="max-w-md text-p-base text-ink-gray-6">
+                {{
+                  __(
+                    'Create one to fetch merchant data from Amap.',
+                  )
+                }}
+              </p>
+            </div>
             <Button
-              class="mt-4"
               variant="outline"
               :label="__('Getting started')"
               icon-left="book-open"
@@ -174,7 +180,7 @@ import LayoutHeader from '@/components/LayoutHeader.vue'
 import StatCard from '@/components/Workbench/StatCard.vue'
 import ScenarioGuideSection from '@/components/Workbench/ScenarioGuideSection.vue'
 import GuideInfoBanner from '@/components/Workbench/GuideInfoBanner.vue'
-import EmptyState from '@/components/ListViews/EmptyState.vue'
+import Icon from '@/components/Icon.vue'
 import { openPhoneSalesGuide } from '@/composables/usePhoneSalesGuide'
 import { createResource, Button, Badge, LoadingIndicator } from 'frappe-ui'
 import { computed, nextTick, onMounted } from 'vue'

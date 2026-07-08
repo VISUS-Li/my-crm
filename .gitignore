@@ -87,6 +87,9 @@ scripts/list_empty_po.py
 scripts/batch_i18n_empty_state.py
 scripts/find_missing_i18n.py
 
+# Local scratch / test notes (not committed)
+scripts/_*.txt
+
 # Local TripAI feature planning & tool registration notes (project docs live in .pi/)
 docs/tripai-integration-plan.md
 docs/tripai-tool-definition.json

@@ -45,7 +45,7 @@ def get_tripai_settings() -> dict[str, str]:
 		base_url = (doc.base_url or "").strip() or base_url
 		project_key = (doc.project_key or "").strip() or project_key
 		tool_key = (doc.tool_key or "").strip() or tool_key
-		stored_token = doc.get_password("runtime_token")
+		stored_token = doc.get_password("runtime_token", raise_exception=False)
 		if stored_token:
 			runtime_token = stored_token
 		default_redirect_path = doc.default_redirect_path or default_redirect_path

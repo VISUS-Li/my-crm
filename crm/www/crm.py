@@ -88,4 +88,9 @@ def get_default_route():
 def _get_phone_sales_mode() -> bool:
 	if not frappe.db.exists("DocType", "FCRM Settings"):
 		return False
+	if not frappe.db.exists(
+		"Custom Field",
+		{"dt": "FCRM Settings", "fieldname": "enable_phone_sales_mode"},
+	):
+		return False
 	return bool(frappe.db.get_single_value("FCRM Settings", "enable_phone_sales_mode"))

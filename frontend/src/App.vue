@@ -21,6 +21,7 @@ import { FrappeUIProvider, setConfig, useTheme } from 'frappe-ui'
 import { computed, defineAsyncComponent, provide } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFontScale } from '@/composables/useFontScale'
+import { getMergedTranslations } from '@/utils/loadTranslations'
 
 const session = sessionStore()
 const route = useRoute()
@@ -52,5 +53,8 @@ const Layout = computed(() => {
 
 setConfig('systemTimezone', window.timezone?.system || null)
 setConfig('localTimezone', window.timezone?.user || null)
-setConfig('translatedMessages', window.translated_messages || {})
+setConfig(
+  'translatedMessages',
+  getMergedTranslations(window.translated_messages || {}),
+)
 </script>

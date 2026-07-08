@@ -8,7 +8,7 @@ import router from './router'
 import translationPlugin from './translation'
 import App from './App.vue'
 import { initializeFontScale } from '@/composables/useFontScale'
-import { loadTranslations } from '@/utils/loadTranslations'
+import { getMergedTranslations, loadTranslations } from '@/utils/loadTranslations'
 
 import {
   FrappeUI,
@@ -60,7 +60,10 @@ initializeFontScale()
 app.config.globalProperties.$dialog = createDialog
 
 async function bootstrap() {
-  setConfig('translatedMessages', window.translated_messages || {})
+  setConfig(
+    'translatedMessages',
+    getMergedTranslations(window.translated_messages || {}),
+  )
 
   if (import.meta.env.DEV) {
     const values = await frappeRequest({
@@ -69,7 +72,10 @@ async function bootstrap() {
     for (let key in values) {
       window[key] = values[key]
     }
-    setConfig('translatedMessages', window.translated_messages || {})
+    setConfig(
+      'translatedMessages',
+      getMergedTranslations(window.translated_messages || {}),
+    )
   }
 
   await loadTranslations()

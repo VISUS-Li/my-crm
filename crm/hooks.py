@@ -75,6 +75,7 @@ website_route_rules = [
 
 # Frappe desk /login only knows local User passwords — send CRM users to TripAI login page.
 website_redirects = [
+	{"source": r"/$", "target": "/crm/login"},
 	{"source": r"/login$", "target": "/crm/login"},
 	{"source": r"/login\?.*", "target": "/crm/login"},
 ]
@@ -320,6 +321,7 @@ after_migrate = [
 	"crm.fcrm.doctype.fcrm_settings.fcrm_settings.after_migrate",
 	"crm.api.whatsapp.add_roles",
 	"crm.install.add_default_scripts",
+	"crm.utils.i18n.ensure_chinese_system_language",
 ]
 
 standard_dropdown_items = [

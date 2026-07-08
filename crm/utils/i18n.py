@@ -12,7 +12,17 @@ def get_session_language() -> str:
 		language = frappe.db.get_value("User", frappe.session.user, "language")
 	else:
 		language = frappe.db.get_single_value("System Settings", "language")
+	# CRM deployment defaults to Simplified Chinese.
 	return language or "zh"
+
+
+def ensure_chinese_system_language() -> None:
+	"""Keep System Settings aligned with CRM Chinese defaults after migrate."""
+	if frappe.flags.in_install:
+		return
+	current = frappe.db.get_single_value("System Settings", "language")
+	if not current:
+		frappe.db.set_single_value("System Settings", "language", "zh")
 
 
 def get_doctype_label(reference_doctype: str | None) -> str:

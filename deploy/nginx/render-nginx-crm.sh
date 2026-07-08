@@ -116,6 +116,10 @@ $(ssl_block)
 
     client_max_body_size 100m;
 
+    location = / {
+        return 302 /crm/login;
+    }
+
 $(socketio_location)
 
 $(app_location)

@@ -9518,6 +9518,12 @@ msgstr "查看全部"
 msgid "No sync jobs yet. Create one to fetch merchant data from Amap."
 msgstr "还没有同步任务，创建一个即可从高德获取商家数据"
 
+msgid "No sync jobs yet"
+msgstr "还没有同步任务"
+
+msgid "Create one to fetch merchant data from Amap."
+msgstr "创建一个即可从高德获取商家数据"
+
 msgid "Fetched {0}, {1} with phone, {2} leads created"
 msgstr "抓取 {0} 条，{1} 条有电话，创建 {2} 条线索"
 
