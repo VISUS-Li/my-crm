@@ -28,10 +28,9 @@ RUN cd apps/crm/frontend \
     && yarn install --frozen-lockfile 2>/dev/null || yarn install \
     && yarn build
 
-# CRM frontend is built above; compile zh.po -> sites/assets/locale/zh/LC_MESSAGES/crm.mo only.
-# Full `bench build --app crm` fails here (esbuild paths undefined without an installed site).
-RUN pip install -e apps/crm -q \
-    && bench compile-po-to-mo --app crm --locale zh --force
+# CRM frontend is built above; compile zh.po -> sites/assets/locale/zh/LC_MESSAGES/crm.mo.
+# Do not use bench build / compile-po-to-mo here (no site; compile-po workers import crm).
+RUN ./env/bin/python apps/crm/scripts/compile_crm_mo.py
 
 FROM docker.m.daocloud.io/frappe/bench:latest AS runner
 

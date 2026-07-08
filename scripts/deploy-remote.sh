@@ -27,8 +27,7 @@ bench --site "$SITE_NAME" migrate
 
 echo "==> Compiling CRM translations (zh.po -> .mo)..."
 cd "$BENCH_DIR"
-pip install -e apps/crm -q 2>/dev/null || true
-bench compile-po-to-mo --app crm --locale zh --force
+./env/bin/python apps/crm/scripts/compile_crm_mo.py
 
 echo "==> Clearing cache..."
 cd "$BENCH_DIR"

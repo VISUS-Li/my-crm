@@ -32,7 +32,7 @@ cd "${REPO_ROOT}"
 
 registry_login "${REGISTRY_DOMAIN}" "${REGISTRY_USER}" "${REGISTRY_PASSWORD}" "${SKIP_LOGIN}"
 
-echo "开始构建镜像（含 frontend yarn build + compile-po-to-mo）..."
+echo "开始构建镜像（含 frontend yarn build + compile_crm_mo.py）..."
 docker build -t "${FULL_IMAGE}" .
 
 if [ "${SKIP_PUSH}" != "true" ]; then

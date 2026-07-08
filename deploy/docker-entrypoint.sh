@@ -83,8 +83,7 @@ maybe_bench_build_crm() {
     return 0
   fi
   echo "==> Compiling CRM translations (zh.po -> sites/assets/locale/zh/LC_MESSAGES/crm.mo)..."
-  pip install -e apps/crm -q 2>/dev/null || true
-  bench compile-po-to-mo --app crm --locale zh --force
+  ./env/bin/python apps/crm/scripts/compile_crm_mo.py
 }
 maybe_bench_build_crm
 
