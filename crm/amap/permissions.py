@@ -79,6 +79,10 @@ def _has_owner_permission(doc, ptype, user, owner_field, tenant_field):
 	if user == "Administrator":
 		return True
 
+	# job_owner / agent_tenant_id are set in validate(), which runs after create permission.
+	if ptype == "create" or not getattr(doc, "name", None):
+		return True
+
 	from crm.permissions.agent_tenant import agent_tenant_matches, get_scoped_agent_tenant_id
 
 	scoped_tenant = get_scoped_agent_tenant_id(user)
