@@ -10828,3 +10828,15 @@ msgstr "在地图中查看"
 
 msgid "Are you sure you want to delete \"{0}\" view?"
 msgstr "确定要删除视图「{0}」吗？"
+
+msgid "Lost Notes are required when Lost Reason is \"Other\""
+msgstr "丢单原因为「其他」时必须填写丢单备注"
+
+msgid "Keep \"Import only with phone\" enabled (recommended). Merchants without a public phone are skipped and will not clutter your call list."
+msgstr "保持「仅导入有电话」开启（推荐）。没有公开电话的商家会被跳过，不会占用拨打列表。"
+
+msgid "Unable to load region data. Check Amap settings or contact your administrator."
+msgstr "无法加载区域数据。请检查高德设置或联系管理员。"
+
+msgid "Are you sure you want to delete \"{0}\" view?"
+msgstr "确定要删除视图「{0}」吗？"

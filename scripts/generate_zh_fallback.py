@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "frontend" / "src" / "locales" / "zh-fallback.js"
 
 from phone_sales_guide_translations import PHONE_SALES_GUIDE_TRANSLATIONS
+from amap_i18n_translations import AMAP_I18N_TRANSLATIONS
 
 # Sidebar, login, workbench, and other CRM UI strings (English msgid -> zh).
 CORE_UI_TRANSLATIONS: dict[str, str] = {
@@ -52,11 +53,41 @@ CORE_UI_TRANSLATIONS: dict[str, str] = {
     "Organizations": "组织",
     "Notes": "备注",
     "Calendar": "日历",
+    # Amap POI sync page (Fetch Merchants)
+    "Pull merchant POI data from Amap by region and industry. Leads with phone numbers are created automatically.": "按区域和行业从高德抓取商家 POI，有电话的会自动变成线索",
+    "Create region and industry specific Amap POI sync jobs. Each agent manages their own jobs and leads.": "创建按区域和行业划分的高德 POI 同步任务。每位代理管理自己的任务和线索。",
+    "Global Settings": "全局设置",
+    "New Job": "新建任务",
+    "Filter by city": "按城市筛选",
+    "Filter by keywords": "按关键词筛选",
+    "Filter by district": "按区县筛选",
+    "Keywords": "关键词",
+    "District": "区县",
+    "City": "城市",
+    "Status": "状态",
+    "Job": "任务",
+    "Search": "搜索",
+    "Region": "区域",
+    "Stats": "统计",
+    "Owner": "负责人",
+    "New Sync Job": "新建同步任务",
+    "Preview Search": "预览搜索",
+    "Create": "创建",
+    "Update": "更新",
+    "Lead Source": "线索来源",
+    "Assign Leads To": "线索分配给",
+    "Province": "省份",
+    "Completed": "已完成",
+    "Failed": "失败",
 }
 
 
 def main() -> None:
-    merged = {**CORE_UI_TRANSLATIONS, **PHONE_SALES_GUIDE_TRANSLATIONS}
+    merged = {
+        **CORE_UI_TRANSLATIONS,
+        **AMAP_I18N_TRANSLATIONS,
+        **PHONE_SALES_GUIDE_TRANSLATIONS,
+    }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(merged, ensure_ascii=False, indent=2)
     OUT.write_text(

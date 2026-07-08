@@ -131,12 +131,12 @@ const filters = reactive({
 })
 
 const STATUS_LABELS = {
-  Draft: '草稿',
-  Queued: '排队中',
-  Running: '运行中',
-  Completed: '已完成',
-  Failed: '失败',
-  Cancelled: '已取消',
+  Draft: __('Draft'),
+  Queued: __('Queued'),
+  Running: __('Running'),
+  Completed: __('Completed'),
+  Failed: __('Failed'),
+  Cancelled: __('Cancelled'),
 }
 
 function displayStatus(status) {

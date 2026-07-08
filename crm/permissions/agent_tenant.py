@@ -18,12 +18,17 @@ def resolve_agent_tenant_id(crm_user: str | None = None) -> str | None:
 	if link_tenant:
 		return link_tenant
 
+	if not frappe.db.has_column("User", "tripai_agent_tenant_id"):
+		return None
+
 	return frappe.db.get_value("User", crm_user, "tripai_agent_tenant_id")
 
 
 def inherit_agent_tenant_from_inviter(invitee_email: str, inviter: str) -> None:
 	tenant_id = resolve_agent_tenant_id(inviter)
 	if not tenant_id or not frappe.db.exists("User", invitee_email):
+		return
+	if not frappe.db.has_column("User", "tripai_agent_tenant_id"):
 		return
 	frappe.db.set_value("User", invitee_email, "tripai_agent_tenant_id", tenant_id)
 
@@ -62,6 +67,8 @@ def agent_tenant_condition(doctype: str, user: str | None = None) -> str | None:
 def lead_agent_tenant_condition(user: str | None = None) -> str | None:
 	tenant_id = get_scoped_agent_tenant_id(user)
 	if not tenant_id:
+		return None
+	if not frappe.db.has_column("CRM Lead", "tripai_agent_tenant_id"):
 		return None
 	return f"`tabCRM Lead`.`tripai_agent_tenant_id` = {frappe.db.escape(tenant_id)}"
 

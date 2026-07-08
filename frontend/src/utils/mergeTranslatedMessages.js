@@ -1,4 +1,10 @@
-/** Merge boot-time strings with the full translation catalog (API wins on conflict). */
-export function mergeTranslatedMessages(bootMessages, apiMessages) {
-  return { ...(bootMessages || {}), ...(apiMessages || {}) }
+/** Merge translation catalogs; only accept real translations from secondary. */
+export function mergeTranslatedMessages(primary, secondary) {
+  const merged = { ...(primary || {}) }
+  for (const [key, value] of Object.entries(secondary || {})) {
+    if (value && value !== key) {
+      merged[key] = value
+    }
+  }
+  return merged
 }

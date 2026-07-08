@@ -10,6 +10,29 @@ from crm.amap.poi.client import build_client_from_settings
 from crm.amap.trace import log_sync_event
 
 
+def _build_amap_client(*, require_enabled: bool = False):
+	"""Build Amap client; region picker only needs API keys, sync needs enabled."""
+	settings = frappe.get_single("CRM Amap Settings")
+	if require_enabled and not settings.enabled:
+		frappe.throw(_("Enable Amap POI sync in settings first"))
+
+	try:
+		client = build_client_from_settings(settings)
+	except Exception as exc:
+		from crm.integrations.tripai.billing import RuntimeConfigError
+
+		if isinstance(exc, RuntimeConfigError):
+			frappe.throw(str(exc), title=_("TripAI Configuration Error"), exc=frappe.ValidationError)
+		raise
+
+	if client.api_keys:
+		return client
+
+	if require_enabled and not settings.enabled:
+		frappe.throw(_("Enable Amap POI sync in settings first"))
+	frappe.throw(_("No API keys configured. Please add and save one first."))
+
+
 @frappe.whitelist()
 def test_connection(api_key: str = ""):
 	"""Test Amap Web服务 API key. Pass api_key to test unsaved form values."""
@@ -152,11 +175,7 @@ def get_job_progress(job_name: str):
 
 @frappe.whitelist()
 def preview_search(keywords: str, city: str, types: str = "", limit: int = 10):
-	settings = frappe.get_single("CRM Amap Settings")
-	if not settings.enabled:
-		frappe.throw(_("Enable Amap POI sync in settings first"))
-
-	client = build_client_from_settings(settings)
+	client = _build_amap_client(require_enabled=True)
 	result = client.search_text(
 		keywords=keywords,
 		city=city,
@@ -176,11 +195,7 @@ def preview_search(keywords: str, city: str, types: str = "", limit: int = 10):
 @frappe.whitelist()
 def get_districts(keywords: str = "", adcode: str = "", subdistrict: int = 1):
 	"""Return province/city/district options for the region picker."""
-	settings = frappe.get_single("CRM Amap Settings")
-	if not settings.enabled:
-		frappe.throw(_("Enable Amap POI sync in settings first"))
-
-	client = build_client_from_settings(settings)
+	client = _build_amap_client(require_enabled=False)
 	return client.search_districts(
 		keywords=keywords or "",
 		adcode=adcode or "",

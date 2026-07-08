@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { call } from 'frappe-ui'
+import { call, toast } from 'frappe-ui'
 import { computed, onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -61,11 +61,20 @@ const districtOptions = computed(() => [
 ])
 
 async function loadDistricts({ keywords = '', adcode = '' } = {}) {
-  return call('crm.amap.api.get_districts', {
-    keywords,
-    adcode,
-    subdistrict: 1,
-  })
+  try {
+    return await call('crm.amap.api.get_districts', {
+      keywords,
+      adcode,
+      subdistrict: 1,
+    })
+  } catch (error) {
+    const message =
+      error.messages?.[0] ||
+      error.message ||
+      __('Unable to load region data. Check Amap settings or contact your administrator.')
+    toast.error(message)
+    return []
+  }
 }
 
 async function loadProvinces() {

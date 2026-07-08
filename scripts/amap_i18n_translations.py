@@ -93,6 +93,7 @@ AMAP_I18N_TRANSLATIONS: dict[str, str] = {
     "Select user": "选择用户",
     "Select product": "选择产品",
     "All districts": "全部区县",
+    "Unable to load region data. Check Amap settings or contact your administrator.": "无法加载区域数据。请检查高德设置或联系管理员。",
     "View on map": "在地图中查看",
     "Please select a keyword and city": "请选择关键词和城市",
     "Please select at least one keyword and a city": "请至少选择一个关键词并选择城市",
