@@ -8,6 +8,7 @@ from typing import Any
 import frappe
 from frappe.utils import now_datetime
 
+from crm.amap.lead_sources import DEFAULT_AMAP_LEAD_SOURCE, ensure_lead_source
 from crm.amap.poi.normalize import (
 	get_primary_phone,
 	has_valid_phone,
@@ -213,7 +214,7 @@ def create_or_update_lead(
 		return frappe.db.get_value("CRM Lead", {"mobile_no": primary_phone})
 
 	lead_owner = sync_job.assign_to or settings.default_lead_owner or sync_job.job_owner
-	lead_source = sync_job.lead_source or "高德地图"
+	lead_source = ensure_lead_source(sync_job.lead_source or DEFAULT_AMAP_LEAD_SOURCE)
 	organization = poi.get("name") or amap_poi_id
 	location = _format_geolocation(poi.get("location"))
 	photo_rows = parse_photo_rows(poi.get("photos"))

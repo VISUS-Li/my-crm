@@ -20,12 +20,15 @@ RUN rm -rf apps/crm \
     && cp -a /tmp/crm-src apps/crm \
     && rm -rf /tmp/crm-src
 
+RUN cd apps/crm \
+    && python3 scripts/generate_zh_fallback.py
+
 RUN cd apps/crm/frontend \
     && export NODE_OPTIONS=--max-old-space-size=4096 \
     && yarn install --frozen-lockfile 2>/dev/null || yarn install \
     && yarn build
 
-RUN bench build --app crm || true
+RUN bench build --app crm
 
 FROM docker.m.daocloud.io/frappe/bench:latest AS runner
 
