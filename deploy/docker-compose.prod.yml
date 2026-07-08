@@ -11,6 +11,10 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --skip-character-set-client-handshake
+      - --innodb-buffer-pool-size=128M
+      - --innodb-log-buffer-size=8M
+      - --max-connections=50
+      - --performance-schema=OFF
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD}
     volumes:
@@ -43,6 +47,7 @@ services:
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - crm-sites:/home/frappe/frappe-bench/sites
+      - ./scripts/docker-entrypoint.sh:/home/frappe/docker-entrypoint.sh:ro
     ports:
       - "${APP_PUBLISH_HOST:-127.0.0.1}:${APP_PUBLISH_PORT:-8000}:8000"
     depends_on:

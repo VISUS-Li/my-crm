@@ -76,7 +76,22 @@ fi
 bench use "${SITE_NAME}"
 
 bench --site "${SITE_NAME}" migrate
-bench build --app crm
+
+maybe_bench_build_crm() {
+  local frontend_index="apps/crm/crm/public/frontend/index.html"
+  if [ "${SKIP_BENCH_BUILD:-0}" = "1" ]; then
+    echo "==> SKIP_BENCH_BUILD=1, skipping bench build --app crm"
+    return 0
+  fi
+  if [ -f "${frontend_index}" ]; then
+    echo "==> CRM frontend assets present, skipping bench build --app crm"
+    return 0
+  fi
+  echo "==> Building CRM assets (first run or missing frontend)..."
+  bench build --app crm
+}
+maybe_bench_build_crm
+
 bench --site "${SITE_NAME}" clear-cache
 
 ln -sfn "$(pwd)/apps/crm/crm/public" sites/assets/crm

@@ -65,14 +65,16 @@ registry_login() {
 
 wait_app_ready() {
   local port="$1"
+  local max_attempts="${APP_READY_MAX_ATTEMPTS:-180}"
+  local sleep_sec="${APP_READY_SLEEP_SEC:-5}"
   local ready_url="http://127.0.0.1:${port}/api/method/ping"
-  echo "等待 CRM 应用就绪: ${ready_url}"
-  for _ in $(seq 1 90); do
+  echo "等待 CRM 应用就绪: ${ready_url}（最多 $((max_attempts * sleep_sec))s）"
+  for _ in $(seq 1 "${max_attempts}"); do
     if curl -fsS "${ready_url}" >/dev/null 2>&1; then
       echo "CRM 应用已就绪"
       return 0
     fi
-    sleep 3
+    sleep "${sleep_sec}"
   done
   echo "错误：CRM 应用未在预期时间内启动: ${ready_url}" >&2
   return 1
@@ -426,15 +428,41 @@ setup_nginx_tls() {
 }
 
 maybe_enable_swap() {
-  if [ "${ENABLE_SWAP:-false}" != "true" ] || [ -f /swapfile ]; then
+  ensure_swappiness
+  if [ "${ENABLE_SWAP:-false}" != "true" ]; then
     return 0
   fi
-  local size="${SWAP_SIZE_GB:-2}"
+  local size="${SWAP_SIZE_GB:-6}"
+  if [ -f /swapfile ]; then
+    local current_mb
+    current_mb=$(stat -c%s /swapfile 2>/dev/null || echo 0)
+    current_mb=$((current_mb / 1024 / 1024))
+    local target_mb=$((size * 1024))
+    if [ "${current_mb}" -ge "${target_mb}" ]; then
+      swapon /swapfile 2>/dev/null || true
+      return 0
+    fi
+    swapoff /swapfile 2>/dev/null || true
+    rm -f /swapfile
+  fi
   fallocate -l "${size}G" /swapfile 2>/dev/null \
     || dd if=/dev/zero of=/swapfile bs=1M count=$((size * 1024)) status=none
   chmod 600 /swapfile
   mkswap /swapfile >/dev/null
+  grep -q '^/swapfile ' /etc/fstab 2>/dev/null || echo "/swapfile none swap sw 0 0" >> /etc/fstab
   swapon /swapfile 2>/dev/null || true
+}
+
+ensure_swappiness() {
+  local target="${SWAP_SWAPPINESS:-10}"
+  sysctl -w "vm.swappiness=${target}" >/dev/null 2>&1 || true
+  if [ -f /etc/sysctl.conf ]; then
+    if grep -q '^vm\.swappiness=' /etc/sysctl.conf; then
+      sed -i "s/^vm\.swappiness=.*/vm.swappiness=${target}/" /etc/sysctl.conf
+    else
+      echo "vm.swappiness=${target}" >> /etc/sysctl.conf
+    fi
+  fi
 }
 
 ensure_docker() {

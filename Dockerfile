@@ -2,7 +2,8 @@
 # 构建: ./scripts/build.sh [version]
 # 运行: ./scripts/deploy.sh init [version]
 
-FROM frappe/bench:latest AS builder
+# 国内构建机请用 DaoCloud 直连，避免 docker.io 经 Clash TUN 拉取大 layer 卡死
+FROM docker.m.daocloud.io/frappe/bench:latest AS builder
 
 USER frappe
 WORKDIR /home/frappe
@@ -26,7 +27,7 @@ RUN cd apps/crm/frontend \
 
 RUN bench build --app crm || true
 
-FROM frappe/bench:latest AS runner
+FROM docker.m.daocloud.io/frappe/bench:latest AS runner
 
 USER root
 RUN apt-get update \

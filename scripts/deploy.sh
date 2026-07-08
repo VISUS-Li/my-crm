@@ -208,9 +208,10 @@ install_compose_project() {
   mkdir -p "${PROD_DIR}/nginx/conf.d" "${PROD_DIR}/certbot/conf" "${PROD_DIR}/certbot/www" "${PROD_DIR}/scripts"
   cp "${COMPOSE_SRC}" "${PROD_DIR}/docker-compose.yml"
   cp "${REPO_ROOT}/deploy/nginx/render-nginx-crm.sh" "${PROD_DIR}/scripts/render-nginx-crm.sh"
+  cp "${REPO_ROOT}/deploy/docker-entrypoint.sh" "${PROD_DIR}/scripts/docker-entrypoint.sh"
   cp "${REPO_ROOT}/scripts/deploy-lib.sh" "${PROD_DIR}/scripts/deploy-lib.sh"
   cp "${REPO_ROOT}/scripts/import-aliyun-cert.sh" "${PROD_DIR}/scripts/import-aliyun-cert.sh"
-  chmod +x "${PROD_DIR}/scripts/render-nginx-crm.sh" "${PROD_DIR}/scripts/import-aliyun-cert.sh"
+  chmod +x "${PROD_DIR}/scripts/render-nginx-crm.sh" "${PROD_DIR}/scripts/import-aliyun-cert.sh" "${PROD_DIR}/scripts/docker-entrypoint.sh"
   log "已安装 compose: ${PROD_DIR}/docker-compose.yml"
 }
 
