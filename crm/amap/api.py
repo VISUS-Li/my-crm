@@ -211,10 +211,11 @@ def list_job_poi_records(job_name: str, page: int = 1, page_length: int = 20):
 	page = max(int(page or 1), 1)
 	page_length = min(max(int(page_length or 20), 1), 100)
 	start = (page - 1) * page_length
+	or_filters = _poi_record_job_filters(job_name)
 
 	records = frappe.get_all(
 		"CRM POI Record",
-		filters={"sync_job": job_name},
+		or_filters=or_filters,
 		fields=[
 			"name",
 			"name1",
@@ -240,7 +241,14 @@ def list_job_poi_records(job_name: str, page: int = 1, page_length: int = 20):
 		start=start,
 		limit=page_length,
 	)
-	total = frappe.db.count("CRM POI Record", {"sync_job": job_name})
+	total = len(
+		frappe.get_all(
+			"CRM POI Record",
+			or_filters=or_filters,
+			pluck="name",
+			limit_page_length=0,
+		)
+	)
 
 	return {
 		"records": records,
@@ -248,6 +256,16 @@ def list_job_poi_records(job_name: str, page: int = 1, page_length: int = 20):
 		"page": page,
 		"page_length": page_length,
 	}
+
+
+def _poi_record_job_filters(job_name: str) -> list[list[str]]:
+	return [
+		["CRM POI Record", "sync_job", "=", job_name],
+		["CRM POI Record", "sync_jobs", "=", job_name],
+		["CRM POI Record", "sync_jobs", "like", f"{job_name}\n%"],
+		["CRM POI Record", "sync_jobs", "like", f"%\n{job_name}"],
+		["CRM POI Record", "sync_jobs", "like", f"%\n{job_name}\n%"],
+	]
 
 
 @frappe.whitelist()

@@ -2,6 +2,10 @@
 set -euo pipefail
 export PATH="$HOME/.local/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] || {
+  echo "nvm not found at $NVM_DIR; install Node 20 before deploying" >&2
+  exit 1
+}
 source "$NVM_DIR/nvm.sh"
 nvm use 20 2>/dev/null || nvm install 20
 
@@ -31,6 +35,7 @@ cd "$BENCH_DIR"
 
 echo "==> Clearing cache..."
 cd "$BENCH_DIR"
+bench --site "$SITE_NAME" enable-scheduler
 bench --site "$SITE_NAME" clear-cache
 
 sed -i '/watch/d' Procfile

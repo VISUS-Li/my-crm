@@ -42,7 +42,9 @@
   "column_break_links",
   "lead",
   "sync_job",
+  "sync_jobs",
   "job_owner",
+  "agent_tenant_id",
   "last_synced_at",
   "source_api_version",
   "sync_action",
@@ -255,11 +257,24 @@
    "options": "CRM POI Sync Job"
   },
   {
+   "description": "All sync jobs that fetched this POI, one job name per line",
+   "fieldname": "sync_jobs",
+   "fieldtype": "Small Text",
+   "label": "Sync Jobs"
+  },
+  {
    "fieldname": "job_owner",
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Job Owner",
    "options": "User"
+  },
+  {
+   "fieldname": "agent_tenant_id",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Agent Tenant ID",
+   "read_only": 1
   },
   {
    "fieldname": "last_synced_at",

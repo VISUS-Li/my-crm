@@ -125,6 +125,7 @@ def upsert_poi_record(
 ) -> str:
 	amap_poi_id = poi.get("id")
 	existing = frappe.db.exists("CRM POI Record", amap_poi_id)
+	existing_doc = frappe.get_doc("CRM POI Record", existing) if existing else None
 	location = _format_geolocation(poi.get("location"))
 	phone_rows = parse_phone_rows(poi.get("tel"))
 	photo_rows = parse_photo_rows(poi.get("photos"))
@@ -132,6 +133,8 @@ def upsert_poi_record(
 	all_phones = "\n".join(
 		row.get("normalized_value") or row.get("raw_value") or "" for row in phone_rows
 	)
+	sync_jobs = _append_sync_job(getattr(existing_doc, "sync_jobs", "") if existing_doc else "", sync_job)
+	first_sync_job = getattr(existing_doc, "sync_job", "") if existing_doc else sync_job
 
 	doc_data = {
 		"doctype": "CRM POI Record",
@@ -163,9 +166,10 @@ def upsert_poi_record(
 		"adcode": poi.get("adcode") or "",
 		"primary_photo_url": photo_rows[0]["url"] if photo_rows else "",
 		"photo_count": len(photo_rows),
-		"sync_job": sync_job,
-		"job_owner": job_owner,
-		"agent_tenant_id": agent_tenant_id,
+		"sync_job": first_sync_job,
+		"sync_jobs": sync_jobs,
+		"job_owner": getattr(existing_doc, "job_owner", "") or job_owner if existing_doc else job_owner,
+		"agent_tenant_id": getattr(existing_doc, "agent_tenant_id", "") or agent_tenant_id if existing_doc else agent_tenant_id,
 		"last_synced_at": now_datetime(),
 		"source_api_version": poi.get("_source_api_version") or "v3",
 		"sync_action": "Updated" if existing else "Inserted",
@@ -177,7 +181,7 @@ def upsert_poi_record(
 	}
 
 	if existing:
-		doc = frappe.get_doc("CRM POI Record", existing)
+		doc = existing_doc
 		doc.update(doc_data)
 		doc.set("phones", [])
 		for row in phone_rows:
@@ -191,6 +195,17 @@ def upsert_poi_record(
 	doc = frappe.get_doc(doc_data)
 	doc.insert(ignore_permissions=True)
 	return doc.name
+
+
+def _append_sync_job(existing_jobs: str | None, sync_job: str) -> str:
+	jobs = []
+	for value in (existing_jobs or "").replace(",", "\n").splitlines():
+		value = value.strip()
+		if value and value not in jobs:
+			jobs.append(value)
+	if sync_job and sync_job not in jobs:
+		jobs.append(sync_job)
+	return "\n".join(jobs)
 
 
 def create_or_update_lead(
@@ -273,9 +288,11 @@ def update_existing_lead_from_poi(
 			"poi_typecode": poi.get("typecode") or "",
 			"district": poi.get("adname") or poi.get("district") or "",
 			"has_valid_phone": 1 if valid_phone else 0,
-			"mobile_no": primary_phone or "",
-			"phone": phones[1] if len(phones) > 1 else "",
 		}
+		if primary_phone:
+			update_data["mobile_no"] = primary_phone
+		if len(phones) > 1:
+			update_data["phone"] = phones[1]
 		if primary_photo:
 			update_data["image"] = primary_photo
 		frappe.db.set_value(

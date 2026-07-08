@@ -21,13 +21,19 @@ bench set-config -g webserver_port 8000
 bench set-config -g socketio_port 9000
 
 echo "==> Waiting for MariaDB at ${MARIADB_HOST}..."
+db_ready=0
 for _ in $(seq 1 90); do
   if mariadb-admin ping -h"${MARIADB_HOST}" -uroot -p"${DB_ROOT_PASSWORD}" --silent 2>/dev/null; then
     echo "MariaDB is ready"
+    db_ready=1
     break
   fi
   sleep 2
 done
+if [ "${db_ready}" != "1" ]; then
+  echo "MariaDB did not become ready in time" >&2
+  exit 1
+fi
 
 if ! grep -qxF crm sites/apps.txt 2>/dev/null; then
   printf 'frappe\ncrm\n' > sites/apps.txt
@@ -74,6 +80,9 @@ if [ -n "${TRIPAI_BASE_URL:-}" ]; then
   bench --site "${SITE_NAME}" set-config tripai_tool_key "${TRIPAI_TOOL_KEY:-my-crm}"
 fi
 bench use "${SITE_NAME}"
+
+echo "==> Enabling scheduler..."
+bench --site "${SITE_NAME}" enable-scheduler
 
 bench --site "${SITE_NAME}" migrate
 

@@ -50,6 +50,6 @@ WORKDIR /home/frappe/frappe-bench
 EXPOSE 8000 9000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=5 \
-  CMD curl -fsS http://127.0.0.1:8000/api/method/ping || exit 1
+  CMD curl -fsS http://127.0.0.1:8000/api/method/frappe.ping || exit 1
 
 ENTRYPOINT ["/home/frappe/docker-entrypoint.sh"]

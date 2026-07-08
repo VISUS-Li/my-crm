@@ -9,15 +9,19 @@ from frappe.utils import now_datetime
 
 class CRMPOISyncJob(Document):
 	def validate(self):
-		if self.is_new() and (not self.job_owner or self.job_owner == "__user__"):
+		job_owner = self.get("job_owner")
+		if self.is_new() and (not job_owner or job_owner == "__user__"):
 			self.job_owner = frappe.session.user
+			job_owner = self.job_owner
 
-		if not self.agent_tenant_id:
+		if not self.get("agent_tenant_id"):
 			from crm.permissions.agent_tenant import resolve_agent_tenant_id
 
-			self.agent_tenant_id = resolve_agent_tenant_id(self.job_owner)
+			tenant_id = resolve_agent_tenant_id(job_owner)
+			if tenant_id:
+				self.agent_tenant_id = tenant_id
 
-		if self.bbox:
+		if self.get("bbox"):
 			parts = [p.strip() for p in self.bbox.split(",")]
 			if len(parts) != 4:
 				frappe.throw(_("Bounding box must be min_lng,min_lat,max_lng,max_lat"))
@@ -80,7 +84,7 @@ class CRMPOISyncJob(Document):
 		return bool(frappe.cache().get_value(f"poi_sync_cancel:{self.name}"))
 
 	def _ensure_agent_tenant_id(self) -> None:
-		if self.agent_tenant_id:
+		if self.get("agent_tenant_id"):
 			return
 		from crm.permissions.agent_tenant import resolve_agent_tenant_id
 

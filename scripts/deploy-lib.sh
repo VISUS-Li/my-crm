@@ -60,7 +60,7 @@ registry_login() {
     return 1
   fi
   echo "登录镜像仓库: ${domain}"
-  docker login --username="${user}" "${domain}" --password "${password}"
+  printf '%s' "${password}" | docker login --username="${user}" --password-stdin "${domain}"
 }
 
 wait_app_ready() {

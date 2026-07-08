@@ -24,25 +24,5 @@ def execute():
 				"hidden": 1,
 			},
 		],
-		"CRM POI Sync Job": [
-			{
-				"fieldname": "agent_tenant_id",
-				"fieldtype": "Data",
-				"label": "Agent Tenant ID",
-				"insert_after": "job_owner",
-				"read_only": 1,
-				"in_standard_filter": 1,
-			},
-		],
-		"CRM POI Record": [
-			{
-				"fieldname": "agent_tenant_id",
-				"fieldtype": "Data",
-				"label": "Agent Tenant ID",
-				"insert_after": "job_owner",
-				"read_only": 1,
-				"in_standard_filter": 1,
-			},
-		],
 	}
 	create_custom_fields(custom_fields, ignore_validate=True)

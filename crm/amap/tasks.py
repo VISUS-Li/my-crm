@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import frappe
 from frappe import _
 from frappe.utils import now_datetime
@@ -15,11 +17,25 @@ from crm.amap.trace import finish_sync_segment, log_sync_event, start_sync_segme
 SYNC_FAILED = "同步失败"
 SYNC_STARTING = "正在启动同步"
 SYNC_COMPLETED = "同步成功完成"
+SYNC_PARTIAL = "部分同步完成"
+MAX_TEXT_SEARCH_PAGES = 8
+
+
+@dataclass
+class FetchSummary:
+	pois: list[dict]
+	had_errors: bool = False
+	truncated: bool = False
 
 
 def run_poi_sync(sync_job_name: str) -> None:
-	frappe.cache().delete_value(f"poi_sync_cancel:{sync_job_name}")
 	job = frappe.get_doc("CRM POI Sync Job", sync_job_name)
+	cancel_key = f"poi_sync_cancel:{sync_job_name}"
+	if job.status == "Cancelled" or frappe.cache().get_value(cancel_key):
+		job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
+		frappe.cache().delete_value(cancel_key)
+		return
+	frappe.cache().delete_value(cancel_key)
 	settings = frappe.get_single("CRM Amap Settings")
 
 	if not settings.enabled:
@@ -97,6 +113,7 @@ def run_poi_sync(sync_job_name: str) -> None:
 
 			job.update_progress("正在使用四叉树获取 POI 数据...")
 			pois = []
+			truncated = False
 			for keyword in split_keywords(job.keywords):
 				if job.is_cancelled():
 					break
@@ -124,11 +141,14 @@ def run_poi_sync(sync_job_name: str) -> None:
 						segment=segment,
 					)
 					raise
+				keyword_pois = _filter_pois_for_job_region(keyword_pois, job)
 				pois.extend(keyword_pois)
 				finish_sync_segment(segment, fetched_count=len(keyword_pois))
 		else:
 			job.update_progress("正在通过城市文本搜索获取 POI 数据...")
-			pois = _fetch_pois_by_text(client, job)
+			fetch_summary = _fetch_pois_by_text(client, job)
+			pois = fetch_summary.pois
+			truncated = fetch_summary.truncated
 
 		if job.is_cancelled():
 			job.db_set({"status": "Cancelled", "completed_at": now_datetime()})
@@ -139,23 +159,33 @@ def run_poi_sync(sync_job_name: str) -> None:
 		log_sync_event(sync_job_name, "import_started", import_message)
 		importer.process_pois(pois)
 
+		final_status = "Completed"
+		final_message = SYNC_COMPLETED
+		if "fetch_summary" in locals() and fetch_summary.had_errors:
+			final_status = "Partial" if pois else "Failed"
+			final_message = SYNC_PARTIAL if pois else SYNC_FAILED
+		elif truncated:
+			final_status = "Partial"
+			final_message = SYNC_PARTIAL
+
 		job.db_set(
 			{
-				"status": "Completed",
+				"status": final_status,
 				"completed_at": now_datetime(),
 				"total_fetched": importer.stats["total_fetched"],
 				"with_phone_count": importer.stats["with_phone_count"],
 				"leads_created": importer.stats["leads_created"],
 				"leads_skipped": importer.stats["leads_skipped"],
-				"progress_message": SYNC_COMPLETED,
+				"progress_message": final_message,
 			}
 		)
 		frappe.db.commit()
 		log_sync_event(
 			sync_job_name,
 			"job_completed",
-			SYNC_COMPLETED,
+			final_message,
 			{
+				"status": final_status,
 				"total_fetched": importer.stats["total_fetched"],
 				"with_phone_count": importer.stats["with_phone_count"],
 				"leads_created": importer.stats["leads_created"],
@@ -227,16 +257,22 @@ def _resolve_bounds(job, client) -> BoundingBox | None:
 	return None
 
 
-def _fetch_pois_by_text(client, job) -> list:
+def _fetch_pois_by_text(client, job) -> FetchSummary:
 	all_pois = []
+	had_errors = False
+	any_truncated = False
 	for keyword in split_keywords(job.keywords):
+		if job.is_cancelled():
+			break
 		segment = start_sync_segment(job, keyword=keyword)
 		segment_pois = []
 		reported_count = 0
 		page_count = 0
 		error_message = ""
 		page = 1
-		while page <= 8:
+		while page <= MAX_TEXT_SEARCH_PAGES:
+			if job.is_cancelled():
+				break
 			result = client.search_text(
 				keywords=keyword,
 				city=job.city,
@@ -247,6 +283,7 @@ def _fetch_pois_by_text(client, job) -> list:
 			)
 			if not result.success or not result.data:
 				error_message = result.error_message if not result.success else ""
+				had_errors = bool(error_message) or had_errors
 				break
 			reported_count = max(reported_count, result.count or 0)
 			page_count = page
@@ -254,6 +291,9 @@ def _fetch_pois_by_text(client, job) -> list:
 			if len(result.data) < 25:
 				break
 			page += 1
+		segment_pois = _filter_pois_for_job_region(segment_pois, job)
+		segment_truncated = bool(reported_count and reported_count > len(segment_pois))
+		any_truncated = any_truncated or segment_truncated
 		all_pois.extend(segment_pois)
 		finish_sync_segment(
 			segment,
@@ -262,10 +302,28 @@ def _fetch_pois_by_text(client, job) -> list:
 			reported_count=reported_count,
 			page_count=page_count,
 			api_calls=page_count,
-			truncated=bool(reported_count and reported_count > len(segment_pois)),
+			truncated=segment_truncated,
 			error_message=error_message,
 		)
-	return all_pois
+	return FetchSummary(pois=all_pois, had_errors=had_errors, truncated=any_truncated)
+
+
+def _filter_pois_for_job_region(pois: list[dict], job) -> list[dict]:
+	"""Keep bbox/adcode searches from importing nearby POIs outside the chosen district."""
+	adcode = (getattr(job, "adcode", None) or "").strip()
+	district = (getattr(job, "district", None) or "").strip()
+	if not adcode and not district:
+		return pois
+
+	filtered = []
+	for poi in pois:
+		poi_adcode = str(poi.get("adcode") or "").strip()
+		poi_district = str(poi.get("adname") or poi.get("district") or "").strip()
+		if adcode and poi_adcode == adcode:
+			filtered.append(poi)
+		elif not adcode and district and poi_district == district:
+			filtered.append(poi)
+	return filtered
 
 
 def split_keywords(keywords: str | None) -> list[str]:
