@@ -25,9 +25,10 @@ echo "==> Running migrations..."
 cd "$BENCH_DIR"
 bench --site "$SITE_NAME" migrate
 
-echo "==> Compiling CRM translations (zh.po -> .mo) and app assets..."
+echo "==> Compiling CRM translations (zh.po -> .mo)..."
 cd "$BENCH_DIR"
-bench build --app crm
+pip install -e apps/crm -q 2>/dev/null || true
+bench compile-po-to-mo --app crm --locale zh --force
 
 echo "==> Clearing cache..."
 cd "$BENCH_DIR"

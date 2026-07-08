@@ -79,11 +79,12 @@ bench --site "${SITE_NAME}" migrate
 
 maybe_bench_build_crm() {
   if [ "${SKIP_BENCH_BUILD:-0}" = "1" ]; then
-    echo "==> SKIP_BENCH_BUILD=1, skipping bench build --app crm"
+    echo "==> SKIP_BENCH_BUILD=1, skipping CRM translation compile"
     return 0
   fi
-  echo "==> Building CRM app (zh.po -> zh.mo + assets)..."
-  bench build --app crm
+  echo "==> Compiling CRM translations (zh.po -> sites/assets/locale/zh/LC_MESSAGES/crm.mo)..."
+  pip install -e apps/crm -q 2>/dev/null || true
+  bench compile-po-to-mo --app crm --locale zh --force
 }
 maybe_bench_build_crm
 
